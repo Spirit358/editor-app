@@ -1,0 +1,79 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Poppins:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap');
+
+:root {
+  /* Vogue Palette */
+  --bg:            #fafaf8;
+  --bg-warm:       #f5f2ed;
+  --bg-card:       #f0ece6;
+  --text:          #1a1a1a;
+  --text-secondary:#666666;
+  --text-muted:    #999999;
+  --text-ghost:    #cccccc;
+  --gold:          #c8a96e;
+  --gold-light:    #e8d5a8;
+  --gold-deep:     #8a6f3a;
+  --border:        #e8e4de;
+  --border-dark:   #d4cfc8;
+
+  /* Tier colors */
+  --tier-budget:   #888880;
+  --tier-mid:      #9a7a5a;
+  --tier-premium:  #5a7a9a;
+  --tier-luxury:   #c8a96e;
+
+  /* Typography */
+  --font-display:  'Playfair Display', Georgia, serif;
+  --font-body:     'Poppins', sans-serif;
+  --font-mono:     'DM Mono', 'Courier New', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-weight: 300;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: var(--gold-light); color: var(--text); }
+
+::-webkit-scrollbar { width: 2px; height: 2px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border-dark); border-radius: 1px; }
+
+/* Typography helpers */
+.font-display { font-family: var(--font-display); }
+.font-mono    { font-family: var(--font-mono); }
+
+/* Noise texture overlay for premium feel */
+.noise::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.018;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Input reset */
+input, textarea {
+  font-family: inherit;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text);
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--text-ghost);
+}
+
+button { cursor: pointer; border: none; background: none; font-family: inherit; }
+a { text-decoration: none; color: inherit; }
