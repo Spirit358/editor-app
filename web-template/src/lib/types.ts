@@ -66,6 +66,8 @@ export interface Service {
   bullets?: string[]
   /** lucide-react icon name, e.g. 'Droplets'. Falls back to a generic icon. */
   icon?: string
+  /** Drawn illustration shown wherever `image` is absent. */
+  illustration?: Illustration
   image?: MediaAsset
   priceFrom?: string
   /** Show on the homepage services grid. Defaults to true. */
@@ -123,7 +125,21 @@ export interface OpeningHours {
 import type { Locale } from './i18n'
 
 /** Font pairings available in src/fonts/. `pnpm use-site` wires the choice up. */
-export type FontPairing = 'fraunces-inter' | 'bricolage-inter'
+export type FontPairing = 'archivo' | 'fraunces-inter' | 'bricolage-inter'
+
+/**
+ * Drawn line illustrations of the equipment (src/components/illustration.tsx).
+ * The imagery until real photography exists; never a blurred placeholder.
+ */
+export type Illustration =
+  | 'boiler'
+  | 'heatpump'
+  | 'radiator'
+  | 'underfloor'
+  | 'cylinder'
+  | 'warehouse'
+  | 'van'
+  | 'tools'
 
 export interface SiteConfig {
   slug: string
@@ -218,11 +234,35 @@ export interface SiteConfig {
     /** Emphasised fragment of the headline, wrapped in the accent style. */
     headlineAccent?: string
     sub: string
+    /** A real photograph. Takes precedence over `illustration` when set. */
     media?: MediaAsset
+    /** Drawn illustration for the hero panel until photography exists. */
+    illustration?: Illustration
     ctas: CallToAction[]
     /** Short proof points under the CTAs. */
     badges?: string[]
   }
+
+  /**
+   * One thing the business is known for, given a full-width solid block on
+   * the homepage — for Activa, the wholesale counter; for a plumber, the
+   * emergency line. Optional; the section is skipped when absent.
+   */
+  spotlight?: {
+    eyebrow?: string
+    title: string
+    body: string[]
+    bullets?: string[]
+    illustration?: Illustration
+    image?: MediaAsset
+    cta?: CallToAction
+  }
+
+  /**
+   * How a job runs, in four steps. Falls back to the locale's generic steps
+   * when omitted.
+   */
+  process?: Array<{ title: string; body: string }>
 
   services: Service[]
   areas: ServiceArea[]

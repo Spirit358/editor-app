@@ -81,9 +81,21 @@ const config: SiteConfig = {
     chroma: 0.13,
     accentHue: 38,
     accentChroma: 0.135,
-    neutralChroma: 0.008,
-    radius: 0.625,
-    fonts: 'fraunces-inter',
+    neutralChroma: 0.006,
+    radius: 0.125,
+    fonts: 'archivo',
+  },
+
+  spotlight: {
+    eyebrow: 'Emergency line',
+    title: 'Answered 24 hours a day, by an engineer',
+    body: [
+      'When a pipe goes at eleven at night, the last thing you need is an answering machine. The emergency line is picked up by the person who will come out, and you get a straight answer on how long.',
+      'The van carries the common parts — isolation valves, compression fittings, pump and PRV spares — so most emergencies are finished on the first visit.',
+    ],
+    bullets: ['No call-out charge', 'Typical Leeds arrival within 90 minutes', 'Made safe first, priced before repair', 'No premium weekend rate'],
+    illustration: 'van',
+    cta: { label: '0113 496 0142', href: 'tel', kind: 'tel' },
   },
 
   hero: {
@@ -91,13 +103,7 @@ const config: SiteConfig = {
     headline: 'Plumbing done properly,',
     headlineAccent: 'first time.',
     sub: 'Emergency call-outs, boiler installations, bathrooms and heating across Leeds. Fixed prices agreed before we start — and a real person on the end of the phone.',
-    media: {
-      type: 'image',
-      src: '/clients/demo-plumber/hero.webp',
-      alt: 'Copper pipework detail, warmly lit',
-      width: 1920,
-      height: 1280,
-    },
+    illustration: 'boiler',
     ctas: [
       { label: '0113 496 0142', href: 'tel', kind: 'tel' },
       { label: 'Request a quote', href: '/contact', kind: 'secondary' },
@@ -116,6 +122,7 @@ const config: SiteConfig = {
       name: 'Emergency plumbing',
       short: 'Burst pipes, leaks and no heating — answered 24 hours a day.',
       icon: 'Siren',
+      illustration: 'van',
       priceFrom: '£85',
       body: [
         'When a pipe goes at eleven at night, the last thing you need is an answering machine. Our emergency line is picked up by an engineer, not a call centre, and we will tell you honestly how long we are going to be.',
@@ -127,19 +134,13 @@ const config: SiteConfig = {
         'Made safe first, priced before any repair starts',
         'No premium weekend rate',
       ],
-      image: {
-        type: 'image',
-        src: '/clients/demo-plumber/service-emergency.webp',
-        alt: 'Emergency plumbing call-out',
-        width: 1200,
-        height: 900,
-      },
     },
     {
       slug: 'boiler-installation',
       name: 'Boiler installation',
       short: 'New combi and system boilers, fitted in a day, 10-year warranty.',
       icon: 'Flame',
+      illustration: 'boiler',
       priceFrom: '£1,850',
       body: [
         'We install Worcester Bosch, Vaillant and Ideal boilers, and we will tell you which one actually suits your house rather than which one carries the best margin. A three-bed terrace in Headingley does not need the biggest combi on the shelf.',
@@ -151,19 +152,13 @@ const config: SiteConfig = {
         'System flush and magnetic filter included',
         'Gas Safe building notification handled for you',
       ],
-      image: {
-        type: 'image',
-        src: '/clients/demo-plumber/service-boiler.webp',
-        alt: 'Newly installed combi boiler',
-        width: 1200,
-        height: 900,
-      },
     },
     {
       slug: 'boiler-servicing',
       name: 'Servicing & repairs',
       short: 'Annual services, landlord certificates and fault-finding.',
       icon: 'Gauge',
+      illustration: 'tools',
       priceFrom: '£72',
       body: [
         'An annual service keeps the manufacturer warranty valid and catches the cheap failures — a sticking diverter valve, a tired expansion vessel — before they become the expensive ones.',
@@ -181,6 +176,7 @@ const config: SiteConfig = {
       name: 'Bathroom installation',
       short: 'Full bathroom fits, managed end to end by one team.',
       icon: 'Bath',
+      illustration: 'cylinder',
       priceFrom: '£3,400',
       body: [
         'We handle the whole bathroom — strip-out, first fix, tiling, electrics through our registered electrician, and the finish. One point of contact and one schedule, rather than four trades blaming each other.',
@@ -192,19 +188,13 @@ const config: SiteConfig = {
         'Tiling, electrics and plastering included',
         'Site cleaned every evening',
       ],
-      image: {
-        type: 'image',
-        src: '/clients/demo-plumber/service-bathroom.webp',
-        alt: 'Completed bathroom installation',
-        width: 1200,
-        height: 900,
-      },
     },
     {
       slug: 'central-heating',
       name: 'Central heating',
       short: 'Radiators, smart controls, power flushing and full systems.',
       icon: 'Thermometer',
+      illustration: 'radiator',
       priceFrom: '£140',
       body: [
         'Cold spots at the bottom of a radiator, a system that takes an hour to warm through, rooms that never get there at all — most of it comes down to sludge, balance or controls, and all three are fixable without a new boiler.',
@@ -222,6 +212,7 @@ const config: SiteConfig = {
       name: 'Leak detection',
       short: 'Finding the leak without taking up the whole floor.',
       icon: 'Droplets',
+      illustration: 'underfloor',
       priceFrom: '£180',
       body: [
         'Thermal imaging and acoustic tracing find a leak under a floor or behind a wall to within a few centimetres, so the repair means lifting one board rather than a room.',
@@ -349,13 +340,6 @@ const config: SiteConfig = {
       'That is the whole reason the phone gets answered. There is no dispatcher deciding which job is worth the diesel, and no incentive to sell you a boiler you do not need. We would rather service yours for another five years and be the ones you ring when it finally goes.',
       'Everything we do is Gas Safe registered, insured to £5m, and guaranteed for twelve months on workmanship — on top of whatever the manufacturer covers on the parts.',
     ],
-    image: {
-      type: 'image',
-      src: '/clients/demo-plumber/about.webp',
-      alt: 'Workshop bench with tools laid out',
-      width: 1200,
-      height: 1400,
-    },
     stats: [
       { value: '17', label: 'Years in Leeds' },
       { value: '4.9', label: 'Average rating' },
@@ -364,50 +348,7 @@ const config: SiteConfig = {
     ],
   },
 
-  gallery: [
-    {
-      src: '/clients/demo-plumber/gallery-1.webp',
-      alt: 'Copper pipework in a newly fitted plant cupboard',
-      caption: 'Boiler swap, Headingley',
-      width: 1200,
-      height: 900,
-    },
-    {
-      src: '/clients/demo-plumber/gallery-2.webp',
-      alt: 'Completed bathroom with walk-in shower',
-      caption: 'Full bathroom, Chapel Allerton',
-      width: 1200,
-      height: 900,
-    },
-    {
-      src: '/clients/demo-plumber/gallery-3.webp',
-      alt: 'Underfloor heating manifold',
-      caption: 'Underfloor manifold, Roundhay',
-      width: 1200,
-      height: 900,
-    },
-    {
-      src: '/clients/demo-plumber/gallery-4.webp',
-      alt: 'Column radiator fitted in a period hallway',
-      caption: 'Period radiators, Otley',
-      width: 1200,
-      height: 900,
-    },
-    {
-      src: '/clients/demo-plumber/gallery-5.webp',
-      alt: 'Unvented cylinder installation',
-      caption: 'Unvented cylinder, Horsforth',
-      width: 1200,
-      height: 900,
-    },
-    {
-      src: '/clients/demo-plumber/gallery-6.webp',
-      alt: 'Smart heating control on a wall',
-      caption: 'Zoned smart controls, Pudsey',
-      width: 1200,
-      height: 900,
-    },
-  ],
+  gallery: [],
 
   faqs: [
     {

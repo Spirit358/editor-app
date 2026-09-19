@@ -18,7 +18,6 @@ export const metadata: Metadata = buildMetadata({
 
 export default function ContactPage() {
   const s = t.pages.contact
-
   return (
     <>
       <PageHero
@@ -27,7 +26,6 @@ export default function ContactPage() {
         intro={site.contact.emergency?.note ?? s.intro}
         breadcrumbs={TRAIL}
       />
-
       <Contact compact />
       <JsonLd data={breadcrumbSchema(TRAIL)} />
     </>

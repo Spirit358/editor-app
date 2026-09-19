@@ -10,12 +10,9 @@ export const metadata: Metadata = buildMetadata({
 })
 
 /**
- * A plain-language privacy notice covering what this site actually does: a
- * contact form and nothing else. The text is per-locale because the legal
- * basis and the regulator differ — UK GDPR and the ICO for en-GB, RODO and the
- * UODO for pl-PL. If a client adds analytics, booking or a chatbot, the
- * relevant locale's text in i18n.ts has to be updated to match — it is not
- * decoration, it is the transparency obligation.
+ * Per-locale because the legal basis and the regulator differ (UK GDPR / ICO
+ * vs RODO / UODO). If a client adds analytics or booking, update that
+ * locale's text in i18n.ts — it is the transparency obligation.
  */
 export default function PrivacyPage() {
   const { business, contact } = site
@@ -38,31 +35,22 @@ export default function PrivacyPage() {
           { name: t.crumbs.privacy, path: '/privacy' },
         ]}
       />
-
-      <section className="section-y bg-surface">
+      <section className="section">
         <div className="container-page">
-          <div className="max-w-2xl space-y-10 text-ink-soft">
+          <div className="measure space-y-8 text-ink-2">
             {sections.map((section) => (
-              <div key={section.title}>
-                <h2 className="text-xl text-ink">{section.title}</h2>
+              <div key={section.title} className="rule-t pt-6">
+                <h2 className="display-wide text-xl text-ink">{section.title}</h2>
                 <p className="mt-3 leading-relaxed">{section.body(ctx)}</p>
               </div>
             ))}
-
-            <div>
-              <p className="leading-relaxed">
-                {regulator.lead}
-                <a
-                  href={regulator.url}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                  className="link-underline text-brand-700"
-                >
-                  {regulator.name}
-                </a>
-                {regulator.tail}
-              </p>
-            </div>
+            <p className="rule-t pt-6 leading-relaxed">
+              {regulator.lead}
+              <a href={regulator.url} rel="noopener noreferrer" target="_blank" className="link">
+                {regulator.name}
+              </a>
+              {regulator.tail}
+            </p>
           </div>
         </div>
       </section>

@@ -1,11 +1,10 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { site, t } from '@/lib/site'
 import { buildMetadata, breadcrumbSchema } from '@/lib/seo'
 import { PageHero } from '@/components/sections/page-hero'
-import { ServiceIcon } from '@/components/service-icon'
-import { Reveal } from '@/components/reveal'
+import { Illustration } from '@/components/illustration'
 import { Cta } from '@/components/sections/cta'
 import { JsonLd } from '@/components/json-ld'
 
@@ -24,71 +23,49 @@ export const metadata: Metadata = buildMetadata({
   path: '/services',
 })
 
+/** The catalogue: every service as a ruled row with its drawing. */
 export default function ServicesPage() {
   return (
     <>
-      <PageHero
-        eyebrow={t.crumbs.services}
-        title={t.pages.services.title}
-        intro={t.pages.services.intro}
-        breadcrumbs={TRAIL}
-      />
+      <PageHero eyebrow={t.crumbs.services} title={t.pages.services.title} intro={t.pages.services.intro} breadcrumbs={TRAIL} />
 
-      <section className="section-y bg-surface">
+      <section className="section rule-b">
         <div className="container-page">
-          <ul className="grid gap-px overflow-hidden rounded-[var(--radius-lg)] border border-line bg-line sm:grid-cols-2">
+          <ol className="rule-strong-t">
             {site.services.map((service, i) => (
-              <Reveal as="li" key={service.slug} delay={(i % 2) * 80}>
+              <li key={service.slug} className="rule-b">
                 <Link
                   href={`/services/${service.slug}`}
-                  className="group flex h-full flex-col bg-surface p-8 transition-colors duration-400 hover:bg-surface-2"
+                  className="group grid gap-6 py-8 md:grid-cols-12 md:items-center"
                 >
-                  <span className="grid size-12 shrink-0 place-items-center rounded-[var(--radius-md)] bg-brand-50 text-brand-700 transition-colors duration-400 group-hover:bg-brand-950 group-hover:text-accent-400">
-                    <ServiceIcon name={service.icon} className="size-6" />
-                  </span>
-
-                  <h2 className="mt-6 text-2xl text-ink">{service.name}</h2>
-                  <p className="mt-3 text-[0.9375rem] leading-relaxed text-ink-soft">
-                    {service.short}
-                  </p>
-
-                  {service.bullets?.length ? (
-                    <ul className="mt-5 flex-1 space-y-2 text-sm text-muted">
-                      {service.bullets.slice(0, 3).map((b) => (
-                        <li key={b} className="flex items-start gap-2.5">
-                          <span
-                            className="mt-2 size-1 shrink-0 rounded-full bg-accent-500"
-                            aria-hidden
-                          />
-                          {b}
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <span className="flex-1" />
-                  )}
-
-                  <span className="mt-7 flex items-center justify-between gap-4 border-t border-line pt-5">
-                    {service.priceFrom && (
-                      <span className="text-sm text-muted">
-                        {t.from}{' '}
-                        <strong className="font-semibold text-ink tabular-nums">
-                          {service.priceFrom}
-                        </strong>
-                      </span>
-                    )}
-                    <span className="inline-flex items-center gap-1.5 text-sm font-medium text-brand-700">
-                      {t.readMore}
-                      <ArrowUpRight
-                        className="size-4 transition-transform duration-300 ease-[var(--ease-out-quint)] group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                        aria-hidden
-                      />
-                    </span>
-                  </span>
+                  <div className="md:col-span-3">
+                    <div className="flex aspect-[4/3] items-center justify-center rounded-[var(--radius-md)] bg-brand-tint p-5 text-brand">
+                      <Illustration kind={service.illustration ?? 'tools'} />
+                    </div>
+                  </div>
+                  <div className="md:col-span-8">
+                    <span className="numeral text-sm">{String(i + 1).padStart(2, '0')}</span>
+                    <h2 className="display-wide mt-2 text-3xl text-ink transition-colors group-hover:text-brand">
+                      {service.name}
+                    </h2>
+                    <p className="measure mt-3 text-[0.9375rem] leading-relaxed text-ink-2">{service.short}</p>
+                    {service.bullets?.length ? (
+                      <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-1 text-sm text-ink-3">
+                        {service.bullets.slice(0, 3).map((b) => (
+                          <li key={b}>— {b}</li>
+                        ))}
+                      </ul>
+                    ) : null}
+                  </div>
+                  <ArrowRight
+                    aria-hidden
+                    strokeWidth={1.5}
+                    className="hidden size-6 justify-self-end text-ink-3 transition-transform group-hover:translate-x-1 group-hover:text-brand md:block"
+                  />
                 </Link>
-              </Reveal>
+              </li>
             ))}
-          </ul>
+          </ol>
         </div>
       </section>
 

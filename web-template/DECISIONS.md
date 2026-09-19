@@ -6,6 +6,29 @@ keep moving.
 
 ---
 
+## The redesign
+
+Oskar's verdict on version one: "looks like a Claude website." He was right,
+and `DESIGN.md` §1 lists the evidence — dark theme, glows, icon-card grids,
+italic accent words, scroll fades, gradient placeholders. The visual layer
+was rewritten; the architecture (config-driven, i18n, static export,
+Lighthouse gate, Higgsfield pipeline) was sound and stayed.
+
+| Decision | Reasoning |
+| --- | --- |
+| **Light paper, brand colour applied not ambient** | The dark theme is the single most common tell. Good trades sites are light; the brand blue does its work as rules, labels, links and one solid block. |
+| **Archivo alone, width axis for hierarchy** | One family removes the "display + Inter" recipe. Condensed heavy headlines read as signage — Activa's building has a painted sign. Body at normal width. |
+| **Hairlines, not cards** | Services are an index; steps are numbered and ruled; facts sit in a ruled strip. Nothing has a 1 px grey border and a shadow. |
+| **Drawn equipment, not blurred blobs** | Every photographic source is blocked here, and a gradient smear in front of a prospect is worse than nothing. Eight line drawings of the actual kit are a deliberate visual language; they occupy the frames photographs will. |
+| **Gallery hides itself when empty** | Same reason. The nav item and sitemap entry go with it. |
+| **No scroll animation** | A tell, and the earlier LCP investigation showed the reveal component cost more than it gave. Deleted, not disabled. |
+| **Contact on the homepage** | The trade's own convention: the form is never a click away. |
+| **Facts strip under the hero** | "Od 1991 roku · Harcerska 2 · Pon–Pt 7:30–16:00 · 4,2 w Google" — the trust layer as text, which is what the conversion research says works. |
+
+The plumber demo moved onto the same design and runs on illustrations too.
+
+---
+
 ## Activa — first lead (Szczecinek, Poland)
 
 **Why this one is a good first target.** Their live domain,

@@ -97,23 +97,18 @@ const config: SiteConfig = {
     chroma: 0.15,
     accentHue: 55,
     accentChroma: 0.17,
-    neutralChroma: 0.008,
-    radius: 0.5,
-    fonts: 'bricolage-inter',
+    neutralChroma: 0.006,
+    radius: 0.125,
+    fonts: 'archivo',
   },
 
   hero: {
     eyebrow: 'Technika grzewcza · Szczecinek i powiat szczecinecki',
-    headline: 'Ciepło w domu,',
-    headlineAccent: 'bez niespodzianek.',
-    sub: 'Kotły, pompy ciepła, ogrzewanie podłogowe i instalacje sanitarne — od doboru urządzeń w naszej hurtowni po montaż i serwis. Jedna firma, jeden numer telefonu, od 1991 roku.',
-    media: {
-      type: 'image',
-      src: '/clients/activa/hero.webp',
-      alt: 'Nowoczesna kotłownia z miedzianą instalacją w ciepłym świetle',
-      width: 1920,
-      height: 1280,
-    },
+    headline: 'Kotły, pompy ciepła i instalacje.',
+    headlineAccent: 'Hurtownia i montaż od 1991 roku.',
+    sub: 'Dobieramy urządzenia w naszej hurtowni przy Harcerskiej 2, montujemy własnym zespołem i serwisujemy po latach. Jedna firma, jeden numer telefonu.',
+    // Drawn until `pnpm imagery --slug activa` has run; then set `media`.
+    illustration: 'boiler',
     ctas: [
       { label: '94 374 11 32', href: 'tel', kind: 'tel' },
       { label: 'Poproś o wycenę', href: '/contact', kind: 'secondary' },
@@ -132,6 +127,7 @@ const config: SiteConfig = {
       name: 'Kotły gazowe',
       short: 'Dobór, sprzedaż i montaż kotłów kondensacyjnych do domów i firm.',
       icon: 'Flame',
+      illustration: 'boiler',
       ctaHeading: 'Czas na nowy kocioł?',
       body: [
         'Kocioł kondensacyjny to dziś podstawa oszczędnego ogrzewania gazowego, ale źle dobrany — za duży, za mały, bez właściwej automatyki — nie da tego, co obiecuje katalog. Zaczynamy od domu, nie od modelu: powierzchnia, ocieplenie, liczba łazienek, sposób przygotowania ciepłej wody.',
@@ -143,19 +139,13 @@ const config: SiteConfig = {
         'Automatyka pogodowa i sterowanie strefowe',
         'Montaż, uruchomienie i przeglądy gwarancyjne', // [VERIFY]
       ],
-      image: {
-        type: 'image',
-        src: '/clients/activa/service-boiler.webp',
-        alt: 'Kocioł kondensacyjny w kotłowni',
-        width: 1200,
-        height: 900,
-      },
     },
     {
       slug: 'pompy-ciepla',
       name: 'Pompy ciepła',
       short: 'Powietrzne pompy ciepła do nowych domów i do wymiany starego ogrzewania.',
       icon: 'Thermometer',
+      illustration: 'heatpump',
       ctaHeading: 'Zastanawiasz się nad pompą ciepła?',
       body: [
         'Pompa ciepła ma sens wtedy, gdy jest dobrana do budynku i instalacji, która już w nim jest. W ocieplonym domu z podłogówką pracuje świetnie; w starym budynku z małymi grzejnikami potrzebuje przemyślenia — i to mówimy uczciwie, zanim cokolwiek policzymy.',
@@ -167,19 +157,13 @@ const config: SiteConfig = {
         'Współpraca z ogrzewaniem podłogowym i grzejnikami',
         'Wskazówki dotyczące dofinansowań', // [VERIFY]
       ],
-      image: {
-        type: 'image',
-        src: '/clients/activa/service-heatpump.webp',
-        alt: 'Jednostka zewnętrzna pompy ciepła przy domu jednorodzinnym',
-        width: 1200,
-        height: 900,
-      },
     },
     {
       slug: 'ogrzewanie-podlogowe',
       name: 'Ogrzewanie podłogowe',
       short: 'Wodne ogrzewanie podłogowe — projekt, materiały i wykonanie.',
       icon: 'Layers',
+      illustration: 'underfloor',
       ctaHeading: 'Planujesz podłogówkę?',
       body: [
         'Podłogówka to najbardziej komfortowy i najtańszy w eksploatacji sposób ogrzewania niskotemperaturowego — pod warunkiem, że pętle są rozłożone z głową, a rozdzielacz jest prawidłowo zrównoważony. Tu nie ma miejsca na poprawki po wylaniu posadzki.',
@@ -191,19 +175,13 @@ const config: SiteConfig = {
         'Próba ciśnieniowa przed wylewką',
         'Sterowanie strefowe pokój po pokoju',
       ],
-      image: {
-        type: 'image',
-        src: '/clients/activa/service-underfloor.webp',
-        alt: 'Rozdzielacz ogrzewania podłogowego z rurami PEX',
-        width: 1200,
-        height: 900,
-      },
     },
     {
       slug: 'instalacje-sanitarne',
       name: 'Instalacje sanitarne',
       short: 'Woda, kanalizacja i ciepła woda użytkowa — w nowych i remontowanych domach.',
       icon: 'Droplets',
+      illustration: 'cylinder',
       body: [
         'Instalacja wodno-kanalizacyjna to część domu, której nikt nie ogląda, dopóki coś nie pójdzie nie tak. Dlatego wykonujemy ją tak, żeby nie trzeba było do niej wracać: starannie prowadzone trasy, sprawdzone materiały, próba szczelności przed zabudową.',
         'Zajmujemy się zarówno nowymi instalacjami, jak i wymianą starych — w tym przygotowaniem ciepłej wody użytkowej z zasobnikiem lub podgrzewaczem dobranym do liczby domowników.',
@@ -221,6 +199,7 @@ const config: SiteConfig = {
       name: 'Hurtownia materiałów instalacyjnych',
       short: 'Kotły, grzejniki, armatura i materiały instalacyjne — dla instalatorów i klientów indywidualnych.',
       icon: 'Store',
+      illustration: 'warehouse',
       ctaHeading: 'Potrzebujesz materiałów na instalację?',
       body: [
         'Hurtownia przy ul. Harcerskiej 2 to serce firmy od 1991 roku. Zaopatrujemy instalatorów z całego powiatu i doradzamy klientom indywidualnym, którzy wolą kupić raz i dobrze niż dwa razy tanio.',
@@ -232,19 +211,13 @@ const config: SiteConfig = {
         'Doradztwo techniczne przy ladzie',
         'Otwarte sześć dni w tygodniu',
       ],
-      image: {
-        type: 'image',
-        src: '/clients/activa/service-warehouse.webp',
-        alt: 'Regały hurtowni z urządzeniami grzewczymi',
-        width: 1200,
-        height: 900,
-      },
     },
     {
       slug: 'serwis',
       name: 'Serwis i przeglądy',
       short: 'Przeglądy okresowe, naprawy i modernizacje istniejących instalacji.',
       icon: 'Wrench',
+      illustration: 'radiator',
       ctaHeading: 'Czas na przegląd?',
       body: [
         'Coroczny przegląd kotła to nie formalność dla gwarancji — to moment, w którym wychwytuje się tanie usterki, zanim staną się drogimi awariami. Sprawdzamy spalanie, zabezpieczenia, naczynie wzbiorcze i to, czy instalacja jest prawidłowo odpowietrzona.',
@@ -330,6 +303,44 @@ const config: SiteConfig = {
     url: 'https://www.google.com/search?q=Activa+Technika+grzewcza+Szczecinek',
   },
 
+  // The one solid block on the homepage: the wholesale counter, which is
+  // what the sign on the building says and what the registers prove.
+  spotlight: {
+    eyebrow: 'Hurtownia · ul. Harcerska 2',
+    title: 'Hurtownia materiałów instalacyjnych',
+    body: [
+      'Serce firmy od 1991 roku. Zaopatrujemy instalatorów z całego powiatu i doradzamy klientom indywidualnym, którzy wolą kupić raz i dobrze.',
+      'Kotły, grzejniki, armatura, rury i osprzęt na miejscu. Czego nie ma na półce — sprowadzamy, zwykle w kilka dni.',
+    ],
+    bullets: [
+      'Pon–Pt 7:30–16:00, Sob 8:00–13:00',
+      'Dla instalatorów i klientów indywidualnych',
+      'Doradztwo techniczne przy ladzie',
+      'Urządzenia od czołowych producentów',
+    ],
+    illustration: 'warehouse',
+    cta: { label: 'Zobacz ofertę hurtowni', href: '/services/hurtownia' },
+  },
+
+  process: [
+    {
+      title: 'Telefon lub wiadomość',
+      body: 'Opisz, co się dzieje albo co planujesz. Rozmawiasz z człowiekiem, który zna urządzenia z naszych półek, i od razu słyszysz, czy to zlecenie dla nas.',
+    },
+    {
+      title: 'Oględziny i wycena',
+      body: 'Przy kotle, pompie ciepła czy podłogówce najpierw oglądamy budynek. Oferta wymienia konkretne urządzenia i zakres prac.',
+    },
+    {
+      title: 'Materiały i montaż',
+      body: 'Urządzenia i materiały z własnej hurtowni, montaż własnym zespołem, próba ciśnieniowa przed zabudową.',
+    },
+    {
+      title: 'Uruchomienie i serwis',
+      body: 'Uruchomienie, dokumentacja, a potem przeglądy — również urządzeń, których nie montowaliśmy.',
+    },
+  ],
+
   about: {
     heading: 'Rodzinna firma, która grzeje Szczecinek od 1991 roku',
     body: [
@@ -337,13 +348,8 @@ const config: SiteConfig = {
       'Dziś łączymy sprzedaż z wykonawstwem: dobieramy urządzenia, montujemy je własnym zespołem i serwisujemy po latach. Klient nie musi szukać trzech firm i pilnować, kto za co odpowiada. Odpowiadamy my.',
       'Wciąż jesteśmy firmą rodzinną. Osoba, z którą rozmawiasz przez telefon, zna każde urządzenie na naszych półkach i większość domów w okolicy, w których je zamontowaliśmy.',
     ],
-    image: {
-      type: 'image',
-      src: '/clients/activa/about.webp',
-      alt: 'Wnętrze hurtowni techniki grzewczej',
-      width: 1200,
-      height: 1400,
-    },
+    // No image: the founding year is set as a large numeral instead. Add a
+    // real photograph of the counter or the team here when it exists.
     stats: [
       { value: '1991', label: 'Rok założenia' },
       { value: '35 lat', label: 'Na rynku' },
@@ -352,52 +358,11 @@ const config: SiteConfig = {
     ],
   },
 
-  // [VERIFY] Placeholder imagery with sample captions. Replace with the
-  // client's own photographs before anything goes live.
-  gallery: [
-    {
-      src: '/clients/activa/gallery-1.webp',
-      alt: 'Nowoczesna kotłownia gazowa',
-      caption: 'Kotłownia gazowa, Szczecinek',
-      width: 1200,
-      height: 900,
-    },
-    {
-      src: '/clients/activa/gallery-2.webp',
-      alt: 'Jednostka zewnętrzna pompy ciepła',
-      caption: 'Pompa ciepła, Borne Sulinowo',
-      width: 1200,
-      height: 900,
-    },
-    {
-      src: '/clients/activa/gallery-3.webp',
-      alt: 'Pętle ogrzewania podłogowego przed wylewką',
-      caption: 'Ogrzewanie podłogowe, Barwice',
-      width: 1200,
-      height: 900,
-    },
-    {
-      src: '/clients/activa/gallery-4.webp',
-      alt: 'Rozdzielacz ogrzewania podłogowego',
-      caption: 'Rozdzielacz, Czaplinek',
-      width: 1200,
-      height: 900,
-    },
-    {
-      src: '/clients/activa/gallery-5.webp',
-      alt: 'Zasobnik ciepłej wody użytkowej',
-      caption: 'Zasobnik c.w.u., Grzmiąca',
-      width: 1200,
-      height: 900,
-    },
-    {
-      src: '/clients/activa/gallery-6.webp',
-      alt: 'Grzejnik dekoracyjny w salonie',
-      caption: 'Grzejniki dekoracyjne, Biały Bór',
-      width: 1200,
-      height: 900,
-    },
-  ],
+  // Empty until real photographs exist — a gallery of placeholders is worse
+  // than no gallery. The section, the nav item and the sitemap entry all
+  // hide themselves. After `pnpm imagery --slug activa`, list the generated
+  // gallery-1…6 here with captions.
+  gallery: [],
 
   faqs: [
     {
@@ -431,19 +396,17 @@ const config: SiteConfig = {
   ],
 
   copy: {
-    servicesTitle: 'Od hurtowni po *gotową instalację*',
+    servicesEyebrow: 'Oferta',
+    servicesTitle: 'Od hurtowni po gotową instalację',
     servicesIntro:
-      'Sprzedajemy urządzenia, projektujemy instalacje i montujemy je własnym zespołem — więc za każdy etap odpowiada jedna firma.',
+      'Sprzedajemy urządzenia, projektujemy instalacje i montujemy je własnym zespołem. Za każdy etap odpowiada jedna firma.',
     areasTitle: 'Szczecinek i cały powiat',
-    areasIntro:
-      'Każda miejscowość ma własną podstronę. Jeśli Twojej nie ma na liście — zadzwoń, prawdopodobnie i tak dojeżdżamy.',
-    galleryTitle: 'Kilka *ostatnich* realizacji',
-    galleryIntro:
-      'Kotłownie, rozdzielacze i instalacje, których zwykle nikt nie ogląda — dlatego robimy je tak, żeby można było pokazać.',
-    faqTitle: 'Konkretne *odpowiedzi*',
+    areasIntro: 'Każda miejscowość ma własną podstronę. Jeśli Twojej nie ma na liście, zadzwoń — prawdopodobnie i tak dojeżdżamy.',
+    galleryTitle: 'Ostatnie realizacje',
+    galleryIntro: 'Kotłownie, rozdzielacze i instalacje, których zwykle nikt nie ogląda.',
+    faqTitle: 'Pytania, które słyszymy najczęściej',
     ctaHeading: 'Planujesz wymianę ogrzewania?',
-    ctaSub:
-      'Zadzwoń lub napisz — powiemy, co ma sens w Twoim domu, zanim cokolwiek zaproponujemy.',
+    ctaSub: 'Zadzwoń lub napisz. Powiemy, co ma sens w Twoim domu, zanim cokolwiek zaproponujemy.',
   },
 
   seo: {

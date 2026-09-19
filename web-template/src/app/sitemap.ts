@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next'
-import { site, isDemo } from '@/lib/site'
+import { site, isDemo, hasGallery } from '@/lib/site'
 import { absoluteUrl } from '@/lib/utils'
 
 export const dynamic = 'force-static'
@@ -15,7 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ['/services', 0.9],
     ['/areas', 0.8],
     ['/about', 0.6],
-    ['/gallery', 0.5],
+    ...(hasGallery ? ([['/gallery', 0.5]] as Array<[string, number]>) : []),
     ['/contact', 0.8],
     ['/privacy', 0.2],
   ]

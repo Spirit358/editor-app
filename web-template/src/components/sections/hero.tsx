@@ -1,212 +1,91 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { Check, Phone } from 'lucide-react'
+import { Phone } from 'lucide-react'
 import { site, t, phoneHref, formatRating } from '@/lib/site'
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
 import { Stars } from '@/components/stars'
+import { Illustration } from '@/components/illustration'
 
 /**
- * The hero is server-rendered and animates with CSS keyframes only. No
- * hydration is needed before it moves, so the largest contentful paint is not
- * waiting on a JavaScript bundle, and nothing shifts once it arrives.
- *
- * The negative top margin pulls the panel up behind the sticky, transparent
- * header; the matching padding keeps the content clear of it.
+ * Split hero on paper. Words on the left, aligned to the page grid; the
+ * equipment on the right in a tinted panel that bleeds to the viewport edge
+ * on wide screens. A photograph fills the panel when the config has one;
+ * otherwise the drawn illustration does. No overlay, no glow, nothing fades.
  */
 export function Hero() {
-  const { hero, business, rating, googleRating } = site
-  // Schema-backed rating first; otherwise the public Google score as a link.
+  const { hero, rating, googleRating } = site
   const proof = rating ?? googleRating
 
   return (
-    <section
-      className={cn(
-        'grain relative isolate overflow-hidden bg-brand-950 text-brand-50',
-        '-mt-18 pt-18 lg:-mt-20 lg:pt-20'
-      )}
-    >
-      {/* Background media */}
-      {hero.media?.type === 'image' && (
-        <Image
-          src={hero.media.src}
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="-z-20 object-cover opacity-30"
-        />
-      )}
-      {hero.media?.type === 'video' && (
-        <video
-          className="absolute inset-0 -z-20 size-full object-cover opacity-30"
-          poster={hero.media.poster}
-          autoPlay
-          muted
-          loop
-          playsInline
-          // Decorative background: never announce it, never let it be focused.
-          aria-hidden
-          tabIndex={-1}
-        >
-          <source src={hero.media.src} type="video/mp4" />
-        </video>
-      )}
+    <section className="rule-b lg:grid lg:grid-cols-[minmax(0,58%)_minmax(0,42%)]">
+      {/* Left padding on wide screens mirrors container-page's gutter so the
+          text stays on the grid while the panel leaves it. */}
+      <div className="container-page lg:max-w-none lg:pl-[max(3rem,calc((100vw-80rem)/2+3rem))] lg:pr-14">
+        <div className="py-10 sm:py-14 lg:py-24">
+          {hero.eyebrow && <p className="label">{hero.eyebrow}</p>}
 
-      {/* Depth: a warm glow bottom-left, a cool one top-right, then a scrim
-          dark enough to guarantee AA contrast over any photograph. */}
-      <div
-        aria-hidden
-        className="absolute inset-0 -z-10 bg-[radial-gradient(60%_55%_at_12%_85%,color-mix(in_oklab,var(--color-accent-600)_22%,transparent),transparent_70%),radial-gradient(50%_60%_at_88%_8%,color-mix(in_oklab,var(--color-brand-500)_26%,transparent),transparent_70%)]"
-      />
-      <div
-        aria-hidden
-        className="absolute inset-0 -z-10 bg-gradient-to-b from-brand-950/85 via-brand-950/70 to-brand-950"
-      />
-
-      <div className="container-page relative">
-        <div className="grid items-center gap-12 py-14 sm:py-24 lg:grid-cols-12 lg:gap-16 lg:py-32">
-          <div className="lg:col-span-7">
-            {hero.eyebrow && (
-              <p
-                className="animate-fade eyebrow stagger text-accent-400"
-                style={{ '--i': 0 } as React.CSSProperties}
-              >
-                <span className="size-1.5 rounded-full bg-accent-400" aria-hidden />
-                {hero.eyebrow}
-              </p>
+          <h1 className="display mt-4 text-5xl text-ink lg:text-6xl">
+            {hero.headline}
+            {hero.headlineAccent && (
+              <>
+                {' '}
+                <span className="text-brand">{hero.headlineAccent}</span>
+              </>
             )}
+          </h1>
 
-            {/* No fade and no stagger: this is the LCP element. */}
-            <h1 className="animate-rise-lcp mt-5 text-6xl leading-[0.98] text-brand-50">
-              {hero.headline}
-              {hero.headlineAccent && (
-                <>
-                  {' '}
-                  <span className="italic text-accent-400">
-                    {hero.headlineAccent}
-                  </span>
-                </>
-              )}
-            </h1>
+          <p className="measure mt-6 text-lg leading-relaxed text-ink-2 sm:text-xl">{hero.sub}</p>
 
-            <p
-              className="animate-rise stagger mt-6 max-w-xl text-lg leading-relaxed text-brand-200"
-              style={{ '--i': 2 } as React.CSSProperties}
-            >
-              {hero.sub}
-            </p>
-
-            <div
-              className="animate-rise stagger mt-9 flex flex-col gap-3 sm:flex-row sm:items-center"
-              style={{ '--i': 3 } as React.CSSProperties}
-            >
-              {hero.ctas.map((cta) => {
-                const isTel = cta.kind === 'tel'
-                const href = isTel ? phoneHref : cta.href
-                const className = cn(
-                  buttonVariants({
-                    variant: isTel
-                      ? 'accent'
-                      : cta.kind === 'primary'
-                        ? 'primary'
-                        : 'outline-light',
-                    size: 'xl',
-                  }),
-                  'w-full sm:w-auto'
-                )
-
-                return isTel || href.startsWith('http') ? (
-                  <a
-                    key={cta.label}
-                    href={href}
-                    className={className}
-                    data-cta="hero-call"
-                  >
-                    {isTel && <Phone aria-hidden />}
-                    <span className={isTel ? 'tabular-nums' : undefined}>{cta.label}</span>
-                  </a>
-                ) : (
-                  <Link key={cta.label} href={href} className={className}>
-                    {cta.label}
-                  </Link>
-                )
-              })}
-            </div>
-
-            {proof && (
-              <div
-                className="animate-fade stagger mt-8 flex items-center gap-3 text-sm text-brand-300"
-                style={{ '--i': 4 } as React.CSSProperties}
-              >
-                <Stars
-                  value={proof.value}
-                  label={t.ratedOutOfCount(proof.value, proof.count)}
-                />
-                {rating ? (
-                  <span>
-                    <strong className="font-semibold text-brand-50">
-                      {formatRating(rating.value)}
-                    </strong>{' '}
-                    {t.reviewsFrom(rating.count)}
-                  </span>
-                ) : (
-                  <a
-                    href={googleRating!.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="link-underline transition-colors hover:text-brand-50"
-                  >
-                    <strong className="font-semibold text-brand-50">
-                      {formatRating(googleRating!.value)}
-                    </strong>{' '}
-                    {t.googleReviews(googleRating!.count)}
-                  </a>
-                )}
-              </div>
-            )}
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+            {hero.ctas.map((cta) => {
+              const isTel = cta.kind === 'tel'
+              const href = isTel ? phoneHref : cta.href
+              const className = cn(
+                buttonVariants({ variant: isTel ? 'accent' : cta.kind === 'primary' ? 'primary' : 'outline', size: 'xl' }),
+                'w-full sm:w-auto'
+              )
+              return isTel || href.startsWith('http') ? (
+                <a key={cta.label} href={href} className={className} data-cta="hero-call">
+                  {isTel && <Phone aria-hidden strokeWidth={1.75} />}
+                  <span className={isTel ? 'tabular' : undefined}>{cta.label}</span>
+                </a>
+              ) : (
+                <Link key={cta.label} href={href} className={className}>
+                  {cta.label}
+                </Link>
+              )
+            })}
           </div>
 
-          {/* Proof card. On mobile it drops below the fold rather than pushing
-              the call-to-action down. */}
-          {hero.badges?.length ? (
-            <div
-              className="animate-rise stagger lg:col-span-5"
-              style={{ '--i': 5 } as React.CSSProperties}
-            >
-              <div className="rounded-[var(--radius-xl)] border border-brand-50/12 bg-brand-50/6 p-7 backdrop-blur-md sm:p-8">
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-accent-400">
-                  {t.whatYouGet}
-                </p>
-                <ul className="mt-6 space-y-4">
-                  {hero.badges.map((badge) => (
-                    <li key={badge} className="flex items-start gap-3.5">
-                      <span
-                        className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-accent-500/20"
-                        aria-hidden
-                      >
-                        <Check className="size-3 text-accent-400" strokeWidth={3} />
-                      </span>
-                      <span className="text-[0.9375rem] leading-snug text-brand-100">
-                        {badge}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-
-                {business.accreditations?.length ? (
-                  <div className="mt-7 border-t border-brand-50/10 pt-6">
-                    <ul className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-brand-300">
-                      {business.accreditations.slice(0, 3).map((a) => (
-                        <li key={a}>{a}</li>
-                      ))}
-                    </ul>
-                  </div>
-                ) : null}
-              </div>
-            </div>
-          ) : null}
+          {proof && (
+            <p className="mt-6 flex items-center gap-3 text-sm text-ink-2">
+              <Stars value={proof.value} label={t.ratedOutOfCount(proof.value, proof.count)} />
+              {rating ? (
+                <span>
+                  <strong className="font-semibold text-ink">{formatRating(rating.value)}</strong> {t.reviewsFrom(rating.count)}
+                </span>
+              ) : (
+                <a href={googleRating!.url} target="_blank" rel="noopener noreferrer" className="link">
+                  <strong className="font-semibold">{formatRating(googleRating!.value)}</strong>{' '}
+                  {t.googleReviews(googleRating!.count)}
+                </a>
+              )}
+            </p>
+          )}
         </div>
+      </div>
+
+      <div className="container-page pb-10 lg:max-w-none lg:p-0">
+        {hero.media?.type === 'image' ? (
+          <div className="relative aspect-[4/3] overflow-hidden rounded-[var(--radius-md)] lg:aspect-auto lg:h-full lg:min-h-[32rem] lg:rounded-none">
+            <Image src={hero.media.src} alt={hero.media.alt} fill priority sizes="(min-width: 1024px) 42vw, 100vw" className="object-cover" />
+          </div>
+        ) : (
+          <div className="flex aspect-[4/3] items-center justify-center rounded-[var(--radius-md)] bg-brand-tint p-6 text-brand sm:p-10 lg:aspect-auto lg:h-full lg:min-h-[32rem] lg:rounded-none lg:p-16">
+            <Illustration kind={hero.illustration ?? 'boiler'} className="max-h-full w-full max-w-[36rem]" />
+          </div>
+        )}
       </div>
     </section>
   )

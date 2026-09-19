@@ -1,71 +1,40 @@
-import { Quote } from 'lucide-react'
 import { site, copy, t, formatRating } from '@/lib/site'
 import { SectionHeading } from './section-heading'
-import { Reveal } from '@/components/reveal'
 import { Stars } from '@/components/stars'
-import { Highlight } from '@/components/highlight'
 
+/** Only when real review texts exist. Quotes in a ruled grid, no cards. */
 export function Reviews() {
   const { reviews, rating } = site
   if (!reviews?.length) return null
 
   return (
-    <section id="reviews" className="section-y bg-surface">
+    <section id="reviews" className="section rule-b">
       <div className="container-page">
-        <div className="flex flex-wrap items-end justify-between gap-8">
-          <SectionHeading
-            eyebrow={copy.reviewsEyebrow}
-            title={<Highlight text={copy.reviewsTitle} />}
-          />
-
+        <div className="flex flex-wrap items-end justify-between gap-6">
+          <SectionHeading eyebrow={copy.reviewsEyebrow} title={copy.reviewsTitle} />
           {rating && (
-            <Reveal delay={100}>
-              <div className="flex items-center gap-4 rounded-[var(--radius-lg)] border border-line bg-surface-2 px-6 py-4">
-                <span className="font-display text-4xl tabular-nums text-brand-800">
-                  {formatRating(rating.value)}
-                </span>
-                <span className="text-sm">
-                  <Stars value={rating.value} label={t.ratedOutOf(rating.value)} />
-                  <span className="mt-1 block text-muted">
-                    {t.reviewsCount(rating.count)}
-                  </span>
-                </span>
-              </div>
-            </Reveal>
+            <p className="flex items-center gap-3">
+              <span className="display text-4xl text-ink">{formatRating(rating.value)}</span>
+              <span className="text-sm text-ink-2">
+                <Stars value={rating.value} label={t.ratedOutOf(rating.value)} />
+                <span className="mt-0.5 block">{t.reviewsCount(rating.count)}</span>
+              </span>
+            </p>
           )}
         </div>
 
-        {/* Columns rather than a grid so uneven review lengths pack tightly
-            instead of leaving ragged whitespace under the short ones. */}
-        <div className="mt-14 gap-6 sm:columns-2 lg:columns-3">
+        <ul className="mt-10 grid gap-x-8 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
           {reviews.map((review, i) => (
-            <Reveal key={i} delay={(i % 3) * 80}>
-              <figure className="mb-6 break-inside-avoid rounded-[var(--radius-lg)] border border-line bg-surface-2 p-7">
-                <Quote
-                  className="size-7 text-brand-200"
-                  aria-hidden
-                  strokeWidth={1.5}
-                />
-                <blockquote className="mt-4 text-[0.9375rem] leading-relaxed text-ink-soft">
-                  {review.text}
-                </blockquote>
-                <figcaption className="mt-6 flex items-center justify-between gap-4 border-t border-line pt-5">
-                  <div>
-                    <span className="block text-sm font-medium text-ink">
-                      {review.author}
-                    </span>
-                    {review.source && (
-                      <span className="mt-0.5 block text-xs text-muted">
-                        {t.via} {review.source}
-                      </span>
-                    )}
-                  </div>
-                  <Stars value={review.rating} size={14} label={t.outOfFive(review.rating)} />
-                </figcaption>
-              </figure>
-            </Reveal>
+            <li key={i} className="rule-strong-t pt-5">
+              <Stars value={review.rating} size={13} label={t.outOfFive(review.rating)} />
+              <blockquote className="mt-4 text-[0.9375rem] leading-relaxed text-ink-2">{review.text}</blockquote>
+              <p className="mt-4 text-sm">
+                <span className="font-medium text-ink">{review.author}</span>
+                {review.source && <span className="text-ink-3"> · {review.source}</span>}
+              </p>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   )

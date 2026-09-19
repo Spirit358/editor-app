@@ -1,46 +1,37 @@
 'use client'
 
 import * as React from 'react'
-import { MessageCircle, Phone } from 'lucide-react'
+import { Phone } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 /**
- * The single highest-converting element on a trades site: a thumb-reachable
- * call button that never scrolls away.
- *
- * It appears only after the hero has scrolled past, so it does not compete
- * with the hero's own call-to-action, and it hides while an input is focused
- * so it cannot cover the contact form on a small screen.
+ * A thumb-reachable call button that never scrolls away. Appears after the
+ * hero has scrolled past; hides while an input is focused so it cannot cover
+ * the contact form.
  */
 export function MobileCallBar({
   phoneHref,
   phoneDisplay,
-  whatsappHref,
   labels,
 }: {
   phoneHref: string
   phoneDisplay: string
-  whatsappHref?: string
-  labels: { callNow: string; whatsapp: string }
+  labels: { callNow: string }
 }) {
   const [show, setShow] = React.useState(false)
   const [typing, setTyping] = React.useState(false)
 
   React.useEffect(() => {
-    const onScroll = () => setShow(window.scrollY > 420)
+    const onScroll = () => setShow(window.scrollY > 480)
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
-
     const onFocus = (e: FocusEvent) => {
       const el = e.target as HTMLElement | null
-      setTyping(
-        !!el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT')
-      )
+      setTyping(!!el && ['INPUT', 'TEXTAREA', 'SELECT'].includes(el.tagName))
     }
     const onBlur = () => setTyping(false)
     document.addEventListener('focusin', onFocus)
     document.addEventListener('focusout', onBlur)
-
     return () => {
       window.removeEventListener('scroll', onScroll)
       document.removeEventListener('focusin', onFocus)
@@ -53,51 +44,23 @@ export function MobileCallBar({
   return (
     <div
       className={cn(
-        'fixed inset-x-0 bottom-0 z-40 no-print lg:hidden',
-        'border-t border-brand-800 bg-brand-950/95 backdrop-blur-lg',
-        'transition-transform duration-500 ease-[var(--ease-out-quint)]',
-        'pb-[env(safe-area-inset-bottom)]',
+        'fixed inset-x-0 bottom-0 z-40 p-3 no-print lg:hidden',
+        'transition-transform duration-300 ease-[var(--ease-out)]',
+        'pb-[max(0.75rem,env(safe-area-inset-bottom))]',
         visible ? 'translate-y-0' : 'translate-y-full'
       )}
-      // Hidden from the tab order while off-screen.
       aria-hidden={!visible}
     >
-      <div className="flex items-stretch gap-2 p-2.5">
-        <a
-          href={phoneHref}
-          data-cta="sticky-call"
-          tabIndex={visible ? undefined : -1}
-          className={cn(
-            'flex flex-1 items-center justify-center gap-2.5 rounded-[var(--radius-md)]',
-            'bg-accent-500 px-4 py-3.5 font-medium text-brand-950',
-            'active:translate-y-px'
-          )}
-        >
-          <Phone className="size-5" aria-hidden />
-          <span className="flex flex-col leading-none">
-            <span className="text-[0.68rem] font-semibold uppercase tracking-widest opacity-70">
-              {labels.callNow}
-            </span>
-            <span className="mt-1 text-base tabular-nums">{phoneDisplay}</span>
-          </span>
-        </a>
-
-        {whatsappHref && (
-          <a
-            href={whatsappHref}
-            data-cta="sticky-whatsapp"
-            tabIndex={visible ? undefined : -1}
-            aria-label={labels.whatsapp}
-            className={cn(
-              'flex items-center justify-center rounded-[var(--radius-md)] px-5',
-              'border border-brand-50/20 bg-brand-50/8 text-brand-50',
-              'active:translate-y-px'
-            )}
-          >
-            <MessageCircle className="size-5" aria-hidden />
-          </a>
-        )}
-      </div>
+      <a
+        href={phoneHref}
+        data-cta="sticky-call"
+        tabIndex={visible ? undefined : -1}
+        className="flex h-14 items-center justify-center gap-3 rounded-[var(--radius-sm)] bg-accent px-4 font-medium text-on-accent shadow-[0_8px_24px_-8px_rgba(0,0,0,0.35)]"
+      >
+        <Phone className="size-5" aria-hidden strokeWidth={1.75} />
+        <span className="text-xs font-semibold uppercase tracking-[0.1em] opacity-80">{labels.callNow}</span>
+        <span className="tabular text-lg">{phoneDisplay}</span>
+      </a>
     </div>
   )
 }

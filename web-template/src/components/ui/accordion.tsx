@@ -11,11 +11,7 @@ export const AccordionItem = React.forwardRef<
   React.ComponentRef<typeof AccordionPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Item>
 >(({ className, ...props }, ref) => (
-  <AccordionPrimitive.Item
-    ref={ref}
-    className={cn('border-b border-line', className)}
-    {...props}
-  />
+  <AccordionPrimitive.Item ref={ref} className={cn('rule-b', className)} {...props} />
 ))
 AccordionItem.displayName = 'AccordionItem'
 
@@ -27,9 +23,8 @@ export const AccordionTrigger = React.forwardRef<
     <AccordionPrimitive.Trigger
       ref={ref}
       className={cn(
-        'group flex flex-1 items-start justify-between gap-6 py-5 text-left',
-        'font-display text-lg text-ink transition-colors duration-200',
-        'hover:text-brand-700 sm:text-xl',
+        'group flex flex-1 items-start justify-between gap-6 py-4 text-left',
+        'text-lg font-medium text-ink transition-colors hover:text-brand',
         className
       )}
       {...props}
@@ -37,11 +32,8 @@ export const AccordionTrigger = React.forwardRef<
       {children}
       <Plus
         aria-hidden
-        className={cn(
-          'mt-1 size-5 shrink-0 text-brand-600',
-          'transition-transform duration-400 ease-[var(--ease-out-quint)]',
-          'group-data-[state=open]:rotate-135'
-        )}
+        strokeWidth={1.5}
+        className="mt-1 size-5 shrink-0 text-ink-3 transition-transform duration-200 group-data-[state=open]:rotate-45"
       />
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
@@ -54,15 +46,10 @@ export const AccordionContent = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
   <AccordionPrimitive.Content
     ref={ref}
-    className={cn(
-      'overflow-hidden text-ink-soft',
-      'data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down'
-    )}
+    className="overflow-hidden text-ink-2 data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
     {...props}
   >
-    <div className={cn('max-w-2xl pb-6 pr-10 leading-relaxed', className)}>
-      {children}
-    </div>
+    <div className={cn('measure pb-5 pr-10 leading-relaxed', className)}>{children}</div>
   </AccordionPrimitive.Content>
 ))
 AccordionContent.displayName = 'AccordionContent'

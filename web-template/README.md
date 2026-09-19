@@ -42,6 +42,15 @@ pnpm dev
 | `pnpm audit-site` | Lighthouse on every route, mobile + desktop. Fails under 90 |
 | `pnpm check` | typecheck → build → audit |
 
+## Design
+
+Read `DESIGN.md` first. In one paragraph: light paper, one typeface (Archivo,
+width axis for hierarchy), hairlines instead of cards, the brand colour
+applied as rules, labels, links and one solid block, the accent on the phone
+button only, drawn technical illustrations of the equipment until real
+photography exists, and nothing that animates on scroll. It exists because
+version one hit nearly every documented "this was generated" tell.
+
 ## The one file that matters
 
 `clients/<slug>/site.config.ts` holds everything: business details, services,
@@ -97,8 +106,12 @@ re-export in `src/config/fonts.ts` to match. Every pairing includes the
 
 | Pairing | Feel |
 | --- | --- |
-| `fraunces-inter` | trades, established, warm |
-| `bricolage-inter` | trades, modern, technical |
+| `archivo` | one family, condensed headlines, the default |
+| `fraunces-inter` | serif display, warm |
+| `bricolage-inter` | grotesk display, technical |
+
+The design's `display` utility sets Archivo at 84% width and 700 weight; the
+other pairings ignore the width axis and simply set heavier.
 
 ### Section copy
 
@@ -131,7 +144,15 @@ endpoint is blank.
 
 ## Imagery
 
-Three ways to get images in, all ending in the same responsive ladder:
+**Drawn until real.** Every frame a photograph would occupy — the hero panel,
+the spotlight block, each service — takes either a `MediaAsset` or an
+`illustration` key (`boiler`, `heatpump`, `radiator`, `underfloor`,
+`cylinder`, `warehouse`, `van`, `tools`; see `src/components/illustration.tsx`).
+The drawings are the site's imagery until photography exists; a blurred
+placeholder never goes in front of a prospect. The gallery, its nav item and
+its sitemap entry hide themselves while `gallery` is empty.
+
+Three ways to get real images in, all ending in the same responsive ladder:
 
 ```
 clients/<slug>/
@@ -159,9 +180,9 @@ public/clients/<slug>/
 2. **Client photos** — drop them in `clients/<slug>/source/`, then
    `pnpm optimize-images --slug <slug>`. 6 MB phone JPEGs are fine.
 
-3. **Placeholders** — `pnpm gen-assets --slug <slug>` writes abstract, on-brand
-   stand-ins for every name in `imagery.json`, so the demo builds and can be
-   reviewed before a single real image exists. **Replace before going live.**
+3. **Placeholders** — `pnpm gen-assets --slug <slug>` still writes abstract
+   stand-ins for every name in `imagery.json`, for pipeline testing. They are
+   not referenced by any config any more; use `illustration` keys instead.
 
 Originals live outside `public/` on purpose: a static export copies `public/`
 wholesale, so anything in there ships to the CDN.
@@ -224,10 +245,11 @@ src/
   app/                 routes — home, services, areas, about, gallery,
                        contact, privacy, sitemap, robots
   components/
+    illustration.tsx   the drawn equipment
     layout/            header, footer, mobile call bar, demo banner
-    sections/          hero, services, about, reviews, areas, gallery,
-                       faq, cta, contact
-    ui/                button, card, badge, accordion, form fields
+    sections/          hero, facts, services, spotlight, process, about,
+                       reviews, areas, gallery, faq, cta, contact
+    ui/                button, accordion, form fields
   config/              active client + font pairing (both rewritten by use-site)
   fonts/               the pairing registry
   lib/                 types, config loader/validator, i18n, SEO + JSON-LD

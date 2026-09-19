@@ -61,12 +61,21 @@ For any lead, look at the Google Business Profile panel before the directory
 sites: it is where the rating, the category, the logo and the tidy-up
 opportunities actually are.
 
+## Design rules
+
+`DESIGN.md` is the contract. The short version: light page; brand colour
+applied, not ambient; no gradients, glows, grain or glass; no cards for
+lists; one family with hierarchy by size, weight and width; drawn
+illustrations until real photography, never a blurred placeholder; phone and
+address on every screen; facts over adjectives; nothing animates on scroll.
+
 ## Conventions that are load-bearing
 
 Undoing any of these quietly breaks something measurable:
 
-- **Never fade in the `<h1>`.** Use `animate-rise-lcp`. See README.
-- **`Reveal` starts visible** and hides only what is below the fold.
+- **Nothing animates on load or scroll.** The h1 paints on the first frame.
+  If a reveal effect is ever reintroduced, the LCP element must never start
+  at opacity 0.
 - **Never hardcode niche or client copy in a component.** It goes in
   `site.config.ts`, under `copy` if it is a section heading.
 - **Never hardcode English in a component either.** Chrome strings come from

@@ -1,10 +1,8 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowUpRight, MapPin } from 'lucide-react'
 import { site, t } from '@/lib/site'
 import { buildMetadata, breadcrumbSchema } from '@/lib/seo'
 import { PageHero } from '@/components/sections/page-hero'
-import { Reveal } from '@/components/reveal'
 import { Cta } from '@/components/sections/cta'
 import { JsonLd } from '@/components/json-ld'
 
@@ -15,11 +13,7 @@ const TRAIL = [
 
 export const metadata: Metadata = buildMetadata({
   title: t.crumbs.areas,
-  description: t.meta.areas(
-    site.business.name,
-    site.areas.map((a) => a.name).join(', '),
-    site.contact.address.locality
-  ),
+  description: t.meta.areas(site.business.name, site.areas.map((a) => a.name).join(', '), site.contact.address.locality),
   path: '/areas',
 })
 
@@ -33,39 +27,25 @@ export default function AreasPage() {
         breadcrumbs={TRAIL}
       />
 
-      <section className="section-y bg-surface">
+      <section className="section rule-b">
         <div className="container-page">
-          <ul className="grid gap-px overflow-hidden rounded-[var(--radius-lg)] border border-line bg-line sm:grid-cols-2">
-            {site.areas.map((area, i) => (
-              <Reveal as="li" key={area.slug} delay={(i % 2) * 70}>
-                <Link
-                  href={`/areas/${area.slug}`}
-                  className="group flex h-full flex-col bg-surface p-8 transition-colors duration-400 hover:bg-surface-2"
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <h2 className="inline-flex items-center gap-2.5 text-2xl text-ink">
-                      <MapPin className="size-5 text-accent-600" aria-hidden strokeWidth={1.75} />
+          <ul className="rule-strong-t">
+            {site.areas.map((area) => (
+              <li key={area.slug} className="rule-b">
+                <Link href={`/areas/${area.slug}`} className="group grid gap-2 py-6 md:grid-cols-12 md:gap-6">
+                  <span className="md:col-span-4">
+                    <span className="display-wide block text-2xl text-ink transition-colors group-hover:text-brand">
                       {area.name}
-                    </h2>
-                    <ArrowUpRight
-                      className="mt-1.5 size-4 shrink-0 text-brand-600 transition-transform duration-300 ease-[var(--ease-out-quint)] group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                      aria-hidden
-                    />
-                  </div>
-
-                  {area.blurb && (
-                    <p className="mt-4 flex-1 text-[0.9375rem] leading-relaxed text-ink-soft">
-                      {area.blurb}
-                    </p>
-                  )}
-
-                  {area.postcodes?.length ? (
-                    <span className="mt-6 text-xs uppercase tracking-[0.12em] text-muted">
-                      {area.postcodes.join(' · ')}
                     </span>
-                  ) : null}
+                    {area.postcodes?.length ? (
+                      <span className="tabular mt-1 block text-sm text-ink-3">{area.postcodes.join(' · ')}</span>
+                    ) : null}
+                  </span>
+                  {area.blurb && (
+                    <span className="measure text-[0.9375rem] leading-relaxed text-ink-2 md:col-span-8">{area.blurb}</span>
+                  )}
                 </Link>
-              </Reveal>
+              </li>
             ))}
           </ul>
         </div>

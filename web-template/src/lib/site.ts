@@ -129,6 +129,24 @@ export const isDemo = site.demo.enabled
 export const siteName = site.business.name
 export const tradePlural = site.business.tradePlural ?? site.business.name
 
+export const hasGallery = (site.gallery?.length ?? 0) > 0
+export const hasReviews = (site.reviews?.length ?? 0) > 0
+
+/** The four "how a job runs" steps: the client's own, or the locale's. */
+export const processSteps = site.process?.length ? site.process : t.process.steps
+
+/** The primary opening-hours line, e.g. 'Pon–Pt 07:30–16:00'. */
+export const primaryHours = (() => {
+  const first = site.hours?.find((h) => !h.closed)
+  if (!first) return null
+  const names = first.days.map((d) => t.days[d - 1] ?? '')
+  const days =
+    first.days.length > 1 && first.days.every((d, i) => i === 0 || d === first.days[i - 1] + 1)
+      ? `${names[0]}–${names[names.length - 1]}`
+      : names.join(', ')
+  return `${days} ${first.opens}–${first.closes}`
+})()
+
 const place = site.contact.address.locality
 const c = site.copy ?? {}
 

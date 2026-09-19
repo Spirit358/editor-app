@@ -2,30 +2,17 @@ import * as React from 'react'
 import { cn } from '@/lib/utils'
 
 /**
- * Renders *fragments in asterisks* in the accent colour, so a config file can
- * carry an emphasised headline without carrying JSX.
- *
- *   'Plumbing done *properly*' → Plumbing done <em>properly</em>
+ * Renders *fragments in asterisks* in the brand colour, so a config file can
+ * carry an emphasised heading without carrying JSX. Colour only — no italic,
+ * no weight change.
  */
-export function Highlight({
-  text,
-  className,
-  italic = true,
-}: {
-  text: string
-  className?: string
-  italic?: boolean
-}) {
+export function Highlight({ text, className }: { text: string; className?: string }) {
   const parts = text.split(/\*([^*]+)\*/g)
-
   return (
     <>
       {parts.map((part, i) =>
-        // Odd indices are the captured groups, i.e. the emphasised fragments.
-        // Accent + italic is the site's one emphasis gesture, set in the hero
-        // and repeated here so it reads as a system rather than a highlight.
         i % 2 === 1 ? (
-          <span key={i} className={cn('text-accent-700', italic && 'italic', className)}>
+          <span key={i} className={cn('text-brand', className)}>
             {part}
           </span>
         ) : (

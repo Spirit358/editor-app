@@ -150,6 +150,25 @@ export interface Strings {
     notFound: string
   }
 
+  /** Ruled strip of facts under the hero. */
+  facts: {
+    since: (year: number) => string
+    /** A schema-backed rating from the reviews shown on the page. */
+    rating: (value: string, count: number) => string
+    /** The public Google score, linked, when no review texts are on the page. */
+    googleRating: (value: string, count: number) => string
+    hours: string
+  }
+
+  /** Numbered "how a job runs" steps, used when the config has none. */
+  process: {
+    eyebrow: string
+    title: string
+    steps: Array<{ title: string; body: string }>
+  }
+
+  galleryEmpty: string
+
   /** Fallback section copy when site.config.ts leaves `copy` blank. */
   copy: {
     servicesEyebrow: string
@@ -345,6 +364,26 @@ const en: Strings = {
     privacy: (name) => `How ${name} handles the details you send through this website.`,
     notFound: 'Not found',
   },
+
+  facts: {
+    since: (year) => `Since ${year}`,
+    rating: (value, count) => `Rated ${value} · ${count} reviews`,
+    googleRating: (value, count) => `${value} on Google · ${count} reviews`,
+    hours: 'Hours',
+  },
+
+  process: {
+    eyebrow: 'How a job runs',
+    title: 'Four steps, one point of contact',
+    steps: [
+      { title: 'Call or write', body: 'Tell us what has happened or what you are planning. You get a person, and a straight answer on whether it is a job for us.' },
+      { title: 'Survey and quote', body: 'For anything substantial we look first. The quote names the equipment and the scope, so the number you see is the number you pay.' },
+      { title: 'The work', body: 'A written programme, the same team throughout, and the site left clean every evening.' },
+      { title: 'Afterwards', body: 'Commissioning, paperwork, and a service reminder before the warranty needs it.' },
+    ],
+  },
+
+  galleryEmpty: 'Photographs of recent work are on their way.',
 
   copy: {
     servicesEyebrow: 'What we do',
@@ -578,6 +617,26 @@ const pl: Strings = {
     privacy: (name) => `Jak ${name} przetwarza dane przesłane przez tę stronę.`,
     notFound: 'Nie znaleziono',
   },
+
+  facts: {
+    since: (year) => `Od ${year} roku`,
+    rating: (value, count) => `Ocena ${value} · ${count} ${plOpinie(count)}`,
+    googleRating: (value, count) => `${value} w Google · ${count} ${plOpinie(count)}`,
+    hours: 'Godziny',
+  },
+
+  process: {
+    eyebrow: 'Jak przebiega zlecenie',
+    title: 'Cztery kroki, jedna osoba do kontaktu',
+    steps: [
+      { title: 'Telefon lub wiadomość', body: 'Opisz, co się dzieje albo co planujesz. Rozmawiasz z człowiekiem i od razu słyszysz, czy to zlecenie dla nas.' },
+      { title: 'Oględziny i wycena', body: 'Przy większych pracach najpierw oglądamy budynek. W ofercie są konkretne urządzenia i zakres — kwota, którą widzisz, to kwota, którą płacisz.' },
+      { title: 'Realizacja', body: 'Ustalony harmonogram, ten sam zespół od początku do końca, porządek na miejscu po każdym dniu pracy.' },
+      { title: 'Po montażu', body: 'Uruchomienie, dokumenty i przypomnienie o przeglądzie, zanim będzie go wymagać gwarancja.' },
+    ],
+  },
+
+  galleryEmpty: 'Zdjęcia ostatnich realizacji pojawią się wkrótce.',
 
   copy: {
     servicesEyebrow: 'Co robimy',
