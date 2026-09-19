@@ -17,7 +17,8 @@
     "imagery": "node scripts/higgsfield.mjs",
     "shoot": "node scripts/shoot.mjs",
     "audit-site": "node scripts/lighthouse.mjs",
-    "check": "pnpm typecheck && pnpm build && pnpm audit-site"
+    "check": "pnpm typecheck && pnpm build && pnpm audit-site",
+    "deploy-ftp": "node scripts/deploy-ftp.mjs"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.20",
@@ -34,6 +35,7 @@
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
+    "basic-ftp": "^6.2.1",
     "lighthouse": "^13.5.0",
     "playwright-core": "^1.63.0",
     "postcss": "^8.4.0",

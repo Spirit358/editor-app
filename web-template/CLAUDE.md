@@ -47,7 +47,13 @@ agency brand name, final pricing. None of them block building.
    4–8 seconds, seamless.
 4. **Visual QA.** `pnpm shoot` → review at 390px and 1440px → fix → repeat.
 5. `pnpm audit-site` — every route at 90+, mobile and desktop. Not optional.
-6. Deploy `out/` to a private preview URL. Demo mode stays on.
+6. Deploy `out/` to a private preview URL. Demo mode stays on. Once the
+   client signs: clear `demo.enabled`, set `seo.baseUrl` to their real
+   domain, give the form a working endpoint, rebuild, then `pnpm deploy-ftp`
+   onto their own hosting (nothing in DNS moves, so their email survives) or
+   repoint DNS at a preview host. Check the MX records before touching an A
+   record — on shared hosting the mail exchanger is usually the domain
+   itself.
 7. Log the lead and the demo URL in the tracker.
 
 ## Leads

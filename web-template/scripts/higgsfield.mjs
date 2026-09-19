@@ -33,6 +33,7 @@ import path from 'node:path'
 import process from 'node:process'
 import sharp from 'sharp'
 import { writeLadder } from './lib/images.mjs'
+import { loadDotEnv } from './lib/env.mjs'
 
 const ROOT = process.cwd()
 const BASE_URL = process.env.HIGGSFIELD_BASE_URL ?? 'https://api.higgsfield.ai'
@@ -55,17 +56,6 @@ async function exists(p) {
     return true
   } catch {
     return false
-  }
-}
-
-/** Minimal .env.local reader so the key never has to be exported by hand. */
-async function loadDotEnv() {
-  const file = path.join(ROOT, '.env.local')
-  if (!(await exists(file))) return
-  for (const line of (await readFile(file, 'utf8')).split('\n')) {
-    const m = line.match(/^\s*([A-Z0-9_]+)\s*=\s*(.*?)\s*$/)
-    if (!m || process.env[m[1]]) continue
-    process.env[m[1]] = m[2].replace(/^["']|["']$/g, '')
   }
 }
 

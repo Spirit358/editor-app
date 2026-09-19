@@ -94,6 +94,50 @@ data — no logo, no photography.
 
 ---
 
+## Going live on the client's own hosting
+
+Activa said yes, so the demo becomes their site. Their domain has the trap
+that catches most of these migrations:
+
+```
+activa-szczecinek.pl   A    195.128.154.18      (hostingrd.pl, WordPress)
+activa-szczecinek.pl   MX   activa-szczecinek.pl
+```
+
+The mail exchanger **is the domain**, so repointing the A record at a preview
+host would have stopped `info@activa-szczecinek.pl` from receiving anything,
+the same afternoon, with nothing in the panel to explain it. Splitting them
+first (`mail.<domain>` A at the current host, MX at that name, a day to
+propagate) is the fix wherever DNS has to move.
+
+It does not have to move here. Oskar's call: upload the static export to the
+hosting Activa already pays for, in place of the WordPress default. Nothing in
+DNS changes, the mail keeps working, and the hosting is already bought. So
+`pnpm deploy-ftp` exists:
+
+- FTPS, credentials from `.env.local` only
+- generates `.htaccess` from the build — `DirectoryIndex index.html` ahead of
+  any leftover `index.php` (otherwise the old WordPress keeps winning),
+  `mod_deflate` (the compression finding below is worth ~20 points), immutable
+  caching for `/_next/static`, revalidating for HTML, canonical host and HTTPS
+  redirects derived from `seo.baseUrl`
+- **refuses to upload a demo build** unless `--allow-demo` is passed. A
+  `noindex` page on a client's real domain is the expensive kind of mistake,
+  so the rule is in code, like the rest of demo safety
+- overwrites and adds, never deletes: clearing a web root over FTP is a
+  destructive operation worth doing by hand, after a backup
+
+`seo.baseUrl` moved to `https://activa-szczecinek.pl` — it drives canonical
+tags, OG URLs and the sitemap, so it has to be the real domain before the
+first indexed build.
+
+**Still open before the files go up:** the six `[VERIFY]` items (they are
+statements about a real company, and nobody has confirmed them), and
+`forms.endpoint`, which is deliberately empty — on a live site that form tells
+visitors it is a preview instead of delivering their enquiry.
+
+---
+
 ## Higgsfield imagery
 
 **The API was egress-blocked when this was built** — `api.higgsfield.ai`

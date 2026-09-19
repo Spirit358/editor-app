@@ -41,6 +41,7 @@ pnpm dev
 | `pnpm shoot` | Screenshot every route at 390px and 1440px into `.qa/` |
 | `pnpm audit-site` | Lighthouse on every route, mobile + desktop. Fails under 90 |
 | `pnpm check` | typecheck → build → audit |
+| `pnpm deploy-ftp` | Upload `out/` to a client's own shared hosting over FTPS |
 
 ## Design
 
@@ -204,6 +205,36 @@ Output directory:  out
 **Vercel** requires a Pro plan for client work — the Hobby tier forbids
 commercial use. If you go that way, `SITE_MODE=server pnpm build` keeps the
 Node server and the built-in image optimiser.
+
+**The client's own hosting** — most small businesses already pay for one, and
+it is the only route that changes nothing in DNS, so their email cannot break
+on deploy day:
+
+```
+pnpm build
+pnpm deploy-ftp --dry-run     # prints the plan, connects to nothing
+pnpm deploy-ftp
+```
+
+Credentials come from `.env.local` (`FTP_HOST`, `FTP_USER`, `FTP_PASSWORD`,
+`FTP_REMOTE_DIR`) — see `.env.example`. The upload overwrites and adds, never
+deletes: back up and clear the web root by hand when replacing an old site,
+or a dead WordPress install sits there as a security liability. An
+`.htaccess` is generated from the build and uploaded with it — it names
+`index.html` ahead of any leftover `index.php`, turns on compression (worth
+~20 Lighthouse points on a host that has it off), and sets cache headers that
+are immutable for hashed assets and revalidating for pages.
+
+**`deploy-ftp` refuses to upload a demo build.** A `noindex` site on the
+client's real domain is invisible to Google forever, so the guard is in code
+rather than in someone's memory. Clear `demo.enabled` and rebuild, or pass
+`--allow-demo` when the target really is a staging host.
+
+**Before the first upload to a live domain, check the MX records.** On shared
+hosting the mail exchanger is often the domain itself, so anything that moves
+the A record moves the mail with it. Split them first: an `A` record for
+`mail.<domain>` pointing at the current host, then `MX` at that name. Not an
+issue for an FTP deploy, which leaves DNS alone entirely.
 
 Point the preview at an unguessable subdomain while the site is a demo.
 

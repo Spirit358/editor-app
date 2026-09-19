@@ -410,7 +410,7 @@ const config: SiteConfig = {
   },
 
   seo: {
-    baseUrl: 'https://activa-szczecinek.pages.dev',
+    baseUrl: 'https://activa-szczecinek.pl',
     title: 'Activa Technika Grzewcza | Kotły, pompy ciepła, instalacje — Szczecinek',
     description:
       'Technika grzewcza w Szczecinku od 1991 roku. Hurtownia, montaż i serwis: kotły gazowe, pompy ciepła, ogrzewanie podłogowe, instalacje sanitarne. ul. Harcerska 2, tel. 94 374 11 32.',
