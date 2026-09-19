@@ -61,7 +61,7 @@ agency brand name, final pricing. None of them block building.
 | Client | Locale | Status | Notes |
 | --- | --- | --- | --- |
 | `demo-plumber` | en-GB | worked example | fictional |
-| `activa` | pl-PL | demo deployed, imagery pending — https://activa-szczecinek.vercel.app (expires 2026-10-19) | Szczecinek heating-tech wholesaler/installer (Google: "HVAC contractor", 4.2★/32); live domain shows a blank WordPress default; GBP has no hours and a poor lead photo. Run `pnpm imagery --slug activa` from a machine with API access, then shoot + audit again. `[VERIFY]` items in the config are the intake questions; ask for the logo and the best review texts. |
+| `activa` | pl-PL | **sold — going live on their own hosting** at https://activa-szczecinek.pl; imagery still pending | Szczecinek heating-tech wholesaler/installer (Google: "HVAC contractor", 4.2★/32); live domain shows a blank WordPress default; GBP has no hours and a poor lead photo. Run `pnpm imagery --slug activa` from a machine with API access, then shoot + audit again. `[VERIFY]` items in the config are the intake questions; ask for the logo and the best review texts. |
 
 For any lead, look at the Google Business Profile panel before the directory
 sites: it is where the rating, the category, the logo and the tidy-up

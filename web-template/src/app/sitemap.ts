@@ -4,6 +4,17 @@ import { absoluteUrl } from '@/lib/utils'
 
 export const dynamic = 'force-static'
 
+/**
+ * The static export is built with `trailingSlash: true`, and Next adds that
+ * slash to canonical URLs for us — but not to the ones we hand the sitemap.
+ * Without this, every entry but the homepage points at a 301 to its own
+ * canonical form.
+ */
+function pageUrl(path: string) {
+  const url = absoluteUrl(site.seo.baseUrl, path)
+  return url.endsWith('/') ? url : `${url}/`
+}
+
 export default function sitemap(): MetadataRoute.Sitemap {
   // A demo has nothing to submit — the whole build is noindex.
   if (isDemo) return []
@@ -22,19 +33,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [
     ...staticPaths.map(([path, priority]) => ({
-      url: absoluteUrl(site.seo.baseUrl, path),
+      url: pageUrl(path),
       lastModified: now,
       changeFrequency: 'monthly' as const,
       priority,
     })),
     ...site.services.map((s) => ({
-      url: absoluteUrl(site.seo.baseUrl, `/services/${s.slug}`),
+      url: pageUrl(`/services/${s.slug}`),
       lastModified: now,
       changeFrequency: 'monthly' as const,
       priority: 0.8,
     })),
     ...site.areas.map((a) => ({
-      url: absoluteUrl(site.seo.baseUrl, `/areas/${a.slug}`),
+      url: pageUrl(`/areas/${a.slug}`),
       lastModified: now,
       changeFrequency: 'monthly' as const,
       priority: 0.7,

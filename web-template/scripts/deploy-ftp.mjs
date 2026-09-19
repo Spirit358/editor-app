@@ -26,12 +26,13 @@
  * clutter.
  */
 
-import { readFile, writeFile, stat } from 'node:fs/promises'
+import { readFile, readdir, writeFile, stat } from 'node:fs/promises'
 import path from 'node:path'
 import process from 'node:process'
 import { Client } from 'basic-ftp'
 import { loadDotEnv } from './lib/env.mjs'
 import { htaccess } from './lib/htaccess.mjs'
+import { formHandler } from './lib/form-handler.mjs'
 
 const ROOT = process.cwd()
 const OUT_DIR = path.join(ROOT, 'out')
@@ -63,6 +64,19 @@ async function readBuild() {
 
   const title = index.match(/<title>([^<]*)<\/title>/)?.[1] ?? ''
   const noindex = /content="noindex/.test(index)
+  const siteName = index.match(/property="og:site_name" content="([^"]+)"/)?.[1] ?? ''
+  const email = index.match(/mailto:([^"?]+)/)?.[1] ?? ''
+
+  // The form's endpoint is a config value baked into the page, so the build
+  // itself says whether this deploy needs a PHP handler shipped with it.
+  let postsToPhp = /\/form\.php/.test(index)
+  if (!postsToPhp) {
+    try {
+      postsToPhp = /\/form\.php/.test(await readFile(path.join(OUT_DIR, 'contact', 'index.html'), 'utf8'))
+    } catch {
+      /* a site without a contact page */
+    }
+  }
 
   let robots = ''
   try {
@@ -74,12 +88,14 @@ async function readBuild() {
   return {
     baseUrl: new URL(canonical).origin,
     title,
+    siteName,
+    email,
+    postsToPhp,
     isDemo: noindex || /Disallow:\s*\/\s*$/m.test(robots),
   }
 }
 
 async function walk(dir) {
-  const { readdir } = await import('node:fs/promises')
   const entries = await readdir(dir, { withFileTypes: true })
   const files = []
   for (const entry of entries) {
@@ -110,6 +126,21 @@ async function main() {
   // the redirect can never drift from the one in the pages.
   await writeFile(path.join(OUT_DIR, '.htaccess'), htaccess({ baseUrl: build.baseUrl }), 'utf8')
 
+  if (build.postsToPhp) {
+    if (!build.email) {
+      fail('The form posts to form.php but the build has no contact email to deliver to.')
+    }
+    await writeFile(
+      path.join(OUT_DIR, 'form.php'),
+      formHandler({
+        to: build.email,
+        siteName: build.siteName || new URL(build.baseUrl).host,
+        subject: `Zapytanie ze strony ${new URL(build.baseUrl).host}`,
+      }),
+      'utf8',
+    )
+  }
+
   const files = await walk(OUT_DIR)
   const bytes = (await Promise.all(files.map((f) => stat(f).then((s) => s.size)))).reduce(
     (a, b) => a + b,
@@ -120,6 +151,9 @@ async function main() {
   console.log(`  ${files.length} files, ${(bytes / 1024 / 1024).toFixed(1)} MB`)
   console.log(`  remote directory: ${remoteDir}`)
   console.log(`  demo mode: ${build.isDemo ? 'ON (staging)' : 'off'}`)
+  console.log(
+    `  contact form: ${build.postsToPhp ? `form.php → ${build.email}` : 'third-party endpoint or none'}`,
+  )
 
   if (dryRun) {
     console.log(`\n  out/.htaccess written. Nothing was uploaded.\n`)

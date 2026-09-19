@@ -131,10 +131,31 @@ DNS changes, the mail keeps working, and the hosting is already bought. So
 tags, OG URLs and the sitemap, so it has to be the real domain before the
 first indexed build.
 
-**Still open before the files go up:** the six `[VERIFY]` items (they are
-statements about a real company, and nobody has confirmed them), and
-`forms.endpoint`, which is deliberately empty — on a live site that form tells
-visitors it is a preview instead of delivering their enquiry.
+**The form now posts to PHP on their own server.** `forms.endpoint` was
+deliberately empty, which on a live site means a visitor who submits is told
+the form is a preview — a defect, not a safeguard, once the site is real.
+Their hosting runs PHP (WordPress was on it), so `deploy-ftp` generates
+`form.php` beside the site and mails straight to `info@activa-szczecinek.pl`.
+No third-party form service, no monthly fee, nothing leaves their server, and
+mail sent from that host already passes their SPF record, which names that
+same IP. Honeypot, length caps, header-injection stripping, a 20-second
+per-IP throttle that only counts submissions actually being sent, and a
+failure log written **outside the web root** — it holds names, phone numbers
+and email addresses, and in the web root anyone who guessed the filename
+could download it.
+
+**Demo mode is off.** Activa agreed, so `demo.enabled: false`: the banner,
+the `noindex` and the blocking `robots.txt` are gone and the sitemap has all
+20 routes. Turning it off exposed a latent bug — the sitemap emitted URLs
+without the trailing slash the static export serves, so every entry but the
+homepage pointed at a 301 to its own canonical form. Next adds that slash to
+canonical tags but not to sitemap entries handed to it.
+
+**Knowingly shipped unverified:** the six `[VERIFY]` items are still
+assumptions — that they install and service rather than only sell, the six
+services, the eight areas, the map coordinates. Oskar's call to publish
+without confirming them. They remain the agenda for the first conversation,
+and each one is a sentence on a real company's live site until then.
 
 ---
 
