@@ -20,6 +20,14 @@
  *   FTP_PORT=21                        (default: 21)
  *   FTP_SECURE=true                    (default: true — explicit FTPS)
  *
+ * When the build's assistant posts to chat.php, the handler is generated and
+ * uploaded too, and these write .chat-secret.php one directory above the
+ * web root:
+ *
+ *   CHATBOT_API_KEY=...                (one key per client — spend per client)
+ *   CHATBOT_MODEL=claude-haiku-4-5
+ *   CHATBOT_DAILY_LIMIT=400
+ *
  * The upload overwrites and adds; it never deletes. Clear the web root by
  * hand, after a backup, when replacing an old site — leaving a dead
  * WordPress install next to the new files is a security liability, not just
@@ -27,12 +35,14 @@
  */
 
 import { readFile, readdir, writeFile, stat } from 'node:fs/promises'
+import { Readable } from 'node:stream'
 import path from 'node:path'
 import process from 'node:process'
 import { Client } from 'basic-ftp'
 import { loadDotEnv } from './lib/env.mjs'
 import { htaccess } from './lib/htaccess.mjs'
 import { formHandler } from './lib/form-handler.mjs'
+import { chatHandler, chatSecret } from './lib/chat-handler.mjs'
 
 const ROOT = process.cwd()
 const OUT_DIR = path.join(ROOT, 'out')
@@ -78,6 +88,8 @@ async function readBuild() {
     }
   }
 
+  const hasChat = /\/chat\.php/.test(index)
+
   let robots = ''
   try {
     robots = await readFile(path.join(OUT_DIR, 'robots.txt'), 'utf8')
@@ -91,6 +103,7 @@ async function readBuild() {
     siteName,
     email,
     postsToPhp,
+    hasChat,
     isDemo: noindex || /Disallow:\s*\/\s*$/m.test(robots),
   }
 }
@@ -141,6 +154,18 @@ async function main() {
     )
   }
 
+  const chat = build.hasChat
+    ? {
+        apiKey: process.env.CHATBOT_API_KEY ?? '',
+        model: process.env.CHATBOT_MODEL ?? 'claude-haiku-4-5',
+        dailyLimit: process.env.CHATBOT_DAILY_LIMIT ?? '400',
+        apiBase: process.env.CHATBOT_API_BASE ?? 'https://api.anthropic.com',
+      }
+    : null
+  if (chat) {
+    await writeFile(path.join(OUT_DIR, 'chat.php'), chatHandler(), 'utf8')
+  }
+
   const files = await walk(OUT_DIR)
   const bytes = (await Promise.all(files.map((f) => stat(f).then((s) => s.size)))).reduce(
     (a, b) => a + b,
@@ -154,6 +179,12 @@ async function main() {
   console.log(
     `  contact form: ${build.postsToPhp ? `form.php → ${build.email}` : 'third-party endpoint or none'}`,
   )
+  if (chat) {
+    console.log(
+      `  assistant: chat.php → ${chat.model}, ${chat.dailyLimit}/day` +
+        (chat.apiKey ? '' : '  (CHATBOT_API_KEY missing — it will answer "unavailable" until set)'),
+    )
+  }
 
   if (dryRun) {
     console.log(`\n  out/.htaccess written. Nothing was uploaded.\n`)
@@ -183,6 +214,15 @@ async function main() {
     await client.ensureDir(remoteDir)
     await client.uploadFromDir(OUT_DIR)
     console.log('  upload finished')
+
+    if (chat?.apiKey) {
+      // One level above the web root when there is one; a .php file that
+      // returns a value outputs nothing even if it ends up inside it.
+      const parent = path.posix.dirname(remoteDir.replace(/\/+$/, '') || '/')
+      const secretPath = path.posix.join(parent === remoteDir ? remoteDir : parent, '.chat-secret.php')
+      await client.uploadFrom(Readable.from([chatSecret(chat)]), secretPath)
+      console.log(`  assistant secret written to ${secretPath}`)
+    }
   } catch (error) {
     fail(`FTP failed: ${error.message}`)
   } finally {

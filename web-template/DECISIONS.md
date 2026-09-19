@@ -159,6 +159,55 @@ and each one is a sentence on a real company's live site until then.
 
 ---
 
+## The chat assistant
+
+Oskar's brief lists a chatbot among the retainer add-ons, and asked for one
+"that does not cost millions to run". The research first, then what was built.
+
+**What the research said.** Reddit could not be read from this environment
+(fetches refused, and the search engine does not index its threads), so the
+Reddit half of the ask is unmet; GitHub and the primary sources were enough.
+The freeCodeCamp Cloudflare Workers widget tutorial is the canonical
+"embed a chatbot" recipe: script-tag injection, SSE streaming, KV sessions,
+`Access-Control-Allow-Origin: *` and no rate limiting — the last two are
+exactly what an unattended endpoint on a small business's site must not do.
+DebugBear measured 21 commercial chat widgets at 67–749 KB and 259–1000 ms of
+main-thread time; the only ones that stay cheap defer nearly everything until
+the visitor opens the chat. `deftio/quikchat` shows a complete widget fits in
+5 KB gzipped with no dependencies. `RumenDamyanov/php-chatbot` and
+`benwills/SimpleGptApiReq` confirm the PHP-on-shared-hosting pattern is
+ordinary (Composer for the first, one curl call for the second). Cloudflare's
+rate-limit binding is per-colo and eventually consistent, with 10 s or 60 s
+windows only, and its free-plan availability is not documented. And the
+incidents every thread cites — Cursor's support bot inventing a device
+policy, Air Canada's bot inventing a refund policy, Klarna walking back its
+all-AI support — all have one shape: the retrieval found nothing, and the
+model filled the gap with something plausible.
+
+| Decision | Reasoning |
+| --- | --- |
+| **The model is the third layer, not the first** | Hours, address, phone, areas and services are quick replies answered from `/chatbot.json` in the browser; a typed question is matched against intent patterns and the FAQ before anything is sent. On a trades site that is most of the traffic, at zero cost and zero hallucination risk. |
+| **Price questions never reach the model** | The widget intercepts `cen`/`koszt`/`price`/`cost` and answers with the hand-off line. Putting a number in a real company's mouth is how a warm lead goes cold (the same rule the site follows), and the Cursor and Air Canada incidents are the cautionary tales. The system prompt repeats the rule for anything that slips through. |
+| **One knowledge file for widget and server** | `/chatbot.json` is written by the build from `site.config.ts`; `chat.php` reads the same file from disk. The model cannot know what the page does not say, and a retainer edit updates the assistant on the next deploy with no change to the PHP. |
+| **PHP on the client's own hosting, not a Worker** | The site already deploys there by FTP with a generated `form.php`; the assistant is the same shape. No second platform to run, no CORS, no shared key across clients — one key per client makes the console show spend per client. A Worker wins on streaming and on shared rate limiting, and the widget posts to a configurable `endpoint`, so that swap is one line if it is ever wanted. |
+| **Raw HTTP, not the official PHP SDK** | The SDK is a Composer package; this file reaches the server by FTP with no Composer on either end. One documented curl call is a smaller risk than vendoring a dependency tree onto shared hosting. |
+| **Claude Haiku 4.5 by default** | $1 / $5 per million tokens. The measured Activa system prompt is under 1,200 characters; a call is ~800 tokens in, ~60 out — a fraction of a cent. Prompt caching would not apply (Haiku's minimum cacheable prefix is 4,096 tokens) and does not need to. `CHATBOT_MODEL` changes it; if answer quality ever matters more than cost, Sonnet 5 is the next step up. |
+| **Hard limits in the handler, not in the prompt** | Origin must be the site's host (nobody else's page can spend this key); 8 turns of 500 characters; 6 calls a minute and 40 a day per visitor; a site-wide daily cap after which the widget hands off to the phone. A bill has a ceiling before anyone reads a dashboard. |
+| **Secrets above the web root, usage below the radar** | `.chat-secret.php` is written one directory up by the deploy, and is PHP that outputs nothing even if it lands inside the root. The usage log records tokens per call, never text — enough to price the add-on per client, nothing a subject-access request would mind. |
+| **Nothing on the critical path** | The launcher is a button in the layout chunk; the panel and matcher are a 9 KB chunk and the knowledge file a 4 KB fetch, both on the first click. Homepage mobile measured 92 with it on a quiet run, 98 without — within this build's run-to-run spread, so it was not chased further; `/contact` stayed at 99. |
+
+**Matching is conservative on purpose.** A question the FAQ matcher is not
+sure about goes to the model, which has the whole FAQ in its facts anyway. A
+wrong FAQ answer delivered confidently is worse than a model call that costs
+a fraction of a cent.
+
+**Not done.** No streaming (LiteSpeed buffers PHP output unreliably, and a
+three-sentence answer arrives in a second or two behind a typing indicator);
+no transcript storage (nothing to leak, nothing to be asked for); no
+analytics beyond the usage log.
+
+---
+
 ## Higgsfield imagery
 
 **The API was egress-blocked when this was built** — `api.higgsfield.ai`

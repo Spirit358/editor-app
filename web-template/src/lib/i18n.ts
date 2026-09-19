@@ -109,6 +109,37 @@ export interface Strings {
     honeypot: string
   }
 
+  /** The chat assistant. Functions here are resolved before reaching the widget. */
+  chat: {
+    open: string
+    close: string
+    title: (business: string) => string
+    greeting: (business: string) => string
+    placeholder: string
+    send: string
+    thinking: string
+    you: string
+    quick: { hours: string; address: string; phone: string; areas: string; services: string }
+    answers: {
+      hours: string
+      address: string
+      phone: (phone: string) => string
+      areas: string
+      areasMore: (phone: string) => string
+      services: string
+    }
+    handoff: (phone: string) => string
+    limitReached: (phone: string) => string
+    offline: (phone: string) => string
+    error: string
+    disclaimer: string
+    callCta: string
+    formCta: string
+    ariaPanel: string
+    ariaLog: string
+    ariaInput: string
+  }
+
   pages: {
     services: { title: string; intro: string }
     areas: { title: (place: string) => string; intro: string }
@@ -299,6 +330,38 @@ const en: Strings = {
     sendError:
       'Something went wrong sending that. Please ring us instead — we would rather hear from you than lose the job to a broken form.',
     honeypot: 'Company (leave blank)',
+  },
+
+  chat: {
+    open: 'Ask a question',
+    close: 'Close chat',
+    title: (business) => `Ask ${business}`,
+    greeting: (business) =>
+      `Hello — I can answer quick questions about ${business}: opening hours, where we are, what we do. For a quote, a call works best.`,
+    placeholder: 'Type a question…',
+    send: 'Send',
+    thinking: 'Typing…',
+    you: 'You',
+    quick: { hours: 'Opening hours', address: 'Address', phone: 'Phone', areas: 'Areas covered', services: 'Services' },
+    answers: {
+      hours: 'We are open:',
+      address: 'You will find us at',
+      phone: (phone) => `Call us on ${phone}.`,
+      areas: 'We cover:',
+      areasMore: (phone) => `Further away? Call ${phone} — on bigger jobs distance is rarely a problem.`,
+      services: 'What we do:',
+    },
+    handoff: (phone) => `That is one to settle on the phone: ${phone}.`,
+    limitReached: (phone) =>
+      `That is as far as I can take it here. Call ${phone} or leave a message in the form and a person will pick it up.`,
+    offline: (phone) => `The assistant is unavailable right now. Call ${phone} or use the contact form.`,
+    error: 'That did not send. Try again, or call.',
+    disclaimer: 'Answers come from an AI assistant working from the information on this site. Do not share details you would rather keep private.',
+    callCta: 'Call',
+    formCta: 'Contact form',
+    ariaPanel: 'Chat assistant',
+    ariaLog: 'Conversation',
+    ariaInput: 'Your question',
   },
 
   pages: {
@@ -552,6 +615,38 @@ const pl: Strings = {
     sendError:
       'Coś poszło nie tak przy wysyłce. Prosimy o telefon — wolimy usłyszeć się z Tobą, niż stracić zlecenie przez zepsuty formularz.',
     honeypot: 'Firma (zostaw puste)',
+  },
+
+  chat: {
+    open: 'Zadaj pytanie',
+    close: 'Zamknij czat',
+    title: (business) => `Zapytaj: ${business}`,
+    greeting: (business) =>
+      `Dzień dobry — odpowiem na proste pytania o ${business}: godziny otwarcia, dojazd, zakres usług. W sprawie wyceny najlepiej zadzwonić.`,
+    placeholder: 'Napisz pytanie…',
+    send: 'Wyślij',
+    thinking: 'Piszę…',
+    you: 'Ty',
+    quick: { hours: 'Godziny otwarcia', address: 'Adres', phone: 'Telefon', areas: 'Dojazd', services: 'Usługi' },
+    answers: {
+      hours: 'Jesteśmy otwarci:',
+      address: 'Znajdziesz nas przy',
+      phone: (phone) => `Zadzwoń: ${phone}.`,
+      areas: 'Dojeżdżamy do:',
+      areasMore: (phone) => `Jesteś dalej? Zadzwoń ${phone} — przy większych realizacjach dojazd rzadko bywa problemem.`,
+      services: 'Czym się zajmujemy:',
+    },
+    handoff: (phone) => `To pytanie najlepiej ustalić telefonicznie: ${phone}.`,
+    limitReached: (phone) =>
+      `Na tyle mogę tu pomóc. Zadzwoń ${phone} albo zostaw wiadomość w formularzu — odpowie człowiek.`,
+    offline: (phone) => `Asystent jest chwilowo niedostępny. Zadzwoń ${phone} albo napisz przez formularz.`,
+    error: 'Nie udało się wysłać. Spróbuj ponownie albo zadzwoń.',
+    disclaimer: 'Odpowiada asystent AI na podstawie informacji z tej strony. Nie podawaj danych, których wolisz nie przekazywać.',
+    callCta: 'Zadzwoń',
+    formCta: 'Formularz',
+    ariaPanel: 'Asystent czatu',
+    ariaLog: 'Rozmowa',
+    ariaInput: 'Twoje pytanie',
   },
 
   pages: {

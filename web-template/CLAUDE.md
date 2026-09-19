@@ -100,6 +100,11 @@ Undoing any of these quietly breaks something measurable:
 - **`demo.enabled` stays true** until the client has signed.
 - **Only emit an aggregate rating when real reviews back it.** Otherwise it is
   review spam and can earn a manual action.
+- **The assistant knows only `/chatbot.json`.** Both the widget and
+  `chat.php` read that one build artifact; never feed the model anything the
+  page does not say, and never let it near a price — the widget intercepts
+  price questions before the model sees them, and the rules send them to the
+  phone if one slips through.
 - **Responsive image ladder widths** live in three files and must stay in step:
   `scripts/lib/images.mjs`, `src/lib/image-loader.ts`, `next.config.ts`.
 

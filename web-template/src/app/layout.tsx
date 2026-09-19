@@ -6,6 +6,7 @@ import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
 import { MobileCallBar } from '@/components/layout/mobile-call-bar'
 import { DemoBanner } from '@/components/layout/demo-banner'
+import { Chat } from '@/components/chat/chat'
 import { JsonLd } from '@/components/json-ld'
 import './globals.css'
 
@@ -97,6 +98,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Footer />
 
         <MobileCallBar phoneHref={phoneHref} phoneDisplay={phoneDisplay} labels={{ callNow: t.callNow }} />
+
+        <Chat />
 
         <JsonLd data={localBusinessSchema()} />
       </body>

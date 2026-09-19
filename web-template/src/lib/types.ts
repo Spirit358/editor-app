@@ -350,6 +350,29 @@ export interface SiteConfig {
     successMessage?: string
   }
 
+  /**
+   * The site's chat assistant. Answers hours, address, phone, areas and the
+   * FAQ from the page itself with no network call; only a free-text question
+   * reaches the model, through `endpoint`. Leave `endpoint` empty to run the
+   * assistant with no model at all — the local answers still work.
+   */
+  chatbot?: {
+    enabled: boolean
+    /**
+     * Where free-text questions POST. '/chat.php' is the handler that
+     * `pnpm deploy-ftp` generates beside the site. Empty = local answers only.
+     */
+    endpoint?: string
+    /**
+     * Extra facts for the model, in the site's language, one sentence each.
+     * Things the page does not say but a visitor asks: "Nie sprzedajemy
+     * klimatyzacji." Never prices.
+     */
+    notes?: string[]
+    /** Free-text questions per conversation before handing off to the phone. Default 8. */
+    maxTurns?: number
+  }
+
   analytics?: {
     /** Plausible domain, e.g. 'kirkstallplumbing.co.uk'. */
     plausible?: string

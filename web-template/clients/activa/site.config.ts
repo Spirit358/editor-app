@@ -418,6 +418,18 @@ const config: SiteConfig = {
     ogImage: '/clients/activa/og.jpg',
   },
 
+  chatbot: {
+    enabled: true,
+    // Generated beside the site by `pnpm deploy-ftp`; the key never enters
+    // the repo. Empty this to keep the widget but drop the model.
+    endpoint: '/chat.php',
+    notes: [
+      'Dostępność towaru na magazynie i płatności ustala się telefonicznie lub na miejscu w hurtowni.',
+      'Wyceny montażu robimy po oględzinach budynku — oględziny nie zobowiązują.',
+    ],
+    maxTurns: 8,
+  },
+
   forms: {
     // Their own hosting runs PHP, so the form posts to a handler deployed
     // beside the site and mailed straight to the address below. No
