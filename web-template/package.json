@@ -1,0 +1,51 @@
+{
+  "name": "local-site-template",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Reusable Next.js template for local business websites. One config file per client.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "new-site": "node scripts/new-site.mjs",
+    "use-site": "node scripts/use-site.mjs",
+    "list-sites": "node scripts/use-site.mjs --list",
+    "gen-assets": "node scripts/gen-placeholder-assets.mjs",
+    "optimize-images": "node scripts/optimize-images.mjs",
+    "shoot": "node scripts/shoot.mjs",
+    "audit-site": "node scripts/lighthouse.mjs",
+    "check": "pnpm typecheck && pnpm build && pnpm audit-site"
+  },
+  "dependencies": {
+    "@radix-ui/react-accordion": "^1.2.20",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.47.0",
+    "next": "^15.5.25",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "tailwind-merge": "^3.7.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "lighthouse": "^13.5.0",
+    "playwright-core": "^1.63.0",
+    "postcss": "^8.4.0",
+    "sharp": "^0.35.4",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.7.0"
+  },
+  "packageManager": "pnpm@10.33.0",
+  "browserslist": [
+    "chrome >= 111",
+    "edge >= 111",
+    "firefox >= 113",
+    "safari >= 16.4",
+    "ios_saf >= 16.4"
+  ]
+}
