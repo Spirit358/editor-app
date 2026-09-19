@@ -83,7 +83,7 @@ async function main() {
   await new Promise((r) => setTimeout(r, 3000))
 
   const failures = []
-  let noindex = false
+  const noindexRoutes = new Set()
 
   console.log(`\nAuditing ${routes.length} route${routes.length === 1 ? '' : 's'}, threshold ${min}\n`)
 
@@ -99,7 +99,8 @@ async function main() {
         ...profile,
       })
 
-      if (result.lhr.audits['is-crawlable']?.score === 0) noindex = true
+      const routeNoindex = result.lhr.audits['is-crawlable']?.score === 0
+      if (routeNoindex) noindexRoutes.add(route)
 
       scores[name] = Object.fromEntries(
         Object.entries(result.lhr.categories).map(([key, c]) => [
@@ -109,8 +110,11 @@ async function main() {
       )
 
       for (const [key, value] of Object.entries(scores[name])) {
-        // A demo is noindex on purpose; do not fail the build for it.
-        if (value < min && !(key === 'seo' && noindex)) {
+        // A noindex page cannot score on SEO — true of a demo build, and of
+        // the 404 page in every build. Judge this route on its own tag: a
+        // single shared flag let the first noindex route silence every SEO
+        // failure after it.
+        if (value < min && !(key === 'seo' && routeNoindex)) {
           failures.push(`${route} [${name}] ${key} ${value}`)
         }
       }
@@ -128,10 +132,13 @@ async function main() {
   chrome.kill()
   server.close()
 
-  if (noindex) {
+  // A noindex 404 is correct everywhere; only real pages mean a demo build.
+  const demoRoutes = [...noindexRoutes].filter((route) => route !== '/404')
+  if (demoRoutes.length) {
     console.log(
-      '\n  Note: this build is in demo mode, so it is noindex and the SEO score\n' +
-        '  is capped around 70. That is correct — it is not a defect to fix.'
+      `\n  Note: ${demoRoutes.length} route${demoRoutes.length === 1 ? ' is' : 's are'} noindex — this is a demo\n` +
+        '  build, so their SEO score is capped around 70. That is correct, not a\n' +
+        '  defect to fix.'
     )
   }
 
