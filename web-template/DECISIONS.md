@@ -82,17 +82,25 @@ warm.
 **GBP tidy-up, the add-on from the handoff, is concrete here:** add hours,
 replace the lead photo, link the website, respond to reviews.
 
-**Where to show it.** `activa-szczecinek.pages.dev` as the preview host; demo
-mode on, 30-day expiry set. Nothing of theirs is used beyond public listing
+**Where to show it.** Live at **https://activa-szczecinek.vercel.app** — Oskar
+asked for Vercel, so the static export in `out/` was deployed there directly
+rather than to Cloudflare Pages; open decision 2 below is still open for the
+agency as a whole. Demo mode on, 30-day expiry set, `noindex` and a blocking
+`robots.txt` verified on the live URL. Vercel's SSO protection covers the
+deployment URLs and the `-editx` alias, but the production alias is public to
+anyone with the link, which is what showing it on a phone needs. Delete the
+project if the lead goes cold. Nothing of theirs is used beyond public listing
 data — no logo, no photography.
 
 ---
 
 ## Higgsfield imagery
 
-**The API is egress-blocked in this build environment** — `api.higgsfield.ai`
-answers 403 at the proxy, an organisation policy denial, not a network fault.
-So the generation could not be run from here. What was built instead:
+**The API was egress-blocked when this was built** — `api.higgsfield.ai`
+answered 403 at the proxy, an organisation policy denial, not a network fault.
+Switching the environment to full network access fixed it: the endpoint now
+answers `401 Invalid credentials`, so only the key is missing. What was built
+while it was blocked:
 
 - `scripts/higgsfield.mjs` — the full pipeline, written against the official
   SDK source (`higgsfield-ai/higgsfield-js`, fetched from
