@@ -54,6 +54,8 @@ export interface Strings {
   credentials: string
   reviewsFrom: (count: number) => string
   reviewsCount: (count: number) => string
+  /** 'from 32 Google reviews' — the linked proof point under the hero CTAs. */
+  googleReviews: (count: number) => string
   via: string
   ratedOutOf: (value: number) => string
   ratedOutOfCount: (value: number, count: number) => string
@@ -223,6 +225,7 @@ const en: Strings = {
   credentials: 'Credentials',
   reviewsFrom: (count) => `from ${count} reviews`,
   reviewsCount: (count) => `${count} reviews`,
+  googleReviews: (count) => `from ${count} Google reviews`,
   via: 'via',
   ratedOutOf: (value) => `Rated ${value} out of 5`,
   ratedOutOfCount: (value, count) => `Rated ${value} out of 5 from ${count} reviews`,
@@ -404,6 +407,15 @@ const en: Strings = {
   },
 }
 
+/** Polish plural of "opinia" in the nominative. */
+function plOpinie(n: number) {
+  const last = n % 10
+  const lastTwo = n % 100
+  if (n === 1) return 'opinia'
+  if (last >= 2 && last <= 4 && (lastTwo < 12 || lastTwo > 14)) return 'opinie'
+  return 'opinii'
+}
+
 const pl: Strings = {
   lang: 'pl-PL',
   ogLocale: 'pl_PL',
@@ -442,8 +454,11 @@ const pl: Strings = {
   everyServiceIn: (area) => `Pełna oferta dostępna również w: ${area}`,
   coveringAreas: (areas, place) => `Obsługujemy ${areas} oraz cały powiat ${place}.`,
   credentials: 'Kwalifikacje i uprawnienia',
+  // Genitive after "na podstawie", so always "opinii".
   reviewsFrom: (count) => `na podstawie ${count} opinii`,
-  reviewsCount: (count) => `${count} opinii`,
+  // Nominative: 1 opinia, 2–4 opinie, 5+ opinii (12–14 are always opinii).
+  reviewsCount: (count) => `${count} ${plOpinie(count)}`,
+  googleReviews: (count) => `na podstawie ${count} opinii w Google`,
   via: 'przez',
   ratedOutOf: (value) => `Ocena ${value} na 5`,
   ratedOutOfCount: (value, count) => `Ocena ${value} na 5 na podstawie ${count} opinii`,

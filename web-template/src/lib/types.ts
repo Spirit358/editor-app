@@ -227,8 +227,18 @@ export interface SiteConfig {
   services: Service[]
   areas: ServiceArea[]
   reviews: Review[]
-  /** Aggregate rating for schema. Only emit if it is real. */
+  /**
+   * Aggregate rating for schema.org. Only allowed when `reviews` are shown on
+   * the page — Google treats an unbacked rating as spam.
+   */
   rating?: { value: number; count: number }
+  /**
+   * The business's public Google rating, shown as a linked proof point in
+   * the hero when no reviews have been transcribed yet. Visible text only —
+   * it is never emitted as structured data. Fill in `reviews` and `rating`
+   * once you have the actual review texts.
+   */
+  googleRating?: { value: number; count: number; url: string }
 
   about?: {
     heading: string

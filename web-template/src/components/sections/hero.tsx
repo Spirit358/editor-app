@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { Check, Phone } from 'lucide-react'
-import { site, t, phoneHref } from '@/lib/site'
+import { site, t, phoneHref, formatRating } from '@/lib/site'
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
 import { Stars } from '@/components/stars'
@@ -15,7 +15,9 @@ import { Stars } from '@/components/stars'
  * header; the matching padding keeps the content clear of it.
  */
 export function Hero() {
-  const { hero, business, rating } = site
+  const { hero, business, rating, googleRating } = site
+  // Schema-backed rating first; otherwise the public Google score as a link.
+  const proof = rating ?? googleRating
 
   return (
     <section
@@ -132,21 +134,35 @@ export function Hero() {
               })}
             </div>
 
-            {rating && (
+            {proof && (
               <div
                 className="animate-fade stagger mt-8 flex items-center gap-3 text-sm text-brand-300"
                 style={{ '--i': 4 } as React.CSSProperties}
               >
                 <Stars
-                  value={rating.value}
-                  label={t.ratedOutOfCount(rating.value, rating.count)}
+                  value={proof.value}
+                  label={t.ratedOutOfCount(proof.value, proof.count)}
                 />
-                <span>
-                  <strong className="font-semibold text-brand-50">
-                    {rating.value.toFixed(1)}
-                  </strong>{' '}
-                  {t.reviewsFrom(rating.count)}
-                </span>
+                {rating ? (
+                  <span>
+                    <strong className="font-semibold text-brand-50">
+                      {formatRating(rating.value)}
+                    </strong>{' '}
+                    {t.reviewsFrom(rating.count)}
+                  </span>
+                ) : (
+                  <a
+                    href={googleRating!.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="link-underline transition-colors hover:text-brand-50"
+                  >
+                    <strong className="font-semibold text-brand-50">
+                      {formatRating(googleRating!.value)}
+                    </strong>{' '}
+                    {t.googleReviews(googleRating!.count)}
+                  </a>
+                )}
               </div>
             )}
           </div>

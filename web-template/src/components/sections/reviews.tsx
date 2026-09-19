@@ -1,5 +1,5 @@
 import { Quote } from 'lucide-react'
-import { site, copy, t } from '@/lib/site'
+import { site, copy, t, formatRating } from '@/lib/site'
 import { SectionHeading } from './section-heading'
 import { Reveal } from '@/components/reveal'
 import { Stars } from '@/components/stars'
@@ -22,7 +22,7 @@ export function Reviews() {
             <Reveal delay={100}>
               <div className="flex items-center gap-4 rounded-[var(--radius-lg)] border border-line bg-surface-2 px-6 py-4">
                 <span className="font-display text-4xl tabular-nums text-brand-800">
-                  {rating.value.toFixed(1)}
+                  {formatRating(rating.value)}
                 </span>
                 <span className="text-sm">
                   <Stars value={rating.value} label={t.ratedOutOf(rating.value)} />

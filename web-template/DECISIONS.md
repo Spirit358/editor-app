@@ -32,17 +32,32 @@ questions for the first conversation:
 | Geo coordinates | Town centre, approximate |
 | Gallery captions | The imagery is generated; the captions name plausible jobs, not real ones |
 
-**Deliberately absent.** No prices — putting numbers in a real company's
-mouth before speaking to them is how a warm lead goes cold. No reviews and no
-rating — none exist online, and the validator would refuse a rating without
-them anyway. The reviews section and the "Opinie" nav item hide themselves.
-No emergency line, no WhatsApp — not advertised anywhere. The Google Business
-Profile tidy-up is part of the pitch, not something to fake in the demo.
+**Corrected by a screenshot of their Google panel.** The web search only
+reached directory sites, which carry no reviews; Google itself shows
+**4.2★ from 32 reviews** and lists them as an *HVAC contractor*, which
+supports the install-and-service side of the offer. The panel also shows
+their logo — a mid-blue wordmark — and that the profile has no opening
+hours and a hostel's banner as its lead photo. Lesson: for a lead, look at
+the Google panel first; it beats every directory.
 
-**Brand.** Warm charcoal (hue 32, chroma 0.07) with a flame-amber accent (hue
-52, chroma 0.16): heat without the fire-engine red every heating site reaches
-for. Bricolage Grotesque + Inter — a heating-tech wholesaler reads modern and
-technical, where the plumber read established and warm.
+**Deliberately absent.** No prices — putting numbers in a real company's
+mouth before speaking to them is how a warm lead goes cold. No review texts
+and no rating schema — the texts are not ours to reproduce, and the
+validator refuses an aggregate rating without visible reviews. The 4.2★ is
+shown in the hero as a link to Google (`googleRating`, visible text only).
+Transcribing the best reviews with the owner at intake unlocks the reviews
+section and the schema. No emergency line, no WhatsApp — not advertised.
+
+**Brand.** Their blue (hue 248, chroma 0.15) with a hot amber accent (hue 55):
+the owner should see their own company on the screen, and blue/orange is the
+complementary pair, so the calls-to-action carry the heat cue at maximum
+contrast. A first pass in warm charcoal looked good and was wrong — it was a
+designer's palette, not theirs. Bricolage Grotesque + Inter: a heating-tech
+wholesaler reads modern and technical, where the plumber read established and
+warm.
+
+**GBP tidy-up, the add-on from the handoff, is concrete here:** add hours,
+replace the lead photo, link the website, respond to reviews.
 
 **Where to show it.** `activa-szczecinek.pages.dev` as the preview host; demo
 mode on, 30-day expiry set. Nothing of theirs is used beyond public listing

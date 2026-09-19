@@ -4,18 +4,29 @@ import type { SiteConfig } from '@/lib/types'
  * ACTIVA TECHNIKA GRZEWCZA — Szczecinek. Unsolicited demo, first real lead.
  *
  * What is verified from public listings (KRS/REGON, Panorama Firm, pkt.pl,
- * zimno-cieplo.pl): trading name, legal name and partners, founding year 1991,
- * address, phone, email, opening hours, and the registered activity —
- * "hurtownia i produkcja urządzeń grzewczych" (wholesale and production of
- * heating equipment) plus sanitary equipment. No customer reviews exist
- * online, so none are shown and no rating is emitted.
+ * zimno-cieplo.pl) and their Google Business Profile: trading name, legal
+ * name and partners, founding year 1991, address, phone, email, opening
+ * hours, the registered activity — "hurtownia i produkcja urządzeń
+ * grzewczych" plus sanitary equipment — and the exterior signage reading
+ * "HURTOWNIA MATERIAŁÓW INSTALACYJNYCH". Google lists them as an
+ * "HVAC contractor" with 4.2★ from 32 reviews. Their logo is a mid-blue
+ * wordmark with a double-stroke mark; the palette below follows it.
+ *
+ * The 4.2★ is shown as a linked proof point only. The review TEXTS are not
+ * public data we hold, so `reviews` stays empty and no rating schema is
+ * emitted — transcribe the best ones with the owner at intake to unlock it.
  *
  * What is INFERRED and must be confirmed at intake, marked [VERIFY] below:
- *   • the installation/service side of the offer — a "technika grzewcza"
- *     firm normally sells AND fits, but the registers only prove the selling
+ *   • the installation/service side of the offer — supported by the
+ *     "HVAC contractor" category, but the registers only prove the selling
  *   • the specific service list and the areas covered
  *   • geo coordinates (approximate, town centre)
  *   • the gallery captions — the imagery is generated, not their work
+ *   • the logo file itself — the text wordmark is a stand-in
+ *
+ * GBP tidy-up to pitch alongside the site: no opening hours listed, the lead
+ * photo shows a hostel's banner on the shared building, and the profile has
+ * no website to link to.
  *
  * No prices are quoted anywhere. Putting numbers in a real company's mouth
  * before speaking to them is how a warm lead becomes a cold one.
@@ -77,15 +88,16 @@ const config: SiteConfig = {
     { days: [7], closed: true },
   ],
 
-  // Warm charcoal brand with a flame-amber accent: heat without the cliché
-  // of a fire-engine-red heating site. The low brand chroma keeps the dark
-  // bands sophisticated; all the colour lives in the accent.
+  // Their signage and logo are a clear mid-blue; the brand ramp follows it so
+  // the owner sees their own company, not a designer's preference. The hot
+  // amber accent is the complementary — it carries the "heat" cue and gives
+  // the calls-to-action maximum contrast against the blue.
   brand: {
-    hue: 32,
-    chroma: 0.07,
-    accentHue: 52,
-    accentChroma: 0.16,
-    neutralChroma: 0.01,
+    hue: 248,
+    chroma: 0.15,
+    accentHue: 55,
+    accentChroma: 0.17,
+    neutralChroma: 0.008,
     radius: 0.5,
     fonts: 'bricolage-inter',
   },
@@ -205,7 +217,8 @@ const config: SiteConfig = {
     },
     {
       slug: 'hurtownia',
-      name: 'Hurtownia techniki grzewczej',
+      // Their own wording, from the sign on the building.
+      name: 'Hurtownia materiałów instalacyjnych',
       short: 'Kotły, grzejniki, armatura i materiały instalacyjne — dla instalatorów i klientów indywidualnych.',
       icon: 'Store',
       ctaHeading: 'Potrzebujesz materiałów na instalację?',
@@ -307,10 +320,15 @@ const config: SiteConfig = {
     },
   ],
 
-  // No reviews exist online for this business. None are invented, and no
-  // rating is emitted — the Google Business Profile tidy-up is part of the
-  // pitch, not something to fake in the demo.
+  // 32 Google reviews at 4.2★ exist, but their texts are not ours to
+  // reproduce without the owner. Shown as a linked proof point in the hero;
+  // no review texts, no rating schema, until they are transcribed at intake.
   reviews: [],
+  googleRating: {
+    value: 4.2,
+    count: 32,
+    url: 'https://www.google.com/search?q=Activa+Technika+grzewcza+Szczecinek',
+  },
 
   about: {
     heading: 'Rodzinna firma, która grzeje Szczecinek od 1991 roku',

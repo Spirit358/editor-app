@@ -99,6 +99,14 @@ const phoneCountry = site.contact.phoneCountry ?? t.phoneCountry
 /** tel: link for the main number — one place, so the country logic is not repeated. */
 export const phoneHref = telHref(site.contact.phone, phoneCountry)
 
+/** '4.2' in en-GB, '4,2' in pl-PL. */
+export function formatRating(value: number) {
+  return new Intl.NumberFormat(locale, {
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 1,
+  }).format(value)
+}
+
 export function waHref(message?: string) {
   return whatsappHref(site.contact.whatsapp ?? site.contact.phone, phoneCountry, message)
 }
