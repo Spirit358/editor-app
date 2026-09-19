@@ -1,6 +1,6 @@
 import { Clock, Mail, MapPin, MessageCircle, Phone } from 'lucide-react'
-import { site, phoneDisplay } from '@/lib/site'
-import { dayLabel, telHref, whatsappHref } from '@/lib/utils'
+import { site, t, phoneDisplay, phoneHref, waHref } from '@/lib/site'
+import { dayLabel } from '@/lib/utils'
 import { SectionHeading } from './section-heading'
 import { ContactForm } from './contact-form'
 import { Reveal } from '@/components/reveal'
@@ -13,9 +13,9 @@ export function Contact({ compact = false }: { compact?: boolean }) {
       <div className="container-page">
         {!compact && (
           <SectionHeading
-            eyebrow="Get in touch"
-            title="Tell us what has gone wrong"
-            intro="Ring for anything urgent — the form is fine for quotes and planned work. Either way you get a person, not a ticket number."
+            eyebrow={t.pages.contact.eyebrow}
+            title={t.pages.contact.title}
+            intro={t.pages.contact.intro}
           />
         )}
 
@@ -24,7 +24,7 @@ export function Contact({ compact = false }: { compact?: boolean }) {
           <div className="order-1 lg:order-2 lg:col-span-5">
             <Reveal delay={60}>
               <a
-                href={telHref(contact.phone)}
+                href={phoneHref}
                 data-cta="contact-call"
                 className="group flex items-center gap-5 rounded-[var(--radius-lg)] bg-brand-950 p-6 transition-colors duration-400 hover:bg-brand-900"
               >
@@ -33,9 +33,7 @@ export function Contact({ compact = false }: { compact?: boolean }) {
                 </span>
                 <span>
                   <span className="block text-xs uppercase tracking-[0.14em] text-accent-400">
-                    {contact.emergency?.available
-                      ? 'Answered 24 hours'
-                      : 'Call us'}
+                    {contact.emergency?.available ? t.emergencyAnswered : t.callUs}
                   </span>
                   <span className="mt-1 block font-display text-2xl tabular-nums text-brand-50">
                     {phoneDisplay}
@@ -46,7 +44,7 @@ export function Contact({ compact = false }: { compact?: boolean }) {
 
             <Reveal delay={120}>
               <dl className="mt-6 divide-y divide-line rounded-[var(--radius-lg)] border border-line">
-                <Row icon={<Mail aria-hidden />} term="Email">
+                <Row icon={<Mail aria-hidden />} term={t.email}>
                   <a
                     href={`mailto:${contact.email}`}
                     className="link-underline break-all text-ink"
@@ -56,22 +54,19 @@ export function Contact({ compact = false }: { compact?: boolean }) {
                 </Row>
 
                 {contact.whatsapp && (
-                  <Row icon={<MessageCircle aria-hidden />} term="WhatsApp">
+                  <Row icon={<MessageCircle aria-hidden />} term={t.whatsapp}>
                     <a
-                      href={whatsappHref(
-                        contact.whatsapp,
-                        `Hi ${business.name}, I'd like a quote for…`
-                      )}
+                      href={waHref(t.whatsappOpener(business.name))}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="link-underline text-ink"
                     >
-                      Message us
+                      {t.messageUs}
                     </a>
                   </Row>
                 )}
 
-                <Row icon={<MapPin aria-hidden />} term="Where we are">
+                <Row icon={<MapPin aria-hidden />} term={t.whereWeAre}>
                   <span className="text-ink">
                     {!contact.address.hideStreet && contact.address.street && (
                       <>
@@ -79,19 +74,19 @@ export function Contact({ compact = false }: { compact?: boolean }) {
                         <br />
                       </>
                     )}
+                    {contact.address.postcode && `${contact.address.postcode} `}
                     {contact.address.locality}
-                    {contact.address.postcode && ` ${contact.address.postcode}`}
                   </span>
                 </Row>
 
                 {hours?.length ? (
-                  <Row icon={<Clock aria-hidden />} term="Hours">
+                  <Row icon={<Clock aria-hidden />} term={t.hours}>
                     <span className="space-y-1">
                       {hours.map((h, i) => (
                         <span key={i} className="flex justify-between gap-6">
-                          <span className="text-muted">{dayLabel(h.days)}</span>
+                          <span className="text-muted">{dayLabel(h.days, t.days)}</span>
                           <span className="tabular-nums text-ink">
-                            {h.closed ? 'Closed' : `${h.opens}–${h.closes}`}
+                            {h.closed ? t.closed : `${h.opens}–${h.closes}`}
                           </span>
                         </span>
                       ))}
@@ -106,7 +101,7 @@ export function Contact({ compact = false }: { compact?: boolean }) {
                 <div className="mt-6 overflow-hidden rounded-[var(--radius-lg)] border border-line">
                   <iframe
                     src={contact.mapEmbedUrl}
-                    title={`Map showing ${business.name} in ${contact.address.locality}`}
+                    title={t.mapTitle(business.name, contact.address.locality)}
                     width="100%"
                     height="260"
                     // Lazy so the third-party frame never blocks first paint.
@@ -125,7 +120,7 @@ export function Contact({ compact = false }: { compact?: boolean }) {
               hiddenFields={forms.hiddenFields}
               successMessage={forms.successMessage}
               services={services.map((s) => ({ slug: s.slug, name: s.name }))}
-              businessName={business.name}
+              labels={{ ...t.form, sentBody: t.form.sentBody(business.name) }}
             />
           </Reveal>
         </div>

@@ -2,7 +2,7 @@
 /**
  * Scaffolds a new client instance.
  *
- *   pnpm new-site <slug> [--hue 224] [--accent 38] [--no-assets]
+ *   pnpm new-site <slug> [--hue 224] [--accent 38] [--locale pl-PL] [--fonts bricolage-inter] [--no-assets]
  *
  * Creates clients/<slug>/site.config.ts from the skeleton, generates on-brand
  * placeholder imagery, and points the build at the new client. After this,
@@ -63,6 +63,8 @@ async function main() {
 
   const hue = arg('--hue', '224')
   const accent = arg('--accent', '38')
+  const locale = arg('--locale', 'en-GB')
+  const fonts = arg('--fonts', 'fraunces-inter')
 
   // 1. Config from the skeleton.
   const skeleton = await readFile(
@@ -77,10 +79,18 @@ async function main() {
     .replace(/__slug__/g, slug)
     .replace(/hue: 224/, `hue: ${hue}`)
     .replace(/accentHue: 38/, `accentHue: ${accent}`)
+    .replace(/locale: 'en-GB'/, `locale: '${locale}'`)
+    .replace(/fonts: 'fraunces-inter'/, `fonts: '${fonts}'`)
 
   await mkdir(clientDir, { recursive: true })
   await writeFile(path.join(clientDir, 'site.config.ts'), config, 'utf8')
   console.log(`\n  ✓ clients/${slug}/site.config.ts`)
+
+  // Imagery manifest: the asset names the config references, with prompt
+  // slots. gen-assets and the Higgsfield pipeline both read it.
+  const imagery = await readFile(path.join(ROOT, 'clients', '_template', 'imagery.json'), 'utf8')
+  await writeFile(path.join(clientDir, 'imagery.json'), imagery, 'utf8')
+  console.log(`  ✓ clients/${slug}/imagery.json`)
 
   // 2. Placeholder imagery on the same hue.
   if (!process.argv.includes('--no-assets')) {
@@ -96,7 +106,7 @@ async function main() {
     ])
   }
 
-  // 3. Point the build at it.
+  // 3. Point the build at it (also wires up the font pairing).
   await setActive(slug)
 
   console.log(`
@@ -105,9 +115,12 @@ Scaffolded "${slug}".
 Next:
   1. Fill in clients/${slug}/site.config.ts — every __PLACEHOLDER__.
      The build fails by name if anything required is left blank.
-  2. Replace public/clients/${slug}/*.webp with real photography.
-  3. pnpm dev, then review at 390px and 1440px.
-  4. pnpm build, deploy the out/ folder to a private preview URL.
+  2. Write the prompts in clients/${slug}/imagery.json, then either
+       pnpm imagery --slug ${slug}          (Higgsfield, needs HIGGSFIELD_KEY)
+     or drop the client's photos in clients/${slug}/source/ and run
+       pnpm optimize-images --slug ${slug}
+  3. pnpm dev, then pnpm shoot — review at 390px and 1440px.
+  4. pnpm build && pnpm audit-site, then deploy out/ to a private preview URL.
 
 Demo mode is ON: the build is noindex, robots.txt blocks everything, and the
 preview banner is showing. Expires ${expires}.

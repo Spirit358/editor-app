@@ -1,4 +1,6 @@
 import { activeConfig } from '@/config/active'
+import { stringsFor } from './i18n'
+import { telHref, whatsappHref } from './utils'
 import type { SiteConfig, Service } from './types'
 
 /**
@@ -87,7 +89,19 @@ function findPlaceholders(value: unknown, path = ''): string[] {
 
 export const site: SiteConfig = validate(activeConfig as SiteConfig)
 
+/** Every non-content string, in the site's language. */
+export const t = stringsFor(site.locale)
+export const locale = t.lang
+
 export const phoneDisplay = site.contact.phoneDisplay ?? site.contact.phone
+const phoneCountry = site.contact.phoneCountry ?? t.phoneCountry
+
+/** tel: link for the main number — one place, so the country logic is not repeated. */
+export const phoneHref = telHref(site.contact.phone, phoneCountry)
+
+export function waHref(message?: string) {
+  return whatsappHref(site.contact.whatsapp ?? site.contact.phone, phoneCountry, message)
+}
 
 export const featuredServices: Service[] = site.services.filter(
   (s) => s.featured !== false
@@ -105,45 +119,37 @@ export function areaBySlug(slug: string) {
 export const isDemo = site.demo.enabled
 
 export const siteName = site.business.name
+export const tradePlural = site.business.tradePlural ?? site.business.name
 
 const place = site.contact.address.locality
 const c = site.copy ?? {}
 
 /**
- * Section copy with neutral fallbacks. Wrap a fragment in *asterisks* to have
- * it rendered in the accent colour — see <Highlight>.
+ * Section copy with locale-aware fallbacks. Wrap a fragment in *asterisks* to
+ * have it rendered in the accent colour — see <Highlight>.
  */
 export const copy = {
-  servicesEyebrow: c.servicesEyebrow ?? 'What we do',
-  servicesTitle: c.servicesTitle ?? 'Our services',
-  servicesIntro:
-    c.servicesIntro ??
-    `One team across ${site.areas.length} areas of ${place}, with the same fixed-price approach whatever the job.`,
+  servicesEyebrow: c.servicesEyebrow ?? t.copy.servicesEyebrow,
+  servicesTitle: c.servicesTitle ?? t.copy.servicesTitle,
+  servicesIntro: c.servicesIntro ?? t.copy.servicesIntro(site.areas.length, place),
 
-  aboutEyebrow: c.aboutEyebrow ?? "Who you're calling",
+  aboutEyebrow: c.aboutEyebrow ?? t.copy.aboutEyebrow,
 
-  reviewsEyebrow: c.reviewsEyebrow ?? 'In their words',
-  reviewsTitle: c.reviewsTitle ?? 'What customers say',
+  reviewsEyebrow: c.reviewsEyebrow ?? t.copy.reviewsEyebrow,
+  reviewsTitle: c.reviewsTitle ?? t.copy.reviewsTitle,
 
-  areasEyebrow: c.areasEyebrow ?? 'Where we work',
-  areasTitle: c.areasTitle ?? `Covering ${place} and the areas around it`,
-  areasIntro:
-    c.areasIntro ??
-    'If you are just outside one of these, ring anyway — we will tell you straight away if we are the wrong people for the job.',
+  areasEyebrow: c.areasEyebrow ?? t.copy.areasEyebrow,
+  areasTitle: c.areasTitle ?? t.copy.areasTitle(place),
+  areasIntro: c.areasIntro ?? t.copy.areasIntro,
 
-  galleryEyebrow: c.galleryEyebrow ?? 'Recent work',
-  galleryTitle: c.galleryTitle ?? 'A few jobs we were happy to photograph',
+  galleryEyebrow: c.galleryEyebrow ?? t.copy.galleryEyebrow,
+  galleryTitle: c.galleryTitle ?? t.copy.galleryTitle,
   galleryIntro: c.galleryIntro,
 
-  faqEyebrow: c.faqEyebrow ?? 'Before you ring',
-  faqTitle: c.faqTitle ?? 'Straight answers',
-  faqIntro:
-    c.faqIntro ??
-    'The questions we get asked most, answered the way we would answer them on the phone.',
+  faqEyebrow: c.faqEyebrow ?? t.copy.faqEyebrow,
+  faqTitle: c.faqTitle ?? t.copy.faqTitle,
+  faqIntro: c.faqIntro ?? t.copy.faqIntro,
 
-  ctaHeading: c.ctaHeading ?? 'Got a job that needs doing?',
-  ctaSub:
-    c.ctaSub ??
-    site.contact.emergency?.note ??
-    'Tell us what has happened and we will give you a straight answer on price and timing.',
+  ctaHeading: c.ctaHeading ?? t.copy.ctaHeading,
+  ctaSub: c.ctaSub ?? site.contact.emergency?.note ?? t.copy.ctaSub,
 }

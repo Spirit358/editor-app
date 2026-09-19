@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { site, isDemo, phoneDisplay } from './site'
+import { site, t, isDemo, phoneDisplay } from './site'
 import { absoluteUrl, schemaDays } from './utils'
 import type { Service, ServiceArea } from './types'
 
@@ -39,7 +39,7 @@ export function buildMetadata(opts: {
     openGraph: {
       type: 'website',
       siteName: site.business.name,
-      locale: 'en_GB',
+      locale: t.ogLocale,
       title,
       description,
       url,

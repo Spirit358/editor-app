@@ -8,3 +8,6 @@ next-env.d.ts
 
 # QA screenshots
 .qa
+
+# Client originals (photos, generated masters) — large, and not part of the site
+clients/*/source/

@@ -1,0 +1,27 @@
+{
+  "$comment": "Prompts for `pnpm imagery --slug <slug>`. Names must match the image paths in site.config.ts — `pnpm gen-assets` reads this file too, so placeholders and real generations line up one-for-one. Dark, warm, no text, no faces: the hero sits at 30% under a dark scrim, so busy or bright images turn to mud.",
+  "model": "bytedance/seedream/v4/text-to-image",
+  "defaults": {
+    "resolution": "2K",
+    "aspect_ratio": "4:3"
+  },
+  "style": "Professional photography, warm low-key lighting, shallow depth of field, clean and precise, no people, no faces, no text, no logos, no watermarks.",
+  "images": [
+    {
+      "name": "hero",
+      "aspect_ratio": "3:2",
+      "prompt": "__A CLOSE-UP OF THE TRADE'S CRAFT, moody and atmospheric__"
+    },
+    {
+      "name": "about",
+      "aspect_ratio": "3:4",
+      "prompt": "__THE WORKSHOP, VAN OR PREMISES, portrait orientation__"
+    },
+    { "name": "gallery-1", "prompt": "__A FINISHED JOB__" },
+    { "name": "gallery-2", "prompt": "__A FINISHED JOB__" },
+    { "name": "gallery-3", "prompt": "__A FINISHED JOB__" },
+    { "name": "gallery-4", "prompt": "__A DETAIL SHOT__" },
+    { "name": "gallery-5", "prompt": "__A DETAIL SHOT__" },
+    { "name": "gallery-6", "prompt": "__A FINISHED JOB__" }
+  ]
+}

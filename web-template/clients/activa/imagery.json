@@ -1,0 +1,61 @@
+{
+  "$comment": "Prompts for `pnpm imagery --slug activa`. One entry per asset the config references. Dark, warm, no text, no faces — matches the hero treatment in globals.css, which sits a 30% image under a brand-950 scrim.",
+  "model": "bytedance/seedream/v4/text-to-image",
+  "defaults": {
+    "resolution": "2K",
+    "aspect_ratio": "4:3"
+  },
+  "style": "Professional architectural interior photography, warm low-key lighting, amber and charcoal tones, shallow depth of field, clean and precise, Polish single-family home context, no people, no faces, no text, no logos, no watermarks.",
+  "images": [
+    {
+      "name": "hero",
+      "aspect_ratio": "3:2",
+      "prompt": "Close-up of a modern wall-hung condensing gas boiler with neat copper and brass pipework in a clean utility room, warm amber light raking across brushed metal, deep shadows, cinematic and moody."
+    },
+    {
+      "name": "about",
+      "aspect_ratio": "3:4",
+      "prompt": "Interior aisle of a heating-equipment wholesale warehouse, tall steel shelving stocked with boilers, radiators and boxed fittings, warm pendant lighting, atmospheric depth, portrait orientation."
+    },
+    {
+      "name": "service-boiler",
+      "prompt": "Modern condensing gas boiler installed on a tiled wall with a magnetic filter and expansion vessel, tidy pipe runs, soft warm light from one side."
+    },
+    {
+      "name": "service-heatpump",
+      "prompt": "Outdoor air-source heat pump unit on a concrete plinth beside a contemporary Polish single-family house at dusk, warm window light, blue hour sky, frost on the grass."
+    },
+    {
+      "name": "service-underfloor",
+      "prompt": "Underfloor heating manifold with red and blue PEX pipe loops freshly installed on insulation boards before the screed, warm work light, precise and geometric."
+    },
+    {
+      "name": "service-warehouse",
+      "prompt": "Counter and shelves of a heating and plumbing supplies wholesaler, radiators stacked on a rack, boxed valves and fittings, warm daylight through a high window."
+    },
+    {
+      "name": "gallery-1",
+      "prompt": "Small residential boiler room with a wall-hung gas boiler, hot-water cylinder and insulated pipework, everything aligned and labelled, warm light."
+    },
+    {
+      "name": "gallery-2",
+      "prompt": "Heat pump outdoor unit installed beside a rendered house wall with a gravel bed, evening light, long shadows."
+    },
+    {
+      "name": "gallery-3",
+      "prompt": "Top-down view of underfloor heating pipe loops laid in a spiral pattern across a room before screed, warm light, geometric."
+    },
+    {
+      "name": "gallery-4",
+      "prompt": "Brass underfloor heating manifold with flow meters and actuators in a cabinet, macro detail, warm reflections."
+    },
+    {
+      "name": "gallery-5",
+      "prompt": "Large stainless steel hot-water cylinder with insulated pipes and a circulation pump in a clean plant room, moody warm lighting."
+    },
+    {
+      "name": "gallery-6",
+      "prompt": "Vertical designer radiator in anthracite on a pale plastered wall of a modern living room, warm afternoon light, minimal."
+    }
+  ]
+}

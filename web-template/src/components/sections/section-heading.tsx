@@ -1,5 +1,6 @@
 import { cn } from '@/lib/utils'
 import { Reveal } from '@/components/reveal'
+import { Highlight } from '@/components/highlight'
 
 export function SectionHeading({
   eyebrow,
@@ -44,7 +45,13 @@ export function SectionHeading({
           light ? 'text-brand-50' : 'text-ink'
         )}
       >
-        {title}
+        {/* A plain string may carry *asterisk* emphasis from the config; run
+            it through Highlight here so no caller can forget to. */}
+        {typeof title === 'string' ? (
+          <Highlight text={title} className={light ? 'text-accent-400' : undefined} />
+        ) : (
+          title
+        )}
       </h2>
       {intro && (
         <p

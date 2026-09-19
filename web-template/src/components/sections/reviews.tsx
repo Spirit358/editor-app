@@ -1,5 +1,5 @@
 import { Quote } from 'lucide-react'
-import { site, copy } from '@/lib/site'
+import { site, copy, t } from '@/lib/site'
 import { SectionHeading } from './section-heading'
 import { Reveal } from '@/components/reveal'
 import { Stars } from '@/components/stars'
@@ -25,12 +25,9 @@ export function Reviews() {
                   {rating.value.toFixed(1)}
                 </span>
                 <span className="text-sm">
-                  <Stars
-                    value={rating.value}
-                    label={`Rated ${rating.value} out of 5`}
-                  />
+                  <Stars value={rating.value} label={t.ratedOutOf(rating.value)} />
                   <span className="mt-1 block text-muted">
-                    {rating.count} reviews
+                    {t.reviewsCount(rating.count)}
                   </span>
                 </span>
               </div>
@@ -59,15 +56,11 @@ export function Reviews() {
                     </span>
                     {review.source && (
                       <span className="mt-0.5 block text-xs text-muted">
-                        via {review.source}
+                        {t.via} {review.source}
                       </span>
                     )}
                   </div>
-                  <Stars
-                    value={review.rating}
-                    size={14}
-                    label={`${review.rating} out of 5`}
-                  />
+                  <Stars value={review.rating} size={14} label={t.outOfFive(review.rating)} />
                 </figcaption>
               </figure>
             </Reveal>

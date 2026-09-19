@@ -3,7 +3,12 @@ import { site, copy } from '@/lib/site'
 import { SectionHeading } from './section-heading'
 import { Reveal } from '@/components/reveal'
 
-export function About() {
+/**
+ * `priority` is for the About page, where this image sits in the first
+ * viewport and is the largest contentful paint; on the homepage it is far
+ * below the fold and should stay lazy.
+ */
+export function About({ priority = false }: { priority?: boolean } = {}) {
   const about = site.about
   if (!about) return null
 
@@ -26,6 +31,7 @@ export function About() {
                   width={about.image.width ?? 1200}
                   height={about.image.height ?? 1400}
                   sizes="(min-width: 1024px) 40vw, 90vw"
+                  priority={priority}
                   className="relative aspect-4/5 w-full rounded-[var(--radius-xl)] object-cover shadow-[var(--shadow-deep)]"
                 />
               </div>

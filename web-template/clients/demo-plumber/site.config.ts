@@ -17,6 +17,7 @@ import type { SiteConfig } from '@/lib/types'
 
 const config: SiteConfig = {
   slug: 'demo-plumber',
+  locale: 'en-GB',
 
   demo: {
     enabled: true,
@@ -82,6 +83,7 @@ const config: SiteConfig = {
     accentChroma: 0.135,
     neutralChroma: 0.008,
     radius: 0.625,
+    fonts: 'fraunces-inter',
   },
 
   hero: {

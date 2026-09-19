@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
-import { site } from '@/lib/site'
+import { site, t } from '@/lib/site'
 import { buildMetadata, breadcrumbSchema } from '@/lib/seo'
 import { PageHero } from '@/components/sections/page-hero'
 import { ServiceIcon } from '@/components/service-icon'
@@ -9,11 +9,18 @@ import { Reveal } from '@/components/reveal'
 import { Cta } from '@/components/sections/cta'
 import { JsonLd } from '@/components/json-ld'
 
+const TRAIL = [
+  { name: t.crumbs.home, path: '/' },
+  { name: t.crumbs.services, path: '/services' },
+]
+
 export const metadata: Metadata = buildMetadata({
-  title: 'Services',
-  description: `Everything ${site.business.name} does across ${site.contact.address.locality}: ${site.services
-    .map((s) => s.name.toLowerCase())
-    .join(', ')}.`,
+  title: t.crumbs.services,
+  description: t.meta.services(
+    site.business.name,
+    site.contact.address.locality,
+    site.services.map((s) => s.name.toLowerCase()).join(', ')
+  ),
   path: '/services',
 })
 
@@ -21,13 +28,10 @@ export default function ServicesPage() {
   return (
     <>
       <PageHero
-        eyebrow="Services"
-        title="What we do, and what it costs"
-        intro="Prices are where jobs typically start. We survey anything substantial before quoting, so the number you get is the number you pay."
-        breadcrumbs={[
-          { name: 'Home', path: '/' },
-          { name: 'Services', path: '/services' },
-        ]}
+        eyebrow={t.crumbs.services}
+        title={t.pages.services.title}
+        intro={t.pages.services.intro}
+        breadcrumbs={TRAIL}
       />
 
       <section className="section-y bg-surface">
@@ -67,14 +71,14 @@ export default function ServicesPage() {
                   <span className="mt-7 flex items-center justify-between gap-4 border-t border-line pt-5">
                     {service.priceFrom && (
                       <span className="text-sm text-muted">
-                        From{' '}
+                        {t.from}{' '}
                         <strong className="font-semibold text-ink tabular-nums">
                           {service.priceFrom}
                         </strong>
                       </span>
                     )}
                     <span className="inline-flex items-center gap-1.5 text-sm font-medium text-brand-700">
-                      Read more
+                      {t.readMore}
                       <ArrowUpRight
                         className="size-4 transition-transform duration-300 ease-[var(--ease-out-quint)] group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                         aria-hidden
@@ -89,13 +93,7 @@ export default function ServicesPage() {
       </section>
 
       <Cta />
-
-      <JsonLd
-        data={breadcrumbSchema([
-          { name: 'Home', path: '/' },
-          { name: 'Services', path: '/services' },
-        ])}
-      />
+      <JsonLd data={breadcrumbSchema(TRAIL)} />
     </>
   )
 }

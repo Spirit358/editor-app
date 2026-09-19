@@ -14,6 +14,7 @@
     "list-sites": "node scripts/use-site.mjs --list",
     "gen-assets": "node scripts/gen-placeholder-assets.mjs",
     "optimize-images": "node scripts/optimize-images.mjs",
+    "imagery": "node scripts/higgsfield.mjs",
     "shoot": "node scripts/shoot.mjs",
     "audit-site": "node scripts/lighthouse.mjs",
     "check": "pnpm typecheck && pnpm build && pnpm audit-site"

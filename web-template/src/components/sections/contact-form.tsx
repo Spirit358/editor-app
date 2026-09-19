@@ -4,6 +4,7 @@ import * as React from 'react'
 import { AlertCircle, CheckCircle2, Loader2, Send } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input, Label, Select, Textarea } from '@/components/ui/field'
+import type { Strings } from '@/lib/i18n'
 
 type Status = 'idle' | 'sending' | 'sent' | 'error'
 
@@ -13,7 +14,12 @@ export interface ContactFormProps {
   hiddenFields?: Record<string, string>
   successMessage?: string
   services: Array<{ slug: string; name: string }>
-  businessName: string
+  /**
+   * Passed in so the client bundle never imports the site config. Functions
+   * cannot cross the server→client boundary, so `sentBody` arrives already
+   * resolved to a string.
+   */
+  labels: Omit<Strings['form'], 'sentBody'> & { sentBody: string }
 }
 
 export function ContactForm({
@@ -21,7 +27,7 @@ export function ContactForm({
   hiddenFields,
   successMessage,
   services,
-  businessName,
+  labels: f,
 }: ContactFormProps) {
   const [status, setStatus] = React.useState<Status>('idle')
   const [error, setError] = React.useState<string | null>(null)
@@ -39,9 +45,7 @@ export function ContactForm({
 
     if (!endpoint) {
       setStatus('error')
-      setError(
-        'This is a preview, so the form is not connected yet. On the live site it goes straight to the business inbox.'
-      )
+      setError(f.previewError)
       return
     }
 
@@ -59,9 +63,7 @@ export function ContactForm({
       form.reset()
     } catch {
       setStatus('error')
-      setError(
-        'Something went wrong sending that. Please ring us instead — we would rather hear from you than lose the job to a broken form.'
-      )
+      setError(f.sendError)
     }
   }
 
@@ -76,40 +78,39 @@ export function ContactForm({
           strokeWidth={1.5}
           aria-hidden
         />
-        <p className="mt-4 font-display text-xl text-ink">Message sent</p>
+        <p className="mt-4 font-display text-xl text-ink">{f.sent}</p>
         <p className="mx-auto mt-2 max-w-sm text-[0.9375rem] leading-relaxed text-ink-soft">
-          {successMessage ??
-            `Thanks — ${businessName} will come back to you shortly.`}
+          {successMessage ?? f.sentBody}
         </p>
       </div>
     )
   }
 
   return (
-    <form onSubmit={onSubmit} noValidate={false} className="space-y-5">
+    <form onSubmit={onSubmit} className="space-y-5">
       {Object.entries(hiddenFields ?? {}).map(([name, value]) => (
         <input key={name} type="hidden" name={name} value={value} />
       ))}
 
       {/* Honeypot — hidden from people, visible to bots. */}
       <div aria-hidden className="absolute -left-[9999px] h-px w-px overflow-hidden">
-        <label htmlFor="company">Company (leave blank)</label>
+        <label htmlFor="company">{f.honeypot}</label>
         <input id="company" name="company" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 
       <div className="grid gap-5 sm:grid-cols-2">
         <div className="space-y-2">
-          <Label htmlFor="name">Your name</Label>
+          <Label htmlFor="name">{f.name}</Label>
           <Input
             id="name"
             name="name"
             required
             autoComplete="name"
-            placeholder="Jane Smith"
+            placeholder={f.namePlaceholder}
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="phone">Phone</Label>
+          <Label htmlFor="phone">{f.phone}</Label>
           <Input
             id="phone"
             name="phone"
@@ -117,46 +118,41 @@ export function ContactForm({
             required
             autoComplete="tel"
             inputMode="tel"
-            placeholder="07700 900000"
+            placeholder={f.phonePlaceholder}
           />
         </div>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email">{f.email}</Label>
         <Input
           id="email"
           name="email"
           type="email"
           required
           autoComplete="email"
-          placeholder="jane@example.com"
+          placeholder={f.emailPlaceholder}
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="service">What do you need?</Label>
+        <Label htmlFor="service">{f.service}</Label>
         <Select id="service" name="service" defaultValue="">
           <option value="" disabled>
-            Choose a service…
+            {f.choose}
           </option>
           {services.map((s) => (
             <option key={s.slug} value={s.name}>
               {s.name}
             </option>
           ))}
-          <option value="Something else">Something else</option>
+          <option value={f.somethingElse}>{f.somethingElse}</option>
         </Select>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="message">Details</Label>
-        <Textarea
-          id="message"
-          name="message"
-          required
-          placeholder="Tell us what has happened, and roughly where you are."
-        />
+        <Label htmlFor="message">{f.details}</Label>
+        <Textarea id="message" name="message" required placeholder={f.detailsPlaceholder} />
       </div>
 
       {status === 'error' && error && (
@@ -169,29 +165,21 @@ export function ContactForm({
         </p>
       )}
 
-      <Button
-        type="submit"
-        size="lg"
-        className="w-full"
-        disabled={status === 'sending'}
-      >
+      <Button type="submit" size="lg" className="w-full" disabled={status === 'sending'}>
         {status === 'sending' ? (
           <>
             <Loader2 className="animate-spin" aria-hidden />
-            Sending…
+            {f.sending}
           </>
         ) : (
           <>
             <Send aria-hidden />
-            Send enquiry
+            {f.send}
           </>
         )}
       </Button>
 
-      <p className="text-xs leading-relaxed text-muted">
-        We use your details to reply to this enquiry and nothing else. No lists,
-        no passing them on.
-      </p>
+      <p className="text-xs leading-relaxed text-muted">{f.privacyNote}</p>
     </form>
   )
 }

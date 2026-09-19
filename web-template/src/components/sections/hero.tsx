@@ -1,8 +1,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { Check, Phone } from 'lucide-react'
-import { site, phoneDisplay } from '@/lib/site'
-import { cn, telHref } from '@/lib/utils'
+import { site, t, phoneHref } from '@/lib/site'
+import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
 import { Stars } from '@/components/stars'
 
@@ -15,7 +15,7 @@ import { Stars } from '@/components/stars'
  * header; the matching padding keeps the content clear of it.
  */
 export function Hero() {
-  const { hero, business, rating, contact } = site
+  const { hero, business, rating } = site
 
   return (
     <section
@@ -101,7 +101,7 @@ export function Hero() {
             >
               {hero.ctas.map((cta) => {
                 const isTel = cta.kind === 'tel'
-                const href = isTel ? telHref(contact.phone) : cta.href
+                const href = isTel ? phoneHref : cta.href
                 const className = cn(
                   buttonVariants({
                     variant: isTel
@@ -122,7 +122,7 @@ export function Hero() {
                     data-cta="hero-call"
                   >
                     {isTel && <Phone aria-hidden />}
-                    {cta.label}
+                    <span className={isTel ? 'tabular-nums' : undefined}>{cta.label}</span>
                   </a>
                 ) : (
                   <Link key={cta.label} href={href} className={className}>
@@ -139,13 +139,13 @@ export function Hero() {
               >
                 <Stars
                   value={rating.value}
-                  label={`Rated ${rating.value} out of 5 from ${rating.count} reviews`}
+                  label={t.ratedOutOfCount(rating.value, rating.count)}
                 />
                 <span>
                   <strong className="font-semibold text-brand-50">
                     {rating.value.toFixed(1)}
                   </strong>{' '}
-                  from {rating.count} reviews
+                  {t.reviewsFrom(rating.count)}
                 </span>
               </div>
             )}
@@ -160,7 +160,7 @@ export function Hero() {
             >
               <div className="rounded-[var(--radius-xl)] border border-brand-50/12 bg-brand-50/6 p-7 backdrop-blur-md sm:p-8">
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-accent-400">
-                  What you get
+                  {t.whatYouGet}
                 </p>
                 <ul className="mt-6 space-y-4">
                   {hero.badges.map((badge) => (

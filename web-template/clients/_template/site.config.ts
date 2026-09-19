@@ -16,6 +16,9 @@ import type { SiteConfig } from '@/lib/types'
 const config: SiteConfig = {
   slug: '__SLUG__',
 
+  // Language of every button, label and legal paragraph: 'en-GB' | 'pl-PL'.
+  locale: 'en-GB',
+
   // Demo mode stays ON until the client has agreed. It applies noindex and a
   // blocking robots.txt, and shows the preview banner.
   demo: {
@@ -58,6 +61,8 @@ const config: SiteConfig = {
     chroma: 0.13,
     accentHue: 38,
     radius: 0.625,
+    // 'fraunces-inter' (established, warm) | 'bricolage-inter' (modern, technical)
+    fonts: 'fraunces-inter',
   },
 
   hero: {

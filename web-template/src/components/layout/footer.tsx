@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { Mail, MapPin, Phone } from 'lucide-react'
-import { site, phoneDisplay } from '@/lib/site'
-import { dayLabel, telHref } from '@/lib/utils'
+import { site, t, phoneDisplay, phoneHref } from '@/lib/site'
+import { dayLabel } from '@/lib/utils'
 
 const SOCIAL_LABELS: Record<string, string> = {
   facebook: 'Facebook',
@@ -33,7 +33,7 @@ export function Footer() {
 
             <address className="mt-7 space-y-3 text-sm not-italic">
               <a
-                href={telHref(contact.phone)}
+                href={phoneHref}
                 data-cta="footer-call"
                 className="flex items-center gap-3 text-brand-50 transition-colors hover:text-accent-400"
               >
@@ -56,18 +56,18 @@ export function Footer() {
                       <br />
                     </>
                   )}
+                  {contact.address.postcode && `${contact.address.postcode} `}
                   {contact.address.locality}
                   {contact.address.region && `, ${contact.address.region}`}
-                  {contact.address.postcode && ` ${contact.address.postcode}`}
                 </span>
               </p>
             </address>
           </div>
 
           {/* Services */}
-          <nav className="lg:col-span-3" aria-label="Services">
+          <nav className="lg:col-span-3" aria-label={t.footer.services}>
             <h2 className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-400">
-              Services
+              {t.footer.services}
             </h2>
             <ul className="mt-5 space-y-2.5 text-sm">
               {services.map((s) => (
@@ -84,9 +84,9 @@ export function Footer() {
           </nav>
 
           {/* Areas — genuine internal linking for local search */}
-          <nav className="lg:col-span-3" aria-label="Areas covered">
+          <nav className="lg:col-span-3" aria-label={t.footer.areasCovered}>
             <h2 className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-400">
-              Areas covered
+              {t.footer.areasCovered}
             </h2>
             <ul className="mt-5 grid grid-cols-2 gap-x-4 gap-y-2.5 text-sm lg:grid-cols-1">
               {areas.map((a) => (
@@ -105,15 +105,15 @@ export function Footer() {
           {/* Hours */}
           <div className="lg:col-span-2">
             <h2 className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-400">
-              Opening hours
+              {t.footer.openingHours}
             </h2>
             {hours?.length ? (
               <dl className="mt-5 space-y-2.5 text-sm">
                 {hours.map((h, i) => (
                   <div key={i} className="flex justify-between gap-3">
-                    <dt className="text-brand-300">{dayLabel(h.days)}</dt>
+                    <dt className="text-brand-300">{dayLabel(h.days, t.days)}</dt>
                     <dd className="tabular-nums text-brand-50">
-                      {h.closed ? 'Closed' : `${h.opens}–${h.closes}`}
+                      {h.closed ? t.closed : `${h.opens}–${h.closes}`}
                     </dd>
                   </div>
                 ))}
@@ -121,7 +121,7 @@ export function Footer() {
             ) : null}
             {contact.emergency?.available && (
               <p className="mt-5 rounded-[var(--radius-sm)] border border-accent-500/30 bg-accent-500/10 px-3 py-2.5 text-xs leading-relaxed text-accent-300">
-                24/7 emergency line
+                {t.emergencyLine}
               </p>
             )}
           </div>
@@ -140,9 +140,7 @@ export function Footer() {
         ) : null}
 
         <div className="flex flex-col gap-4 border-t border-brand-800 py-7 text-xs text-brand-400 sm:flex-row sm:items-center sm:justify-between">
-          <p>
-            © {year} {business.legalName ?? business.name}. All rights reserved.
-          </p>
+          <p>{t.footer.rights(year, business.legalName ?? business.name)}</p>
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
             {social.map(([key, href]) => (
               <a
@@ -156,7 +154,7 @@ export function Footer() {
               </a>
             ))}
             <Link href="/privacy" className="transition-colors hover:text-brand-50">
-              Privacy
+              {t.footer.privacy}
             </Link>
           </div>
         </div>

@@ -8,22 +8,14 @@ import { Eye } from 'lucide-react'
  * Paired with noindex + a blocking robots.txt in demo mode. See DECISIONS.md.
  */
 export function DemoBanner({
-  preparedFor,
-  expiresOn,
+  headline,
   note,
+  expiry,
 }: {
-  preparedFor: string
-  expiresOn?: string
+  headline: string
   note?: string
+  expiry?: string
 }) {
-  const expiry = expiresOn
-    ? new Date(expiresOn).toLocaleDateString('en-GB', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-      })
-    : null
-
   return (
     <div className="relative z-60 bg-brand-950 text-brand-100 no-print">
       <div className="container-page">
@@ -33,14 +25,10 @@ export function DemoBanner({
         <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 py-2.5 text-center text-xs sm:text-sm">
           <span className="inline-flex items-center gap-2 font-medium text-brand-50">
             <Eye className="size-3.5 shrink-0 text-accent-400" aria-hidden />
-            Preview prepared for {preparedFor}
+            {headline}
           </span>
           {note && <span className="hidden text-brand-300 sm:inline">{note}</span>}
-          {expiry && (
-            <span className="hidden text-brand-300 sm:inline">
-              Private link · removed after {expiry}
-            </span>
-          )}
+          {expiry && <span className="hidden text-brand-300 sm:inline">{expiry}</span>}
         </div>
       </div>
     </div>

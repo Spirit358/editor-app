@@ -21,7 +21,8 @@ export function Stars({
     <span
       className={cn('inline-flex items-center', className)}
       role="img"
-      aria-label={label ?? `${value} out of 5 stars`}
+      // Callers pass a translated label; the fallback is language-neutral.
+      aria-label={label ?? `${value}/5`}
     >
       <span className="relative inline-block" style={{ height: size }}>
         <StarRow size={size} className="text-line-strong" />

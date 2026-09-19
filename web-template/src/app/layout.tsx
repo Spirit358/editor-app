@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { fontClassNames } from '@/config/fonts'
-import { site, phoneDisplay, isDemo } from '@/lib/site'
+import { site, t, locale, phoneDisplay, phoneHref, waHref, isDemo } from '@/lib/site'
 import { buildMetadata, localBusinessSchema } from '@/lib/seo'
 import { Header } from '@/components/layout/header'
 import { Footer } from '@/components/layout/footer'
@@ -17,11 +17,11 @@ export const viewport: Viewport = {
 }
 
 const NAV = [
-  { label: 'Services', href: '/services' },
-  { label: 'Areas', href: '/areas' },
-  { label: 'About', href: '/about' },
-  { label: 'Reviews', href: '/#reviews' },
-  { label: 'Contact', href: '/contact' },
+  { label: t.nav.services, href: '/services' },
+  { label: t.nav.areas, href: '/areas' },
+  { label: t.nav.about, href: '/about' },
+  ...(site.reviews?.length ? [{ label: t.nav.reviews, href: '/#reviews' }] : []),
+  { label: t.nav.contact, href: '/contact' },
 ]
 
 export default function RootLayout({
@@ -31,9 +31,17 @@ export default function RootLayout({
 }) {
   const { brand } = site
 
+  const expiry = site.demo.expiresOn
+    ? new Date(site.demo.expiresOn).toLocaleDateString(locale, {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      })
+    : null
+
   return (
     <html
-      lang="en-GB"
+      lang={locale}
       className={fontClassNames}
       // The entire palette hangs off these four numbers. Inline so they beat
       // the stylesheet's defaults without an !important anywhere.
@@ -53,24 +61,31 @@ export default function RootLayout({
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-100 focus:rounded-[var(--radius-sm)] focus:bg-brand-950 focus:px-4 focus:py-2.5 focus:text-brand-50"
         >
-          Skip to content
+          {t.skipToContent}
         </a>
 
         {isDemo && (
           <DemoBanner
-            preparedFor={site.demo.preparedFor ?? site.business.name}
-            expiresOn={site.demo.expiresOn}
+            headline={t.demo.preparedFor(site.demo.preparedFor ?? site.business.name)}
             note={site.demo.note}
+            expiry={expiry ? t.demo.privateLink(expiry) : undefined}
           />
         )}
 
         <Header
           businessName={site.business.name}
           wordmark={site.business.wordmark}
-          phone={site.contact.phone}
+          phoneHref={phoneHref}
           phoneDisplay={phoneDisplay}
-          variant="overlay"
           nav={NAV}
+          labels={{
+            call: t.call,
+            openMenu: t.openMenu,
+            closeMenu: t.closeMenu,
+            mainNav: t.mainNav,
+            mobileNav: t.mobileNav,
+            home: t.crumbs.home,
+          }}
         />
 
         <main id="main">{children}</main>
@@ -78,9 +93,10 @@ export default function RootLayout({
         <Footer />
 
         <MobileCallBar
-          phone={site.contact.phone}
+          phoneHref={phoneHref}
           phoneDisplay={phoneDisplay}
-          whatsapp={site.contact.whatsapp}
+          whatsappHref={site.contact.whatsapp ? waHref() : undefined}
+          labels={{ callNow: t.callNow, whatsapp: t.whatsappAria }}
         />
 
         <JsonLd data={localBusinessSchema()} />

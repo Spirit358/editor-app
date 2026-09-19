@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { ShieldCheck } from 'lucide-react'
-import { site } from '@/lib/site'
+import { site, t } from '@/lib/site'
 import { buildMetadata, breadcrumbSchema } from '@/lib/seo'
 import { PageHero } from '@/components/sections/page-hero'
 import { About } from '@/components/sections/about'
@@ -9,32 +9,34 @@ import { Cta } from '@/components/sections/cta'
 import { Reveal } from '@/components/reveal'
 import { JsonLd } from '@/components/json-ld'
 
+const TRAIL = [
+  { name: t.crumbs.home, path: '/' },
+  { name: t.crumbs.about, path: '/about' },
+]
+
 export const metadata: Metadata = buildMetadata({
-  title: 'About us',
+  title: t.meta.about,
   description: site.about?.body[0] ?? site.business.description,
   path: '/about',
 })
 
 export default function AboutPage() {
-  const { business } = site
+  const { business, contact } = site
 
   return (
     <>
       <PageHero
         eyebrow={
           business.foundedYear
-            ? `Working in ${site.contact.address.locality} since ${business.foundedYear}`
+            ? t.pages.about.eyebrow(contact.address.locality, business.foundedYear)
             : undefined
         }
-        title={`About ${business.name}`}
+        title={t.pages.about.title(business.name)}
         intro={business.description}
-        breadcrumbs={[
-          { name: 'Home', path: '/' },
-          { name: 'About', path: '/about' },
-        ]}
+        breadcrumbs={TRAIL}
       />
 
-      <About />
+      <About priority />
 
       {business.accreditations?.length ? (
         <section className="section-y-sm bg-surface">
@@ -42,7 +44,7 @@ export default function AboutPage() {
             <Reveal>
               <h2 className="eyebrow">
                 <span className="h-px w-6 bg-brand-400" aria-hidden />
-                Credentials
+                {t.credentials}
               </h2>
             </Reveal>
             <ul className="mt-8 grid gap-px overflow-hidden rounded-[var(--radius-lg)] border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
@@ -54,9 +56,7 @@ export default function AboutPage() {
                       strokeWidth={1.75}
                       aria-hidden
                     />
-                    <span className="text-[0.9375rem] leading-snug text-ink">
-                      {a}
-                    </span>
+                    <span className="text-[0.9375rem] leading-snug text-ink">{a}</span>
                   </div>
                 </Reveal>
               ))}
@@ -67,13 +67,7 @@ export default function AboutPage() {
 
       <Reviews />
       <Cta />
-
-      <JsonLd
-        data={breadcrumbSchema([
-          { name: 'Home', path: '/' },
-          { name: 'About', path: '/about' },
-        ])}
-      />
+      <JsonLd data={breadcrumbSchema(TRAIL)} />
     </>
   )
 }

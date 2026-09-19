@@ -36,16 +36,26 @@ agency brand name, final pricing. None of them block building.
 ## Per-site workflow
 
 1. **Intake** — business name, Google Maps listing, existing site, services,
-   areas, reviews, phone, hours, photos.
-2. **Visuals first.** Generate or collect the hero image before writing
-   anything: it sets the palette and the mood. Video loops should be slow,
-   dark, 4–8 seconds, seamless, no text, no faces.
-3. `pnpm new-site <slug> --hue <h>` then fill in the one config file.
-4. `pnpm optimize-images --slug <slug>` once real photos exist.
-5. **Visual QA.** `pnpm shoot` → review at 390px and 1440px → fix → repeat.
-6. `pnpm audit-site` — every route at 90+, mobile and desktop. Not optional.
-7. Deploy `out/` to a private preview URL. Demo mode stays on.
-8. Log the lead and the demo URL in the tracker.
+   areas, reviews, phone, hours, photos. For an unsolicited demo, everything
+   you cannot verify from public listings gets a `[VERIFY]` comment in the
+   config: that list *is* the agenda for the first conversation.
+2. `pnpm new-site <slug> --locale <pl-PL|en-GB> --fonts <pairing> --hue <h>`
+   then fill in `site.config.ts` and the prompts in `imagery.json`.
+3. **Visuals.** `pnpm imagery --slug <slug>` (Higgsfield, `HIGGSFIELD_KEY` in
+   the environment) or drop client photos in `clients/<slug>/source/` and
+   `pnpm optimize-images`. Dark, warm, no text, no faces. Video loops: slow,
+   4–8 seconds, seamless.
+4. **Visual QA.** `pnpm shoot` → review at 390px and 1440px → fix → repeat.
+5. `pnpm audit-site` — every route at 90+, mobile and desktop. Not optional.
+6. Deploy `out/` to a private preview URL. Demo mode stays on.
+7. Log the lead and the demo URL in the tracker.
+
+## Leads
+
+| Client | Locale | Status | Notes |
+| --- | --- | --- | --- |
+| `demo-plumber` | en-GB | worked example | fictional |
+| `activa` | pl-PL | demo built, imagery pending | Szczecinek heating-tech wholesaler/installer; live domain shows a blank WordPress default. Run `pnpm imagery --slug activa` from a machine with API access, then shoot + audit again. `[VERIFY]` items in the config are the intake questions. |
 
 ## Conventions that are load-bearing
 
@@ -55,6 +65,17 @@ Undoing any of these quietly breaks something measurable:
 - **`Reveal` starts visible** and hides only what is below the fold.
 - **Never hardcode niche or client copy in a component.** It goes in
   `site.config.ts`, under `copy` if it is a section heading.
+- **Never hardcode English in a component either.** Chrome strings come from
+  `t` (`@/lib/site`), defined per locale in `src/lib/i18n.ts`. A client
+  component gets them as props — and never a function, only resolved strings.
+- **Every font pairing declares `latin-ext`.** Polish, Czech and Turkish
+  diacritics otherwise fall back to the system font mid-word.
+- **Only request the font axes you use.** An unused axis is paid for on every
+  page load, four files over.
+- **Client originals go in `clients/<slug>/source/`, never in `public/`.**
+  A static export ships everything under `public/`.
+- **Credentials live in the environment or `.env.local`.** Never in a file
+  under `clients/` or `src/`.
 - **The build validates the config.** If a field should be mandatory, add it to
   `validate()` in `src/lib/site.ts` rather than hoping someone notices.
 - **`demo.enabled` stays true** until the client has signed.

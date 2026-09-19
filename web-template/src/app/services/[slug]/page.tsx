@@ -3,9 +3,9 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowUpRight, Check, Phone } from 'lucide-react'
-import { site, serviceBySlug, phoneDisplay } from '@/lib/site'
+import { site, t, serviceBySlug, phoneDisplay, phoneHref } from '@/lib/site'
 import { buildMetadata, breadcrumbSchema, serviceSchema } from '@/lib/seo'
-import { cn, telHref } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 import { PageHero } from '@/components/sections/page-hero'
 import { ServiceIcon } from '@/components/service-icon'
 import { Reveal } from '@/components/reveal'
@@ -19,17 +19,13 @@ export function generateStaticParams() {
   return site.services.map((s) => ({ slug: s.slug }))
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Params
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { slug } = await params
   const service = serviceBySlug(slug)
-  if (!service) return buildMetadata({ title: 'Not found' })
+  if (!service) return buildMetadata({ title: t.meta.notFound })
 
   return buildMetadata({
-    title: `${service.name} in ${site.contact.address.locality}`,
+    title: t.meta.serviceTitle(service.name, site.contact.address.locality),
     description: service.short,
     path: `/services/${service.slug}`,
   })
@@ -40,36 +36,29 @@ export default async function ServicePage({ params }: { params: Params }) {
   const service = serviceBySlug(slug)
   if (!service) notFound()
 
+  const place = site.contact.address.locality
   const others = site.services.filter((s) => s.slug !== service.slug).slice(0, 3)
   const trail = [
-    { name: 'Home', path: '/' },
-    { name: 'Services', path: '/services' },
+    { name: t.crumbs.home, path: '/' },
+    { name: t.crumbs.services, path: '/services' },
     { name: service.name, path: `/services/${service.slug}` },
   ]
 
   return (
     <>
-      <PageHero
-        eyebrow={`${site.contact.address.locality} & surrounding areas`}
-        title={service.name}
-        intro={service.short}
-        breadcrumbs={trail}
-      >
+      <PageHero eyebrow={place} title={service.name} intro={service.short} breadcrumbs={trail}>
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
           <a
-            href={telHref(site.contact.phone)}
+            href={phoneHref}
             data-cta="service-call"
-            className={cn(
-              buttonVariants({ variant: 'accent', size: 'lg' }),
-              'w-full sm:w-auto'
-            )}
+            className={cn(buttonVariants({ variant: 'accent', size: 'lg' }), 'w-full sm:w-auto')}
           >
             <Phone aria-hidden />
-            {phoneDisplay}
+            <span className="tabular-nums">{phoneDisplay}</span>
           </a>
           {service.priceFrom && (
             <span className="text-sm text-brand-300">
-              Typically from{' '}
+              {t.typicallyFrom}{' '}
               <strong className="font-semibold text-brand-50 tabular-nums">
                 {service.priceFrom}
               </strong>
@@ -91,9 +80,7 @@ export default async function ServicePage({ params }: { params: Params }) {
               <div className="mt-8 space-y-6">
                 {service.body.map((para, i) => (
                   <Reveal key={i} delay={i * 60}>
-                    <p className="max-w-2xl text-lg leading-relaxed text-ink-soft">
-                      {para}
-                    </p>
+                    <p className="max-w-2xl text-lg leading-relaxed text-ink-soft">{para}</p>
                   </Reveal>
                 ))}
               </div>
@@ -116,9 +103,7 @@ export default async function ServicePage({ params }: { params: Params }) {
               {service.bullets?.length ? (
                 <Reveal delay={80}>
                   <div className="rounded-[var(--radius-lg)] border border-line bg-surface-2 p-7 lg:sticky lg:top-28">
-                    <h2 className="font-display text-lg text-ink">
-                      What is included
-                    </h2>
+                    <h2 className="font-display text-lg text-ink">{t.whatIsIncluded}</h2>
                     <ul className="mt-5 space-y-3.5">
                       {service.bullets.map((b) => (
                         <li key={b} className="flex items-start gap-3">
@@ -126,35 +111,28 @@ export default async function ServicePage({ params }: { params: Params }) {
                             className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-brand-100"
                             aria-hidden
                           >
-                            <Check
-                              className="size-3 text-brand-700"
-                              strokeWidth={3}
-                            />
+                            <Check className="size-3 text-brand-700" strokeWidth={3} />
                           </span>
-                          <span className="text-[0.9375rem] leading-snug text-ink-soft">
-                            {b}
-                          </span>
+                          <span className="text-[0.9375rem] leading-snug text-ink-soft">{b}</span>
                         </li>
                       ))}
                     </ul>
 
                     <div className="mt-7 border-t border-line pt-6">
                       <p className="text-sm text-muted">
-                        Covering{' '}
-                        {site.areas
-                          .slice(0, 4)
-                          .map((a) => a.name)
-                          .join(', ')}{' '}
-                        and the rest of {site.contact.address.locality}.
+                        {t.coveringAreas(
+                          site.areas
+                            .slice(0, 4)
+                            .map((a) => a.name)
+                            .join(', '),
+                          place
+                        )}
                       </p>
                       <Link
                         href="/contact"
-                        className={cn(
-                          buttonVariants({ variant: 'primary', size: 'md' }),
-                          'mt-5 w-full'
-                        )}
+                        className={cn(buttonVariants({ variant: 'primary', size: 'md' }), 'mt-5 w-full')}
                       >
-                        Request a quote
+                        {t.requestQuote}
                       </Link>
                     </div>
                   </div>
@@ -165,7 +143,7 @@ export default async function ServicePage({ params }: { params: Params }) {
 
           {others.length > 0 && (
             <div className="mt-20 border-t border-line pt-12">
-              <h2 className="font-display text-xl text-ink">Other services</h2>
+              <h2 className="font-display text-xl text-ink">{t.otherServices}</h2>
               <ul className="mt-6 grid gap-4 sm:grid-cols-3">
                 {others.map((other, i) => (
                   <Reveal as="li" key={other.slug} delay={i * 70}>
@@ -173,9 +151,7 @@ export default async function ServicePage({ params }: { params: Params }) {
                       href={`/services/${other.slug}`}
                       className="group flex items-center justify-between gap-4 rounded-[var(--radius-md)] border border-line p-5 transition-colors duration-300 hover:border-brand-400 hover:bg-surface-2"
                     >
-                      <span className="text-[0.9375rem] font-medium text-ink">
-                        {other.name}
-                      </span>
+                      <span className="text-[0.9375rem] font-medium text-ink">{other.name}</span>
                       <ArrowUpRight
                         className="size-4 shrink-0 text-brand-600 transition-transform duration-300 ease-[var(--ease-out-quint)] group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                         aria-hidden
@@ -189,7 +165,7 @@ export default async function ServicePage({ params }: { params: Params }) {
         </div>
       </section>
 
-      <Cta heading={`Need ${service.name.toLowerCase()}?`} />
+      <Cta heading={service.ctaHeading} />
 
       <JsonLd data={serviceSchema(service)} />
       <JsonLd data={breadcrumbSchema(trail)} />

@@ -34,6 +34,8 @@ export interface Brand {
   neutralChroma?: number
   /** Base corner radius in rem. 0 = brutal, 0.5 = default, 1 = soft. */
   radius?: number
+  /** Which pairing from src/fonts/ to build with. Defaults to fraunces-inter. */
+  fonts?: FontPairing
 }
 
 export interface MediaAsset {
@@ -68,6 +70,12 @@ export interface Service {
   priceFrom?: string
   /** Show on the homepage services grid. Defaults to true. */
   featured?: boolean
+  /**
+   * Heading for the call-to-action panel at the foot of this service's page,
+   * e.g. 'Need a new boiler?'. Falls back to the site-wide CTA heading —
+   * generating one from the service name does not survive translation.
+   */
+  ctaHeading?: string
 }
 
 export interface ServiceArea {
@@ -112,8 +120,19 @@ export interface OpeningHours {
   closed?: boolean
 }
 
+import type { Locale } from './i18n'
+
+/** Font pairings available in src/fonts/. `pnpm use-site` wires the choice up. */
+export type FontPairing = 'fraunces-inter' | 'bricolage-inter'
+
 export interface SiteConfig {
   slug: string
+
+  /**
+   * Language of the whole site — every button, label and legal paragraph.
+   * Defaults to 'en-GB'. Client content is whatever language you write it in.
+   */
+  locale?: Locale
 
   /**
    * Demo mode. While true the site is noindex + nofollow, robots.txt disallows
@@ -155,6 +174,12 @@ export interface SiteConfig {
     phone: string
     /** Human formatting, e.g. '0113 496 0000'. Defaults to `phone`. */
     phoneDisplay?: string
+    /**
+     * International prefix used to build tel: links from a national number,
+     * e.g. '+48'. Defaults to the locale's country. Ignored when `phone`
+     * already starts with '+'.
+     */
+    phoneCountry?: string
     email: string
     whatsapp?: string
     emergency?: {

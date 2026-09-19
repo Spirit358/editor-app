@@ -1,18 +1,25 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowUpRight, MapPin } from 'lucide-react'
-import { site } from '@/lib/site'
+import { site, t } from '@/lib/site'
 import { buildMetadata, breadcrumbSchema } from '@/lib/seo'
 import { PageHero } from '@/components/sections/page-hero'
 import { Reveal } from '@/components/reveal'
 import { Cta } from '@/components/sections/cta'
 import { JsonLd } from '@/components/json-ld'
 
+const TRAIL = [
+  { name: t.crumbs.home, path: '/' },
+  { name: t.crumbs.areas, path: '/areas' },
+]
+
 export const metadata: Metadata = buildMetadata({
-  title: 'Areas we cover',
-  description: `${site.business.name} covers ${site.areas
-    .map((a) => a.name)
-    .join(', ')} and the rest of ${site.contact.address.locality}.`,
+  title: t.crumbs.areas,
+  description: t.meta.areas(
+    site.business.name,
+    site.areas.map((a) => a.name).join(', '),
+    site.contact.address.locality
+  ),
   path: '/areas',
 })
 
@@ -20,13 +27,10 @@ export default function AreasPage() {
   return (
     <>
       <PageHero
-        eyebrow="Coverage"
-        title={`Areas we cover around ${site.contact.address.locality}`}
-        intro="Each area has its own page with what we typically get called out for there. If yours is not listed, ring and ask."
-        breadcrumbs={[
-          { name: 'Home', path: '/' },
-          { name: 'Areas', path: '/areas' },
-        ]}
+        eyebrow={t.crumbs.areas}
+        title={t.pages.areas.title(site.contact.address.locality)}
+        intro={t.pages.areas.intro}
+        breadcrumbs={TRAIL}
       />
 
       <section className="section-y bg-surface">
@@ -40,11 +44,7 @@ export default function AreasPage() {
                 >
                   <div className="flex items-start justify-between gap-4">
                     <h2 className="inline-flex items-center gap-2.5 text-2xl text-ink">
-                      <MapPin
-                        className="size-5 text-accent-600"
-                        aria-hidden
-                        strokeWidth={1.75}
-                      />
+                      <MapPin className="size-5 text-accent-600" aria-hidden strokeWidth={1.75} />
                       {area.name}
                     </h2>
                     <ArrowUpRight
@@ -72,13 +72,7 @@ export default function AreasPage() {
       </section>
 
       <Cta />
-
-      <JsonLd
-        data={breadcrumbSchema([
-          { name: 'Home', path: '/' },
-          { name: 'Areas', path: '/areas' },
-        ])}
-      />
+      <JsonLd data={breadcrumbSchema(TRAIL)} />
     </>
   )
 }

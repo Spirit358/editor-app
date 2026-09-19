@@ -14,7 +14,7 @@
  * placeholders never fight the palette.
  */
 
-import { mkdir, writeFile } from 'node:fs/promises'
+import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import process from 'node:process'
 import sharp from 'sharp'
@@ -147,7 +147,8 @@ function scene({ width, height, hue, accentHue, seed, mood = 'dark' }) {
 
 // ---------------------------------------------------------------------------
 
-const ASSETS = [
+/** Used only when the client has no imagery.json yet. */
+const DEFAULT_ASSETS = [
   { name: 'hero', width: 1920, height: 1280, seed: 11 },
   { name: 'about', width: 1200, height: 1400, seed: 23 },
   { name: 'service-emergency', width: 1200, height: 900, seed: 31 },
@@ -160,6 +161,38 @@ const ASSETS = [
   { name: 'gallery-5', width: 1200, height: 900, seed: 127, mood: 'light' },
   { name: 'gallery-6', width: 1200, height: 900, seed: 139 },
 ]
+
+/** Pixel sizes for the aspect ratios imagery.json can ask for. */
+const RATIO_SIZES = {
+  '3:2': [1920, 1280],
+  '16:9': [1920, 1080],
+  '21:9': [2100, 900],
+  '4:3': [1200, 900],
+  '1:1': [1200, 1200],
+  '3:4': [1200, 1600],
+  '2:3': [1200, 1800],
+  '9:16': [900, 1600],
+}
+
+/**
+ * The asset list comes from the client's imagery.json when it exists, so the
+ * placeholders carry exactly the names the config references and the real
+ * generation later overwrites them one-for-one. A placeholder set that does
+ * not match the config leaves broken images on every page it missed.
+ */
+async function assetsFor(slug) {
+  const specFile = path.join(process.cwd(), 'clients', slug, 'imagery.json')
+  try {
+    const spec = JSON.parse(await readFile(specFile, 'utf8'))
+    return spec.images.map((img, i) => {
+      const ratio = img.aspect_ratio ?? spec.defaults?.aspect_ratio ?? '4:3'
+      const [width, height] = RATIO_SIZES[ratio] ?? RATIO_SIZES['4:3']
+      return { name: img.name, width, height, seed: 11 + i * 17, mood: i % 3 === 2 ? 'light' : 'dark' }
+    })
+  } catch {
+    return DEFAULT_ASSETS
+  }
+}
 
 function arg(flag, fallback) {
   const i = process.argv.indexOf(flag)
@@ -174,6 +207,7 @@ async function main() {
 
   await mkdir(outDir, { recursive: true })
 
+  const ASSETS = await assetsFor(slug)
   let count = 0
   for (const asset of ASSETS) {
     const svg = scene({ ...asset, hue, accentHue })

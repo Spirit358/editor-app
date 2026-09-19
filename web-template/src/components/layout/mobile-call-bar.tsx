@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import { MessageCircle, Phone } from 'lucide-react'
-import { cn, telHref, whatsappHref } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 
 /**
  * The single highest-converting element on a trades site: a thumb-reachable
@@ -13,13 +13,15 @@ import { cn, telHref, whatsappHref } from '@/lib/utils'
  * so it cannot cover the contact form on a small screen.
  */
 export function MobileCallBar({
-  phone,
+  phoneHref,
   phoneDisplay,
-  whatsapp,
+  whatsappHref,
+  labels,
 }: {
-  phone: string
+  phoneHref: string
   phoneDisplay: string
-  whatsapp?: string
+  whatsappHref?: string
+  labels: { callNow: string; whatsapp: string }
 }) {
   const [show, setShow] = React.useState(false)
   const [typing, setTyping] = React.useState(false)
@@ -30,19 +32,23 @@ export function MobileCallBar({
     window.addEventListener('scroll', onScroll, { passive: true })
 
     const onFocus = (e: FocusEvent) => {
-      const t = e.target as HTMLElement | null
+      const el = e.target as HTMLElement | null
       setTyping(
-        !!t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT')
+        !!el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT')
       )
     }
+    const onBlur = () => setTyping(false)
     document.addEventListener('focusin', onFocus)
-    document.addEventListener('focusout', () => setTyping(false))
+    document.addEventListener('focusout', onBlur)
 
     return () => {
       window.removeEventListener('scroll', onScroll)
       document.removeEventListener('focusin', onFocus)
+      document.removeEventListener('focusout', onBlur)
     }
   }, [])
+
+  const visible = show && !typing
 
   return (
     <div
@@ -51,16 +57,16 @@ export function MobileCallBar({
         'border-t border-brand-800 bg-brand-950/95 backdrop-blur-lg',
         'transition-transform duration-500 ease-[var(--ease-out-quint)]',
         'pb-[env(safe-area-inset-bottom)]',
-        show && !typing ? 'translate-y-0' : 'translate-y-full'
+        visible ? 'translate-y-0' : 'translate-y-full'
       )}
       // Hidden from the tab order while off-screen.
-      aria-hidden={!show || typing}
+      aria-hidden={!visible}
     >
       <div className="flex items-stretch gap-2 p-2.5">
         <a
-          href={telHref(phone)}
+          href={phoneHref}
           data-cta="sticky-call"
-          tabIndex={show && !typing ? undefined : -1}
+          tabIndex={visible ? undefined : -1}
           className={cn(
             'flex flex-1 items-center justify-center gap-2.5 rounded-[var(--radius-md)]',
             'bg-accent-500 px-4 py-3.5 font-medium text-brand-950',
@@ -70,18 +76,18 @@ export function MobileCallBar({
           <Phone className="size-5" aria-hidden />
           <span className="flex flex-col leading-none">
             <span className="text-[0.68rem] font-semibold uppercase tracking-widest opacity-70">
-              Call now
+              {labels.callNow}
             </span>
             <span className="mt-1 text-base tabular-nums">{phoneDisplay}</span>
           </span>
         </a>
 
-        {whatsapp && (
+        {whatsappHref && (
           <a
-            href={whatsappHref(whatsapp)}
+            href={whatsappHref}
             data-cta="sticky-whatsapp"
-            tabIndex={show && !typing ? undefined : -1}
-            aria-label="Message us on WhatsApp"
+            tabIndex={visible ? undefined : -1}
+            aria-label={labels.whatsapp}
             className={cn(
               'flex items-center justify-center rounded-[var(--radius-md)] px-5',
               'border border-brand-50/20 bg-brand-50/8 text-brand-50',

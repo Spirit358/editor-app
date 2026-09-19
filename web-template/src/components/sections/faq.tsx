@@ -1,5 +1,4 @@
-import { site, phoneDisplay, copy } from '@/lib/site'
-import { telHref } from '@/lib/utils'
+import { site, phoneDisplay, phoneHref, copy, t } from '@/lib/site'
 import { SectionHeading } from './section-heading'
 import {
   Accordion,
@@ -27,13 +26,11 @@ export function Faq() {
               />
               <Reveal delay={120}>
                 <a
-                  href={telHref(site.contact.phone)}
+                  href={phoneHref}
                   data-cta="faq-call"
                   className="mt-8 inline-flex items-center gap-2 text-[0.9375rem] font-medium text-brand-700"
                 >
-                  <span className="link-underline">
-                    Something else? Call {phoneDisplay}
-                  </span>
+                  <span className="link-underline">{t.faqCall(phoneDisplay)}</span>
                 </a>
               </Reveal>
             </div>

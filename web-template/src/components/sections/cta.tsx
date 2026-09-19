@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { Phone } from 'lucide-react'
-import { site, phoneDisplay, copy } from '@/lib/site'
-import { cn, telHref } from '@/lib/utils'
+import { phoneDisplay, phoneHref, copy, t } from '@/lib/site'
+import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
 import { Reveal } from '@/components/reveal'
 
@@ -12,7 +12,6 @@ export function Cta({
   heading?: string
   sub?: string
 } = {}) {
-  const { contact } = site
   const title = heading ?? copy.ctaHeading
   const body = sub ?? copy.ctaSub
 
@@ -32,7 +31,7 @@ export function Cta({
               </p>
               <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
                 <a
-                  href={telHref(contact.phone)}
+                  href={phoneHref}
                   data-cta="footer-cta-call"
                   className={cn(
                     buttonVariants({ variant: 'accent', size: 'xl' }),
@@ -40,7 +39,7 @@ export function Cta({
                   )}
                 >
                   <Phone aria-hidden />
-                  {phoneDisplay}
+                  <span className="tabular-nums">{phoneDisplay}</span>
                 </a>
                 <Link
                   href="/contact"
@@ -49,7 +48,7 @@ export function Cta({
                     'w-full sm:w-auto'
                   )}
                 >
-                  Send a message
+                  {t.sendMessage}
                 </Link>
               </div>
             </div>

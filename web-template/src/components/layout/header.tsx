@@ -4,38 +4,49 @@ import * as React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Menu, Phone, X } from 'lucide-react'
-import { cn, telHref } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
 
 export interface HeaderProps {
   businessName: string
   wordmark?: string
-  phone: string
+  phoneHref: string
   phoneDisplay: string
-  /** Overlay sits transparent on top of a dark hero until the user scrolls. */
-  variant?: 'overlay' | 'solid'
   nav: Array<{ label: string; href: string }>
+  /** Chrome strings, passed in so the client bundle never imports the config. */
+  labels: {
+    call: string
+    openMenu: string
+    closeMenu: string
+    mainNav: string
+    mobileNav: string
+    home: string
+  }
 }
 
+/**
+ * Sits transparent over the dark band every page opens with, and turns solid
+ * once the user scrolls. Sticky rather than fixed so the demo banner above it
+ * can scroll away naturally and the header never needs a body offset.
+ */
 export function Header({
   businessName,
   wordmark,
-  phone,
+  phoneHref,
   phoneDisplay,
-  variant = 'solid',
   nav,
+  labels,
 }: HeaderProps) {
   const [scrolled, setScrolled] = React.useState(false)
   const [open, setOpen] = React.useState(false)
   const pathname = usePathname()
 
   React.useEffect(() => {
-    if (variant !== 'overlay') return
     const onScroll = () => setScrolled(window.scrollY > 24)
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
-  }, [variant])
+  }, [])
 
   // Close the drawer on navigation and lock the body while it is open.
   React.useEffect(() => setOpen(false), [pathname])
@@ -53,13 +64,11 @@ export function Header({
     return () => window.removeEventListener('keydown', onKey)
   }, [open])
 
-  const transparent = variant === 'overlay' && !scrolled && !open
+  const transparent = !scrolled && !open
 
   return (
     <header
       className={cn(
-        // Sticky rather than fixed so the demo banner above it can scroll
-        // away naturally, and so the header never needs a body offset.
         'sticky top-0 z-50 no-print',
         'transition-[background-color,box-shadow,border-color] duration-500',
         'ease-[var(--ease-out-quint)]',
@@ -76,18 +85,18 @@ export function Header({
               'font-display text-xl tracking-tight transition-colors sm:text-2xl',
               transparent ? 'text-brand-50' : 'text-ink'
             )}
-            aria-label={`${businessName} home`}
+            aria-label={`${businessName} — ${labels.home}`}
           >
             {wordmark ?? businessName}
             <span className="text-accent-500">.</span>
           </Link>
 
-          <nav className="hidden items-center gap-1 lg:flex" aria-label="Main">
+          <nav className="hidden items-center gap-1 lg:flex" aria-label={labels.mainNav}>
             {nav.map((item) => {
               const active =
                 item.href === '/'
                   ? pathname === '/'
-                  : pathname.startsWith(item.href)
+                  : pathname.startsWith(item.href.split('#')[0] || '/')
               return (
                 <Link
                   key={item.href}
@@ -109,7 +118,7 @@ export function Header({
 
           <div className="flex items-center gap-2">
             <a
-              href={telHref(phone)}
+              href={phoneHref}
               data-cta="header-call"
               className={cn(
                 buttonVariants({
@@ -120,7 +129,7 @@ export function Header({
               )}
             >
               <Phone aria-hidden />
-              <span>{phoneDisplay}</span>
+              <span className="tabular-nums">{phoneDisplay}</span>
             </a>
 
             <button
@@ -128,7 +137,7 @@ export function Header({
               onClick={() => setOpen((v) => !v)}
               aria-expanded={open}
               aria-controls="mobile-nav"
-              aria-label={open ? 'Close menu' : 'Open menu'}
+              aria-label={open ? labels.closeMenu : labels.openMenu}
               className={cn(
                 'inline-flex size-11 items-center justify-center rounded-[var(--radius-sm)]',
                 'transition-colors duration-200 lg:hidden',
@@ -149,7 +158,7 @@ export function Header({
         hidden={!open}
         className="border-t border-line bg-surface lg:hidden"
       >
-        <nav className="container-page py-4" aria-label="Mobile">
+        <nav className="container-page py-4" aria-label={labels.mobileNav}>
           <ul className="flex flex-col">
             {nav.map((item, i) => (
               <li key={item.href} style={{ '--i': i } as React.CSSProperties}>
@@ -163,12 +172,12 @@ export function Header({
             ))}
           </ul>
           <a
-            href={telHref(phone)}
+            href={phoneHref}
             data-cta="mobile-nav-call"
             className={cn(buttonVariants({ variant: 'accent', size: 'lg' }), 'mt-6 w-full')}
           >
             <Phone aria-hidden />
-            Call {phoneDisplay}
+            {labels.call} <span className="tabular-nums">{phoneDisplay}</span>
           </a>
         </nav>
       </div>

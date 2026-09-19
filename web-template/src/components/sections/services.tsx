@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
-import { featuredServices, copy } from '@/lib/site'
+import { featuredServices, copy, t } from '@/lib/site'
 import { SectionHeading } from './section-heading'
 import { ServiceIcon } from '@/components/service-icon'
 import { Reveal } from '@/components/reveal'
@@ -23,7 +23,7 @@ export function Services() {
               href="/services"
               className="group inline-flex items-center gap-2 text-[0.9375rem] font-medium text-brand-700"
             >
-              <span className="link-underline">All services</span>
+              <span className="link-underline">{t.allServices}</span>
               <ArrowUpRight
                 className="size-4 transition-transform duration-300 ease-[var(--ease-out-quint)] group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                 aria-hidden
@@ -63,7 +63,7 @@ export function Services() {
                 <div className="mt-6 flex items-center justify-between gap-4 border-t border-line pt-5">
                   {service.priceFrom ? (
                     <span className="text-sm text-muted">
-                      From{' '}
+                      {t.from}{' '}
                       <strong className="font-semibold text-ink tabular-nums">
                         {service.priceFrom}
                       </strong>
@@ -72,7 +72,7 @@ export function Services() {
                     <span />
                   )}
                   <span className="inline-flex items-center gap-1.5 text-sm font-medium text-brand-700">
-                    Details
+                    {t.details}
                     <ArrowUpRight
                       className="size-4 transition-transform duration-300 ease-[var(--ease-out-quint)] group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                       aria-hidden

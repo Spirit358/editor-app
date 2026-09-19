@@ -2,13 +2,15 @@
 /**
  * Turns real client photography into the responsive ladder the site needs.
  *
- *   1. Drop the originals in public/clients/<slug>/_source/
+ *   1. Drop the originals in clients/<slug>/source/
  *      (whatever they sent: 6MB phone JPEGs are fine)
  *   2. pnpm optimize-images --slug <slug>
  *
- * Each source produces <name>.webp plus one file per rung, next to the other
- * client assets. The _source folder is not deployed — it is only the archive
- * of what the client sent.
+ * Each source produces <name>.webp plus one file per rung in
+ * public/clients/<slug>/. The originals live OUTSIDE public/ on purpose: a
+ * static export copies public/ wholesale, so anything in there ships to the
+ * CDN. The source folder is also git-ignored — it is the archive of what the
+ * client sent, not part of the site.
  *
  * Run this before every build that includes new photos. A 4MB JPEG straight
  * off a phone will sink the Lighthouse score on its own.
@@ -35,7 +37,7 @@ async function main() {
 
   const quality = Number(arg('--quality', '74'))
   const clientDir = path.join(process.cwd(), 'public', 'clients', slug)
-  const sourceDir = path.join(clientDir, '_source')
+  const sourceDir = path.join(process.cwd(), 'clients', slug, 'source')
 
   try {
     await stat(sourceDir)
@@ -52,7 +54,7 @@ async function main() {
   )
 
   if (!files.length) {
-    console.error(`\nNo supported images in _source/. Looking for: ${[...SUPPORTED].join(', ')}\n`)
+    console.error(`\nNo supported images in clients/${slug}/source/. Looking for: ${[...SUPPORTED].join(', ')}\n`)
     process.exit(1)
   }
 
