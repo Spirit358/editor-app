@@ -45,7 +45,7 @@ export function Footer() {
           </div>
 
           <nav className="lg:col-span-3" aria-label={t.footer.services}>
-            <h2 className="label text-on-brand/60">{t.footer.services}</h2>
+            <h2 className="label text-on-brand/80">{t.footer.services}</h2>
             <ul className="mt-4 space-y-2 text-sm">
               {services.map((s) => (
                 <li key={s.slug}>
@@ -65,7 +65,7 @@ export function Footer() {
           </nav>
 
           <nav className="lg:col-span-2" aria-label={t.footer.areasCovered}>
-            <h2 className="label text-on-brand/60">{t.footer.areasCovered}</h2>
+            <h2 className="label text-on-brand/80">{t.footer.areasCovered}</h2>
             <ul className="mt-4 space-y-2 text-sm">
               {areas.map((a) => (
                 <li key={a.slug}>
@@ -78,7 +78,7 @@ export function Footer() {
           </nav>
 
           <div className="lg:col-span-2">
-            <h2 className="label text-on-brand/60">{t.footer.openingHours}</h2>
+            <h2 className="label text-on-brand/80">{t.footer.openingHours}</h2>
             {hours?.length ? (
               <dl className="tabular mt-4 space-y-2 text-sm">
                 {hours.map((h, i) => (

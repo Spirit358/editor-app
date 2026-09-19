@@ -23,7 +23,9 @@
   --color-paper-3: oklch(0.935 calc(var(--neutral-c) * 1.4) var(--brand-h));
   --color-ink: oklch(0.2 calc(var(--neutral-c) * 1.8) var(--brand-h));
   --color-ink-2: oklch(0.4 calc(var(--neutral-c) * 1.8) var(--brand-h));
-  --color-ink-3: oklch(0.56 calc(var(--neutral-c) * 1.6) var(--brand-h));
+  /* L 0.52, not 0.56: the lighter value measured 4.44:1 on paper at label
+     size, just under WCAG AA's 4.5. */
+  --color-ink-3: oklch(0.52 calc(var(--neutral-c) * 1.6) var(--brand-h));
   --color-rule: oklch(0.87 calc(var(--neutral-c) * 1.4) var(--brand-h));
   --color-rule-strong: oklch(0.74 calc(var(--neutral-c) * 1.6) var(--brand-h));
 
