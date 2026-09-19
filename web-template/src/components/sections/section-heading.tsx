@@ -20,7 +20,7 @@ export function SectionHeading({
   const onBrand = tone === 'brand'
   return (
     <div className={cn('measure', className)}>
-      {eyebrow && <p className={cn('label', onBrand && 'text-on-brand/80')}>{eyebrow}</p>}
+      {eyebrow && <p className={cn('label', onBrand && 'text-on-brand/90')}>{eyebrow}</p>}
       <Tag className={cn('display-wide mt-3 text-4xl', onBrand ? 'text-on-brand' : 'text-ink')}>
         {typeof title === 'string' ? <Highlight text={title} className={onBrand ? 'text-on-brand/85' : undefined} /> : title}
       </Tag>

@@ -22,7 +22,7 @@ export function Spotlight() {
         <div className="grid items-center gap-10 py-14 lg:grid-cols-12 lg:gap-16 lg:py-20">
           <div className="lg:col-span-7">
             {/* 80% white on the brand blue clears 4.5:1; 60% did not. */}
-            {s.eyebrow && <p className="label text-on-brand/80">{s.eyebrow}</p>}
+            {s.eyebrow && <p className="label text-on-brand/90">{s.eyebrow}</p>}
             <h2 className="display mt-3 text-5xl">{s.title}</h2>
             <div className="measure mt-6 space-y-4 text-lg leading-relaxed text-on-brand/85">
               {s.body.map((p, i) => (
@@ -33,9 +33,9 @@ export function Spotlight() {
               <ul className="mt-8 grid gap-x-8 gap-y-2 text-[0.9375rem] sm:grid-cols-2">
                 {s.bullets.map((b) => (
                   <li key={b} className="flex gap-3 border-t border-on-brand/20 pt-3">
-                    <span aria-hidden className="opacity-60">
-                      —
-                    </span>
+                    {/* A drawn dash, not a text glyph: decorative text at 60%
+                        opacity fails the contrast audit even when aria-hidden. */}
+                    <span aria-hidden className="mt-[0.72em] h-px w-3 shrink-0 bg-on-brand/60" />
                     {b}
                   </li>
                 ))}
