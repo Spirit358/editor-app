@@ -1,7 +1,8 @@
 # Project brief — AI web design business (Leeds)
 
 Context for anyone, human or model, picking this up. Read `README.md` for how
-to run it and `DECISIONS.md` for why it is built the way it is.
+to run it, `DECISIONS.md` for why it is built the way it is, and `MARKET.md`
+for what it competes with and what to build next.
 
 ---
 

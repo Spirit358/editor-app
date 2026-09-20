@@ -307,6 +307,7 @@ shipped to the CDN on every deploy. Originals now live in
 | 2 | **Cloudflare Pages or Vercel Pro?** | Changes the build mode and the cost per site. | Cloudflare Pages. The build is a static export by default; `SITE_MODE=server` switches it. |
 | 3 | **Agency brand name, and does it trade under the existing Ltd?** | Nothing in the template depends on it. Needed before any outreach. | Not set. |
 | 4 | **Final price points** | Demo config shows illustrative prices for a *plumber's* services, not agency pricing. | Handoff range used as-is. |
+| 5 | **What the assistant costs the client** | It costs under £1 a month to serve and the market charges $100–200 for the equivalent (`MARKET.md`). Undercut, or price nearer the market? | Not set. Suggested: +£15–25/mo as an add-on, or a "site + assistant" bundle at £60–80/mo. |
 
 None of these blocked the build. Answer them when convenient.
 
