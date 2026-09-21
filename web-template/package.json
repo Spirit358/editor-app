@@ -18,7 +18,8 @@
     "shoot": "node scripts/shoot.mjs",
     "audit-site": "node scripts/lighthouse.mjs",
     "check": "pnpm typecheck && pnpm build && pnpm audit-site",
-    "deploy-ftp": "node scripts/deploy-ftp.mjs"
+    "deploy-ftp": "node scripts/deploy-ftp.mjs",
+    "deploy-vercel": "node scripts/deploy-vercel.mjs"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.20",

@@ -201,6 +201,16 @@ sure about goes to the model, which has the whole FAQ in its facts anyway. A
 wrong FAQ answer delivered confidently is worse than a model call that costs
 a fraction of a cent.
 
+**Preview host.** The Vercel preview cannot run PHP, so
+`scripts/lib/chat-function.mjs` generates the same endpoint as a Vercel
+function and `deploy-vercel` rewrites `/chat.php` to it — the widget posts to
+one path on either host. Two implementations of one contract is a known
+debt: the rules text lives in both files, and a change to one must be made
+in the other. The function uses the official SDK (it is installed by npm at
+build time, so nothing argues for raw HTTP there), keeps its rate limits per
+instance (a noindex preview does not need the PHP file's durability), and
+logs usage to Vercel's function logs instead of a file.
+
 **Not done.** No streaming (LiteSpeed buffers PHP output unreliably, and a
 three-sentence answer arrives in a second or two behind a typing indicator);
 no transcript storage (nothing to leak, nothing to be asked for); no

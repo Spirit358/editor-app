@@ -11,3 +11,6 @@ next-env.d.ts
 
 # Client originals (photos, generated masters) — large, and not part of the site
 clients/*/source/
+
+# Assembled Vercel preview (pnpm deploy-vercel)
+dist-vercel

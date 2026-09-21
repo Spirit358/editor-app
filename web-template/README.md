@@ -42,6 +42,7 @@ pnpm dev
 | `pnpm audit-site` | Lighthouse on every route, mobile + desktop. Fails under 90 |
 | `pnpm check` | typecheck → build → audit |
 | `pnpm deploy-ftp` | Upload `out/` to a client's own shared hosting over FTPS, with the form and chat handlers |
+| `pnpm deploy-vercel` | Deploy `out/` to Vercel as a noindex preview, with the assistant as a function |
 
 ## Design
 
@@ -202,9 +203,16 @@ Build command:     pnpm build
 Output directory:  out
 ```
 
-**Vercel** requires a Pro plan for client work — the Hobby tier forbids
-commercial use. If you go that way, `SITE_MODE=server pnpm build` keeps the
-Node server and the built-in image optimiser.
+**Vercel as the preview host** — `pnpm deploy-vercel` assembles the export
+plus the assistant as a Vercel function (`/chat.php` is rewritten to it, so
+the same build posts to the same path on either host), adds a
+`X-Robots-Tag: noindex` header and a blocking `robots.txt`, and deploys to a
+project named after the site. `VERCEL_TOKEN` in `.env.local`; the assistant's
+`CHATBOT_API_KEY` goes in the Vercel project's environment variables (or
+`--sync-env` copies it from the local environment). `--indexable` drops the
+noindex for a site whose real home is Vercel — which requires a Pro plan for
+client work, as the Hobby tier forbids commercial use. The contact form has
+no handler on this host: it posts to `/form.php`, which is not there.
 
 **The client's own hosting** — most small businesses already pay for one, and
 it is the only route that changes nothing in DNS, so their email cannot break
