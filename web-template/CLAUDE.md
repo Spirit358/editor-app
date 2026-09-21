@@ -120,6 +120,24 @@ Undoing any of these quietly breaks something measurable:
 - Best channel here is walk-ins and conversations while driving the taxi. Show
   the demo on a phone. Bundle with NFC review cards and a GBP tidy-up.
 
+## Reference sites
+
+Oskar's list of places to draw on when building sites (2026-09-21). Check
+each against `DESIGN.md` and the Lighthouse gate before using it — a library
+is not a licence to ship its JavaScript to every visitor.
+
+- **motion.dev** — Motion, the animation library (successor to Framer Motion).
+  Deliberately not in the template: everything animates in two CSS
+  properties and nothing animates on scroll (`DECISIONS.md` → Stack). Reach
+  for it only when something genuinely needs spring physics or gestures.
+- **Kokonut UI** (kokonutui.com) — shadcn-style React/Tailwind components.
+  Compatible with `components.json`; copy a component in rather than adding
+  a dependency, and strip any gradient, glow or glass before it ships.
+- **BKLit UI** — as written by Oskar; not identified from here. Confirm the
+  URL before relying on it.
+- **manus.im** — an AI agent for research and automation, not a UI library.
+  A candidate for the lead pipeline and intake research below.
+
 ## Not yet built
 
 - **Lead pipeline.** `gosom/google-maps-scraper` for Leeds businesses in the
