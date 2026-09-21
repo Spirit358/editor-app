@@ -3,6 +3,8 @@
  * Publishes the static export to a client's own shared hosting over FTPS.
  *
  *   pnpm deploy-ftp --dry-run        print the plan, connect to nothing
+ *   pnpm deploy-ftp --check          connect, list the remote root, suggest the
+ *                                    web root, upload nothing
  *   pnpm deploy-ftp                  upload out/ to the remote directory
  *   pnpm deploy-ftp --allow-demo     upload a demo build (staging only)
  *
@@ -202,6 +204,39 @@ async function main() {
 
   const client = new Client(30_000)
   try {
+    if (has('--check')) {
+      await client.access({
+        host: FTP_HOST,
+        port: Number(process.env.FTP_PORT ?? 21),
+        user: FTP_USER,
+        password: FTP_PASSWORD,
+        secure,
+        secureOptions: { rejectUnauthorized: false },
+      })
+      console.log(`\n  connected to ${FTP_HOST} as ${FTP_USER}`)
+      const entries = await client.list('/')
+      console.log('  remote root:')
+      for (const e of entries) console.log(`    ${e.isDirectory ? 'd' : '-'} ${e.name}`)
+      // The two layouts shared hosts use: cPanel-style public_html at the
+      // root, or DirectAdmin-style domains/<domain>/public_html.
+      const names = entries.map((e) => e.name)
+      let guess = null
+      if (names.includes('public_html')) guess = '/public_html'
+      else if (names.includes('domains')) {
+        const domains = await client.list('/domains')
+        const host = new URL(build.baseUrl).host.replace(/^www\./, '')
+        const match = domains.find((d) => d.name === host) ?? domains.find((d) => d.isDirectory)
+        if (match) guess = `/domains/${match.name}/public_html`
+      } else if (names.includes('httpdocs')) guess = '/httpdocs'
+      else if (names.includes('index.php') || names.includes('wp-config.php')) guess = '/'
+      console.log(guess ? `\n  web root looks like: FTP_REMOTE_DIR=${guess}\n` : '\n  could not tell the web root — look for the directory holding the old site\n')
+      if (guess) {
+        const web = await client.list(guess)
+        const wp = web.some((e) => e.name === 'wp-config.php')
+        console.log(`  ${guess} holds ${web.length} entries${wp ? ' — a WordPress install; clear it before the upload' : ''}\n`)
+      }
+      return
+    }
     await client.access({
       host: FTP_HOST,
       port: Number(process.env.FTP_PORT ?? 21),
