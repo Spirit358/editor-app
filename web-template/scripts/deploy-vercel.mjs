@@ -124,6 +124,10 @@ async function main() {
   if (!process.env.VERCEL_TOKEN) fail('Set VERCEL_TOKEN in the environment or .env.local.')
 
   if (has('--sync-env') && build.hasChat) {
+    // The assembled directory is new every run, so it is not linked to the
+    // project yet; `env` commands need that link, `deploy` does not.
+    const linked = vercel(['link', '--yes', '--project', slug, '--cwd', dist])
+    if (!linked.ok) fail(`Could not link ${slug}: ${linked.out.trim().split('\n').slice(-2).join(' ')}`)
     for (const name of ['CHATBOT_API_KEY', 'CHATBOT_MODEL', 'CHATBOT_DAILY_LIMIT']) {
       const value = process.env[name]
       if (!value) continue
