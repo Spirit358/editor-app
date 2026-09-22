@@ -85,6 +85,23 @@ export interface Strings {
     openingHours: string
     rights: (year: number, name: string) => string
     privacy: string
+    review: string
+  }
+
+  /** Labels for /llms.txt — the site's facts as one plain-text page for AI crawlers. */
+  llms: {
+    facts: string
+    legalName: string
+    founded: string
+    address: string
+    phone: string
+    email: string
+    hours: string
+    areas: string
+    services: string
+    faq: string
+    notes: string
+    pages: string
   }
 
   form: {
@@ -141,7 +158,7 @@ export interface Strings {
   }
 
   pages: {
-    services: { title: string; intro: string }
+    services: { title: string; intro: string; titleUnpriced: string; introUnpriced: string }
     areas: { title: (place: string) => string; intro: string }
     about: {
       eyebrow: (place: string, year: number) => string
@@ -172,7 +189,8 @@ export interface Strings {
     services: (name: string, place: string, list: string) => string
     areas: (name: string, list: string, place: string) => string
     serviceTitle: (service: string, place: string) => string
-    areaTitle: (tagline: string, area: string) => string
+    serviceDesc: (short: string, name: string, place: string, phone: string) => string
+    areaTitle: (trade: string, area: string, top: string) => string
     areaDesc: (name: string, area: string, postcodes: string, desc: string) => string
     about: string
     contact: (name: string, phone: string, place: string) => string
@@ -305,6 +323,22 @@ const en: Strings = {
     openingHours: 'Opening hours',
     rights: (year, name) => `© ${year} ${name.replace(/\.$/, '')}. All rights reserved.`,
     privacy: 'Privacy',
+    review: 'Review us on Google',
+  },
+
+  llms: {
+    facts: 'Facts',
+    legalName: 'Legal name',
+    founded: 'Trading since',
+    address: 'Address',
+    phone: 'Phone',
+    email: 'Email',
+    hours: 'Opening hours',
+    areas: 'Areas covered',
+    services: 'Services',
+    faq: 'Frequently asked questions',
+    notes: 'Good to know',
+    pages: 'Pages',
   },
 
   form: {
@@ -369,6 +403,9 @@ const en: Strings = {
       title: 'What we do, and what it costs',
       intro:
         'Prices are where jobs typically start. We survey anything substantial before quoting, so the number you get is the number you pay.',
+      titleUnpriced: 'What we do',
+      introUnpriced:
+        'Every job is quoted after a look at the building, so the number you get is the number you pay. Call, or send the form, and we will tell you what makes sense before proposing anything.',
     },
     areas: {
       title: (place) => `Areas we cover around ${place}`,
@@ -417,7 +454,8 @@ const en: Strings = {
     services: (name, place, list) => `Everything ${name} does across ${place}: ${list}.`,
     areas: (name, list, place) => `${name} covers ${list} and the rest of ${place}.`,
     serviceTitle: (service, place) => `${service} in ${place}`,
-    areaTitle: (tagline, area) => `${tagline} in ${area}`,
+    serviceDesc: (short, name, place, phone) => `${short} ${name}, ${place} and the surrounding area. Call ${phone}.`,
+    areaTitle: (trade, area, top) => `${trade} in ${area} — ${top}`,
     areaDesc: (name, area, postcodes, desc) =>
       `${name} covers ${area}${postcodes ? ` (${postcodes})` : ''}. ${desc}`,
     about: 'About us',
@@ -590,6 +628,22 @@ const pl: Strings = {
     openingHours: 'Godziny otwarcia',
     rights: (year, name) => `© ${year} ${name.replace(/\.$/, '')}. Wszelkie prawa zastrzeżone.`,
     privacy: 'Polityka prywatności',
+    review: 'Oceń nas w Google',
+  },
+
+  llms: {
+    facts: 'Fakty',
+    legalName: 'Nazwa prawna',
+    founded: 'Działa od',
+    address: 'Adres',
+    phone: 'Telefon',
+    email: 'E-mail',
+    hours: 'Godziny otwarcia',
+    areas: 'Obszar działania',
+    services: 'Oferta',
+    faq: 'Najczęstsze pytania',
+    notes: 'Warto wiedzieć',
+    pages: 'Strony',
   },
 
   form: {
@@ -654,6 +708,9 @@ const pl: Strings = {
       title: 'Co robimy i ile to kosztuje',
       intro:
         'Podane ceny to punkt wyjścia. Większe prace wyceniamy po oględzinach, więc kwota, którą podajemy, jest kwotą, którą płacisz.',
+      titleUnpriced: 'Co robimy',
+      introUnpriced:
+        'Każdą pracę wyceniamy po oględzinach budynku, więc kwota, którą podajemy, jest kwotą, którą płacisz. Zadzwoń albo napisz — powiemy, co ma sens, zanim cokolwiek zaproponujemy.',
     },
     areas: {
       title: (place) => `Obszar działania wokół miasta ${place}`,
@@ -702,7 +759,8 @@ const pl: Strings = {
     services: (name, place, list) => `Pełna oferta ${name} w mieście ${place} i okolicach: ${list}.`,
     areas: (name, list, place) => `${name} obsługuje ${list} oraz cały powiat ${place}.`,
     serviceTitle: (service, place) => `${service} — ${place}`,
-    areaTitle: (tagline, area) => `${tagline} — ${area}`,
+    serviceDesc: (short, name, place, phone) => `${short} ${name} — ${place} i okolice. Tel. ${phone}.`,
+    areaTitle: (trade, area, top) => `${trade} ${area} — ${top}`,
     areaDesc: (name, area, postcodes, desc) =>
       `${name} obsługuje ${area}${postcodes ? ` (${postcodes})` : ''}. ${desc}`,
     about: 'O nas',

@@ -81,6 +81,10 @@ const config: SiteConfig = {
     mapEmbedUrl:
       'https://www.google.com/maps?q=Harcerska+2,+78-400+Szczecinek&output=embed',
     googleMapsUrl: 'https://maps.google.com/?q=Activa+Harcerska+2+Szczecinek',
+    // The "Ask for reviews" share link from the Business Profile
+    // (https://g.page/r/<code>/review). Set it and the footer shows
+    // "Oceń nas w Google"; the same link goes on the NFC cards.
+    // googleReviewUrl: '',
   },
 
   hours: [
@@ -416,6 +420,9 @@ const config: SiteConfig = {
     description:
       'Technika grzewcza w Szczecinku od 1991 roku. Hurtownia, montaż i serwis: kotły gazowe, pompy ciepła, ogrzewanie podłogowe, instalacje sanitarne. ul. Harcerska 2, tel. 94 374 11 32.',
     ogImage: '/clients/activa/og.jpg',
+    // Search Console (HTML tag → content) and Bing Webmaster (msvalidate.01).
+    // verification: { google: '', bing: '' },
+    indexNowKey: '175680e2505fefdaf26333d19d987b54',
   },
 
   chatbot: {

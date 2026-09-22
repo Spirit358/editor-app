@@ -277,6 +277,24 @@ analytics beyond the usage log.
 
 ---
 
+## SEO, reviews and the AI answers
+
+Oskar, the day Activa went live: first on Google, good reviews, first in
+ChatGPT. `SEO.md` is the plan; these are the calls behind the code's share.
+
+| Decision | Reasoning |
+| --- | --- |
+| **AI crawlers are allowed by name, training bots included** | The 2026 fashion is to allow the answer bots (OAI-SearchBot, Claude-SearchBot, PerplexityBot) and block the training ones. That is a publisher's calculus. A brochure site for a heating wholesaler has nothing to protect and everything to gain from the next model knowing it exists. |
+| **`/llms.txt` from the same config as the pages** | The convention is young and unproven with Google; it costs one static route, and its real value is discipline — the facts an AI needs in one place with nothing to infer. Same source as the pages, the schema and the assistant, so it cannot drift. |
+| **IndexNow key in the config, served at `/indexnow.txt`** | The key is public by design (the protocol proves ownership by serving it). `keyLocation` lets it live at a fixed path instead of `/<key>.txt`, so the route is static. Bing is ChatGPT's index; a ping per deploy is the cheapest "index me" available. |
+| **Verification tokens in the config, not `.env`** | They are public in the HTML anyway; a token in `.env.local` would be the one thing a rebuild on another machine forgets. |
+| **Area titles name the trade and the top two services, not the tagline** | "Technika grzewcza w Szczecinku od 1991 roku — Barwice" told Google the page was about Szczecinek. "Instalacje grzewcze Barwice — kotły gazowe, pompy ciepła" is the query. The area `Service` schema had an English "in" on a Polish site; it now uses the localised page title. |
+| **Service descriptions add the business, the town and the phone** | `service.short` alone was a sentence fragment in the results; the phone in the snippet is a click that never reaches the page and still converts. |
+| **The services heading no longer promises prices on a site that shows none** | "Co robimy i ile to kosztuje" over six unpriced services was a small lie. The page picks the unpriced heading when no service has `priceFrom`. |
+| **No aggregate rating until the review texts are ours** | Unchanged: 4.2★ / 32 is real, the texts are Google's. |
+
+---
+
 ## Higgsfield imagery
 
 **The API was egress-blocked when this was built** — `api.higgsfield.ai`

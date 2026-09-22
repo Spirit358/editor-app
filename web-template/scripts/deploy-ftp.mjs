@@ -42,7 +42,7 @@ import process from 'node:process'
 import { Client } from 'basic-ftp'
 import { loadDotEnv } from './lib/env.mjs'
 import { chatSecret } from './lib/chat-handler.mjs'
-import { fail, readBuild, walk, sizeOf, prepareServerFiles, describe, verifyLive } from './lib/build.mjs'
+import { fail, readBuild, walk, sizeOf, prepareServerFiles, describe, verifyLive, pingIndexNow } from './lib/build.mjs'
 
 const ROOT = process.cwd()
 const OUT_DIR = path.join(ROOT, 'out')
@@ -145,7 +145,9 @@ async function main() {
     client.close()
   }
 
-  await verifyLive(build, 'Usually the web root is elsewhere — check FTP_REMOTE_DIR.')
+  if (await verifyLive(build, 'Usually the web root is elsewhere — check FTP_REMOTE_DIR.')) {
+    await pingIndexNow(OUT_DIR, build)
+  }
 }
 
 main().catch((error) => fail(error.stack ?? String(error)))

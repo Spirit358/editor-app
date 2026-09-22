@@ -263,6 +263,18 @@ issue for an FTP deploy, which leaves DNS alone entirely.
 
 Point the preview at an unguessable subdomain while the site is a demo.
 
+## SEO, reviews and the AI answers
+
+`SEO.md` is the playbook: the map pack, reviews, the AI answers, and the
+organic race, with the first ninety days as a checklist. The code's share of
+it ships with every build — titles and descriptions naming the service and
+the town, JSON-LD (`HVACBusiness`/`Plumber`… + `Service` + `FAQPage` +
+breadcrumbs), a sitemap, a `robots.txt` that names the AI crawlers,
+`/llms.txt` with the facts in plain text, and `/indexnow.txt` with an
+IndexNow ping from every deploy. Three config fields carry the owner's
+tokens: `seo.verification` (Search Console and Bing), `seo.indexNowKey`,
+and `contact.googleReviewUrl` (the footer's "Review us on Google").
+
 ## Chat assistant
 
 A button in the corner that answers the questions a trades business gets

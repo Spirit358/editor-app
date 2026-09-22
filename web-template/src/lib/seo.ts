@@ -54,6 +54,12 @@ export function buildMetadata(opts: {
     other: {
       'format-detection': 'telephone=no',
     },
+    verification: site.seo.verification
+      ? prune({
+          google: site.seo.verification.google,
+          other: site.seo.verification.bing ? { 'msvalidate.01': site.seo.verification.bing } : undefined,
+        })
+      : undefined,
   }
 }
 
@@ -168,9 +174,8 @@ export function areaServiceSchema(area: ServiceArea) {
   return prune({
     '@context': 'https://schema.org',
     '@type': 'Service',
-    name: `${site.business.tagline} in ${area.name}`,
-    description:
-      area.blurb ?? `${site.business.name} serving ${area.name} and the surrounding area.`,
+    name: t.copy.areaPageTitle(site.business.tradePlural ?? site.business.name, area.name),
+    description: area.blurb ?? t.meta.areaDesc(site.business.name, area.name, '', site.business.description),
     provider: { '@id': `${site.seo.baseUrl}/#business` },
     areaServed: { '@type': 'City', name: area.name },
     url: absoluteUrl(site.seo.baseUrl, `/areas/${area.slug}`),

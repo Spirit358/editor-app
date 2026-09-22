@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   if (!service) return buildMetadata({ title: t.meta.notFound })
   return buildMetadata({
     title: t.meta.serviceTitle(service.name, site.contact.address.locality),
-    description: service.short,
+    description: t.meta.serviceDesc(service.short, site.business.name, site.contact.address.locality, phoneDisplay),
     path: `/services/${service.slug}`,
   })
 }

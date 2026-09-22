@@ -104,6 +104,11 @@ export function Footer() {
                 {SOCIAL_LABELS[key] ?? key}
               </a>
             ))}
+            {contact.googleReviewUrl && (
+              <a href={contact.googleReviewUrl} rel="noopener noreferrer" target="_blank" className="link-quiet">
+                {t.footer.review}
+              </a>
+            )}
             <Link href="/privacy" className="link-quiet">
               {t.footer.privacy}
             </Link>

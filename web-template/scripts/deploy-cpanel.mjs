@@ -43,7 +43,7 @@ import process from 'node:process'
 import { promisify } from 'node:util'
 import { loadDotEnv } from './lib/env.mjs'
 import { chatSecret } from './lib/chat-handler.mjs'
-import { fail, readBuild, walk, sizeOf, prepareServerFiles, describe, verifyLive } from './lib/build.mjs'
+import { fail, readBuild, walk, sizeOf, prepareServerFiles, describe, verifyLive, pingIndexNow } from './lib/build.mjs'
 
 const run = promisify(execFile)
 const ROOT = process.cwd()
@@ -318,6 +318,7 @@ async function main() {
   }
 
   const ok = await verifyLive(build, 'The document root may be elsewhere — run --check, or set CPANEL_REMOTE_DIR.')
+  if (ok) await pingIndexNow(OUT_DIR, build)
   if (ok && chat) {
     try {
       const probe = await fetch(`${build.baseUrl}/chat.php`, {

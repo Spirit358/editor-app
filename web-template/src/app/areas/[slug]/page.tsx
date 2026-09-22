@@ -23,7 +23,14 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   const area = areaBySlug(slug)
   if (!area) return buildMetadata({ title: t.meta.notFound })
   return buildMetadata({
-    title: t.meta.areaTitle(site.business.tagline, area.name),
+    title: t.meta.areaTitle(
+      site.business.tradePlural ?? site.business.name,
+      area.name,
+      site.services
+        .slice(0, 2)
+        .map((s) => s.name.toLowerCase())
+        .join(', '),
+    ),
     description:
       area.blurb ??
       t.meta.areaDesc(site.business.name, area.name, area.postcodes?.join(', ') ?? '', site.business.description),

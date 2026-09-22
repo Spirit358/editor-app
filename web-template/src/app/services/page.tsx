@@ -8,6 +8,9 @@ import { Illustration } from '@/components/illustration'
 import { Cta } from '@/components/sections/cta'
 import { JsonLd } from '@/components/json-ld'
 
+// A site that shows no prices must not promise them in its heading.
+const priced = site.services.some((s) => s.priceFrom)
+
 const TRAIL = [
   { name: t.crumbs.home, path: '/' },
   { name: t.crumbs.services, path: '/services' },
@@ -27,7 +30,12 @@ export const metadata: Metadata = buildMetadata({
 export default function ServicesPage() {
   return (
     <>
-      <PageHero eyebrow={t.crumbs.services} title={t.pages.services.title} intro={t.pages.services.intro} breadcrumbs={TRAIL} />
+      <PageHero
+        eyebrow={t.crumbs.services}
+        title={priced ? t.pages.services.title : t.pages.services.titleUnpriced}
+        intro={priced ? t.pages.services.intro : t.pages.services.introUnpriced}
+        breadcrumbs={TRAIL}
+      />
 
       <section className="section rule-b">
         <div className="container-page">

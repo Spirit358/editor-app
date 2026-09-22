@@ -102,6 +102,10 @@ Undoing any of these quietly breaks something measurable:
 - **`demo.enabled` stays true** until the client has signed.
 - **Only emit an aggregate rating when real reviews back it.** Otherwise it is
   review spam and can earn a manual action.
+- **SEO is `SEO.md`.** The build does the technical half; the profile,
+  reviews and listings are the owner's half, listed there as the first
+  ninety days. Verification tokens and the IndexNow key are public and live
+  in the client config, not in `.env`.
 - **The assistant knows only `/chatbot.json`.** Both the widget and
   `chat.php` read that one build artifact; never feed the model anything the
   page does not say, and never let it near a price — the widget intercepts

@@ -221,6 +221,11 @@ export interface SiteConfig {
     mapEmbedUrl?: string
     /** Link to the Google Business Profile. */
     googleMapsUrl?: string
+    /**
+     * The "write a review" link from the Business Profile (Ask for reviews →
+     * share). Shown in the footer and used on review cards; nothing else.
+     */
+    googleReviewUrl?: string
   }
 
   hours?: OpeningHours[]
@@ -334,6 +339,16 @@ export interface SiteConfig {
     /** Path under /public. A gradient OG image is generated if omitted. */
     ogImage?: string
     /** Extra keywords are deliberately not supported — they do nothing. */
+    /**
+     * Site-verification tokens: Google Search Console (HTML tag method,
+     * the `content` value) and Bing Webmaster Tools (`msvalidate.01`).
+     */
+    verification?: { google?: string; bing?: string }
+    /**
+     * IndexNow key (8–128 of [a-zA-Z0-9-]). Served at /indexnow.txt; the
+     * deploy scripts ping Bing & co. with every sitemap URL after an upload.
+     */
+    indexNowKey?: string
   }
 
   forms: {

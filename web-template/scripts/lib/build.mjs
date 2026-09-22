@@ -138,6 +138,41 @@ export function describe(build, chat, { files, bytes, target }) {
   }
 }
 
+/**
+ * Tells Bing, Yandex and the rest of the IndexNow pool which URLs changed —
+ * Bing is what ChatGPT searches, so this is the cheapest "index me" there
+ * is. Needs `seo.indexNowKey` in the client config (served at
+ * /indexnow.txt); silently does nothing without it.
+ */
+export async function pingIndexNow(outDir, build) {
+  let key = ''
+  let sitemap = ''
+  try {
+    key = (await readFile(path.join(outDir, 'indexnow.txt'), 'utf8')).trim()
+    sitemap = await readFile(path.join(outDir, 'sitemap.xml'), 'utf8')
+  } catch {
+    return
+  }
+  if (!/^[a-zA-Z0-9-]{8,128}$/.test(key)) return
+  const urlList = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1])
+  if (!urlList.length) return
+  const host = new URL(build.baseUrl).host
+  try {
+    const response = await fetch('https://api.indexnow.org/indexnow', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      body: JSON.stringify({ host, key, keyLocation: `${build.baseUrl}/indexnow.txt`, urlList }),
+    })
+    console.log(
+      response.ok || response.status === 202
+        ? `  ✓ IndexNow told about ${urlList.length} URLs (${response.status})`
+        : `  ! IndexNow answered ${response.status} — the key file may not be live yet`,
+    )
+  } catch (error) {
+    console.log(`  ! IndexNow ping failed: ${error.message}`)
+  }
+}
+
 /** Nothing proves a deploy like the live URL answering with the new page. */
 export async function verifyLive(build, hint) {
   try {
