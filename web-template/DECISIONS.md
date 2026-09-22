@@ -151,6 +151,24 @@ without the trailing slash the static export serves, so every entry but the
 homepage pointed at a 301 to its own canonical form. Next adds that slash to
 canonical tags but not to sitemap entries handed to it.
 
+**FTP turned out to be closed from everywhere that mattered.** The build
+environment reaches the world on 80 and 443 only; Activa had no FTP account
+and, for two days, no panel login. When the cPanel login turned up, the API
+was the door that was open: cPanel's proxy subdomain (`cpanel.<domain>`) is
+served by Apache on 443, so `pnpm deploy-cpanel` talks to UAPI and API 2 over
+plain HTTPS — one `tar.gz` of `out/` uploaded with `Fileman::upload_files`,
+extracted with `Fileman::fileop`, the secret written with
+`Fileman::save_file_content`. Two wrinkles are encoded in the script rather
+than remembered: the server hands the `*.hostingrd.pl` certificate to the
+proxy name, so the request goes to the server's hostname with `cpanel.<domain>`
+as the Host header; and the old web root is renamed aside and recreated
+rather than overwritten or deleted, because a WordPress that still answers
+on `/wp-login.php` under the new site is a liability, and a rename is the
+reversible version of clearing it. `curl` does the transport so that the
+same script runs from the laptop, with the machine's proxy and CA settings,
+without a Node HTTP-proxy dependency. `deploy-ftp` and `deploy-cpanel` share
+`scripts/lib/build.mjs` so the two cannot disagree about what a deploy ships.
+
 **Knowingly shipped unverified:** the six `[VERIFY]` items are still
 assumptions — that they install and service rather than only sell, the six
 services, the eight areas, the map coordinates. Oskar's call to publish

@@ -42,6 +42,7 @@ pnpm dev
 | `pnpm audit-site` | Lighthouse on every route, mobile + desktop. Fails under 90 |
 | `pnpm check` | typecheck → build → audit |
 | `pnpm deploy-ftp` | Upload `out/` to a client's own shared hosting over FTPS, with the form and chat handlers |
+| `pnpm deploy-cpanel` | The same through the cPanel API — when FTP is closed from where you are, or a cPanel login is all you have |
 | `pnpm deploy-vercel` | Deploy `out/` to Vercel as a noindex preview, with the assistant as a function |
 
 ## Design
@@ -233,7 +234,22 @@ or a dead WordPress install sits there as a security liability. An
 ~20 Lighthouse points on a host that has it off), and sets cache headers that
 are immutable for hashed assets and revalidating for pages.
 
-**`deploy-ftp` refuses to upload a demo build.** A `noindex` site on the
+**The same hosting through cPanel** — `pnpm deploy-cpanel` does what
+`deploy-ftp` does over the cPanel API instead of FTP: one archive of `out/`
+uploaded, the old web root renamed to `public_html.old-<stamp>` (never
+deleted), a fresh one created, the archive extracted into it, the assistant
+secret written above it. It finds the web root from the domain itself. Use it
+when FTP is blocked from the machine you deploy from, or when the client can
+give you a cPanel login and nothing else. `CPANEL_URL`, `CPANEL_USER` and an
+API token (`CPANEL_TOKEN`, from cPanel → Security → Manage API Tokens) or the
+password in `.env.local`; `--check` logs in and reports the web root without
+touching it. If port 2083 is closed where you are, cPanel's proxy subdomain
+answers on 443: set `CPANEL_URL` to the server's hostname and `CPANEL_HOST`
+to `cpanel.<domain>` (the Host header — the server may hand the wrong
+certificate to the proxy name directly). Everything goes through `curl`, so
+the machine's proxy and CA settings apply.
+
+**`deploy-ftp` and `deploy-cpanel` refuse to upload a demo build.** A `noindex` site on the
 client's real domain is invisible to Google forever, so the guard is in code
 rather than in someone's memory. Clear `demo.enabled` and rebuild, or pass
 `--allow-demo` when the target really is a staging host.

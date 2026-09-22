@@ -19,6 +19,7 @@
     "audit-site": "node scripts/lighthouse.mjs",
     "check": "pnpm typecheck && pnpm build && pnpm audit-site",
     "deploy-ftp": "node scripts/deploy-ftp.mjs",
+    "deploy-cpanel": "node scripts/deploy-cpanel.mjs",
     "deploy-vercel": "node scripts/deploy-vercel.mjs"
   },
   "dependencies": {

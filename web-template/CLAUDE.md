@@ -51,7 +51,8 @@ agency brand name, final pricing. None of them block building.
 6. Deploy `out/` to a private preview URL. Demo mode stays on. Once the
    client signs: clear `demo.enabled`, set `seo.baseUrl` to their real
    domain, give the form a working endpoint, rebuild, then `pnpm deploy-ftp`
-   onto their own hosting (nothing in DNS moves, so their email survives) or
+   (or `pnpm deploy-cpanel` when FTP is closed or a cPanel login is all
+   there is) onto their own hosting (nothing in DNS moves, so their email survives) or
    repoint DNS at a preview host. Check the MX records before touching an A
    record — on shared hosting the mail exchanger is usually the domain
    itself.
