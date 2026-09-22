@@ -243,7 +243,8 @@ when FTP is blocked from the machine you deploy from, or when the client can
 give you a cPanel login and nothing else. `CPANEL_URL`, `CPANEL_USER` and an
 API token (`CPANEL_TOKEN`, from cPanel → Security → Manage API Tokens) or the
 password in `.env.local`; `--check` logs in and reports the web root without
-touching it. If port 2083 is closed where you are, cPanel's proxy subdomain
+touching it, and `--secret-only` rewrites the assistant's secret file alone
+(a key rotation). If port 2083 is closed where you are, cPanel's proxy subdomain
 answers on 443: set `CPANEL_URL` to the server's hostname and `CPANEL_HOST`
 to `cpanel.<domain>` (the Host header — the server may hand the wrong
 certificate to the proxy name directly). Everything goes through `curl`, so

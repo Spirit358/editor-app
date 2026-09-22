@@ -169,6 +169,25 @@ same script runs from the laptop, with the machine's proxy and CA settings,
 without a Node HTTP-proxy dependency. `deploy-ftp` and `deploy-cpanel` share
 `scripts/lib/build.mjs` so the two cannot disagree about what a deploy ships.
 
+**Live since 2026-09-22 17:03 UTC** through `deploy-cpanel`, from the build
+environment, with Activa's cPanel API token. What the first real run
+taught, and what the script now does about it: the host runs Imunify360's
+WebShield, which greets an IP it has greylisted (this one had earned it by
+probing) with a "One moment, please…" page that a browser reloads after five
+seconds — the transport now reloads the same way, up to fifteen times; the
+domain is a *parked* alias of the account's main domain, which
+`DomainInfo::domains_data` returns as a bare name, so the web root comes from
+the main domain's `serveralias`; and a directory listing asked for twice at
+the same URL came back the second time as it had the first — every API call
+now carries a cache-buster. `--secret-only` rewrites `.chat-secret.php`
+alone, for the day the assistant's key is rotated. Verified from outside
+after the deploy: HTTP and `www` redirect to the canonical host, all 20
+sitemap routes, `chatbot.json` as JSON, hashed assets immutable, `wp-login.php`
+a 404, `form.php` refusing GET, and `chat.php` answering a pump question in
+Polish with the phone number. The WordPress is at
+`public_html.old-20260922-170328`, unreachable from the web; delete it once
+nobody misses it.
+
 **Knowingly shipped unverified:** the six `[VERIFY]` items are still
 assumptions — that they install and service rather than only sell, the six
 services, the eight areas, the map coordinates. Oskar's call to publish

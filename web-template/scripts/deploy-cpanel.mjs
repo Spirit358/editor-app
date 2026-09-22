@@ -9,6 +9,7 @@
  *   pnpm deploy-cpanel               archive out/, upload it, move the old web
  *                                    root aside, extract, write the assistant secret
  *   pnpm deploy-cpanel --keep-old    extract over what is there instead of moving it
+ *   pnpm deploy-cpanel --secret-only rewrite .chat-secret.php only (a key rotation)
  *   pnpm deploy-cpanel --allow-demo  upload a demo build (staging only)
  *
  * Credentials come from the environment or a git-ignored .env.local:
@@ -61,12 +62,23 @@ class Cpanel {
   }
 
   async curl(args, { binary = false } = {}) {
-    const argv = ['-sS', '-m', '300', '-L', ...args]
+    const argv = ['-sS', '-m', '300', '-L', '-H', 'Cache-Control: no-cache', ...args]
     if (this.host) argv.push('-H', `Host: ${this.host}`)
     if (this.token) argv.push('-H', `Authorization: cpanel ${this.user}:${this.token}`)
     if (this.jar) argv.push('-b', this.jar, '-c', this.jar)
-    const { stdout } = await run('curl', argv, { maxBuffer: 64 * 1024 * 1024, encoding: binary ? 'buffer' : 'utf8' })
-    return stdout
+    // Imunify360's WebShield greets an IP it has greylisted with a splash
+    // page that a browser would reload after five seconds; the reload gets
+    // through. Do what the browser would do, a few times, before giving up.
+    for (let attempt = 0; ; attempt++) {
+      const { stdout } = await run('curl', argv, {
+        maxBuffer: 64 * 1024 * 1024,
+        encoding: binary ? 'buffer' : 'utf8',
+      })
+      const text = binary ? stdout.toString('latin1', 0, 400) : stdout.slice(0, 400)
+      if (!/<title>One moment, please/.test(text) || attempt >= 14) return stdout
+      if (attempt === 0) console.log("  the host's bot filter asked to wait — retrying")
+      await new Promise((resolve) => setTimeout(resolve, 7000))
+    }
   }
 
   async login() {
@@ -94,6 +106,9 @@ class Cpanel {
   async uapi(module, func, params = {}, form = null) {
     const url = new URL(`${this.base}${this.session}/execute/${module}/${func}`)
     for (const [k, v] of Object.entries(params)) url.searchParams.set(k, String(v))
+    // A directory listing asked for twice at the same URL came back the
+    // second time as it was the first, from a cache between here and cPanel.
+    url.searchParams.set('_', String(Date.now()))
     const args = []
     if (form) for (const [k, v] of Object.entries(form)) args.push('-F', `${k}=${v}`)
     const json = parse(await this.curl([...args, url.toString()]), `${module}::${func}`)
@@ -111,6 +126,7 @@ class Cpanel {
     url.searchParams.set('cpanel_jsonapi_module', module)
     url.searchParams.set('cpanel_jsonapi_func', func)
     for (const [k, v] of Object.entries(params)) url.searchParams.set(k, String(v))
+    url.searchParams.set('_', String(Date.now()))
     const json = parse(await this.curl([url.toString()]), `${module}::${func}`)
     const result = json.cpanelresult ?? {}
     const rows = Array.isArray(result.data) ? result.data : []
@@ -147,16 +163,23 @@ async function locate(cp, build) {
   let docroot = process.env.CPANEL_REMOTE_DIR ?? ''
   if (!docroot) {
     const domains = await cp.uapi('DomainInfo', 'domains_data', { format: 'hash' })
-    const all = [
-      domains.main_domain,
-      ...(domains.addon_domains ?? []),
-      ...(domains.sub_domains ?? []),
-      ...(domains.parked_domains ?? []),
-    ].filter(Boolean)
-    const match = all.find((d) => d.domain === host || d.domain === `www.${host}`)
-    docroot = match?.documentroot ?? domains.main_domain?.documentroot ?? `${home}/public_html`
+    const main = domains.main_domain
+    // Addon and sub domains carry their own document root; a parked domain
+    // is an alias of the main one and comes back as a bare name.
+    const own = [main, ...(domains.addon_domains ?? []), ...(domains.sub_domains ?? [])].filter(
+      (d) => d && typeof d === 'object',
+    )
+    const isHost = (name) => name === host || name === `www.${host}`
+    const match =
+      own.find((d) => isHost(d.domain) || (d.serveralias ?? '').split(/\s+/).some(isHost)) ??
+      ((domains.parked_domains ?? []).some((d) => isHost(typeof d === 'string' ? d : d?.domain))
+        ? main
+        : null)
+    docroot = match?.documentroot ?? main?.documentroot ?? `${home}/public_html`
     if (!match) {
       console.log(`  ! ${host} is not a domain on this account — using ${docroot}`)
+    } else if (match === main && main.domain !== host) {
+      console.log(`  ${host} is an alias of ${main.domain}`)
     }
   }
   return { home, docroot, account: info.user ?? cp.user }
@@ -170,6 +193,20 @@ async function listing(cp, dir) {
     if (/does not exist|No such/i.test(error.message)) return null
     throw error
   }
+}
+
+/** One level above the web root: a .php file that returns a value outputs nothing even if it ends up inside it. */
+async function writeSecret(cp, docroot, chat, work) {
+  const parent = path.posix.dirname(docroot)
+  const secretFile = path.join(work, 'secret.php')
+  await writeFile(secretFile, chatSecret(chat), { mode: 0o600 })
+  await cp.uapi(
+    'Fileman',
+    'save_file_content',
+    { dir: parent, file: '.chat-secret.php', from_charset: 'utf-8', to_charset: 'utf-8' },
+    { content: `<${secretFile}` },
+  )
+  console.log(`  assistant secret written to ${path.posix.join(parent, '.chat-secret.php')}`)
 }
 
 async function main() {
@@ -224,8 +261,14 @@ async function main() {
       return
     }
 
-    // One archive, one upload, one extract — instead of one request per file.
     const stamp = new Date().toISOString().replace(/[-:]/g, '').slice(0, 15).replace('T', '-')
+    if (has('--secret-only')) {
+      if (!chat?.apiKey) fail('--secret-only needs CHATBOT_API_KEY and a build with an assistant.')
+      await writeSecret(cp, docroot, chat, work)
+      return
+    }
+
+    // One archive, one upload, one extract — instead of one request per file.
     const archiveName = `site-${stamp}.tar.gz`
     const archive = path.join(work, archiveName)
     await run('tar', ['-czf', archive, '-C', OUT_DIR, '.'])
@@ -261,20 +304,7 @@ async function main() {
     }
     console.log(`  extracted into ${docroot} (${after.length} entries)`)
 
-    if (chat?.apiKey) {
-      // One level above the web root: a .php file that returns a value
-      // outputs nothing even if it ends up inside it.
-      const parent = path.posix.dirname(docroot)
-      const secretFile = path.join(work, 'secret.php')
-      await writeFile(secretFile, chatSecret(chat), { mode: 0o600 })
-      await cp.uapi(
-        'Fileman',
-        'save_file_content',
-        { dir: parent, file: '.chat-secret.php', from_charset: 'utf-8', to_charset: 'utf-8' },
-        { 'content': `<${secretFile}` },
-      )
-      console.log(`  assistant secret written to ${path.posix.join(parent, '.chat-secret.php')}`)
-    }
+    if (chat?.apiKey) await writeSecret(cp, docroot, chat, work)
   } catch (error) {
     fail(`cPanel deploy failed: ${error.message}`)
   } finally {
