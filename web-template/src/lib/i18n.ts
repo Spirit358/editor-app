@@ -303,7 +303,7 @@ const en: Strings = {
     services: 'Services',
     areasCovered: 'Areas covered',
     openingHours: 'Opening hours',
-    rights: (year, name) => `© ${year} ${name}. All rights reserved.`,
+    rights: (year, name) => `© ${year} ${name.replace(/\.$/, '')}. All rights reserved.`,
     privacy: 'Privacy',
   },
 
@@ -588,7 +588,7 @@ const pl: Strings = {
     services: 'Oferta',
     areasCovered: 'Obszar działania',
     openingHours: 'Godziny otwarcia',
-    rights: (year, name) => `© ${year} ${name}. Wszelkie prawa zastrzeżone.`,
+    rights: (year, name) => `© ${year} ${name.replace(/\.$/, '')}. Wszelkie prawa zastrzeżone.`,
     privacy: 'Polityka prywatności',
   },
 

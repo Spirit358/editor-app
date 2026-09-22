@@ -49,7 +49,7 @@ const config: SiteConfig = {
 
   business: {
     name: 'Activa Technika Grzewcza',
-    legalName: 'Activa Józef Czebotar s.c.',
+    legalName: 'Activa Sp. z o.o.',
     type: 'HVACBusiness',
     tagline: 'Technika grzewcza w Szczecinku od 1991 roku',
     description:

@@ -44,6 +44,13 @@ s.c.* (Józef, Irena, Maciej Czebotar, Aneta Dubas), founded 1991, ul. Harcerska
 of heating equipment, plus sanitary equipment. A sibling *Activa Sp. z o.o.*
 (2019) does building-materials wholesale at the same address.
 
+**The site names *Activa Sp. z o.o.*** — Oskar's instruction from the client
+on go-live day (2026-09-22), replacing the *s.c.* the registers had
+suggested. `business.legalName` drives the footer, the privacy page's data
+controller and the assistant's facts, so one config line changed all three;
+the copyright line now also drops a trailing period from the name before
+adding its own, or "Sp. z o.o.." would have followed "s.c..". 
+
 **What is inferred and marked `[VERIFY]` in the config** — the intake
 questions for the first conversation:
 
