@@ -233,6 +233,21 @@ model filled the gap with something plausible.
 | **Secrets above the web root, usage below the radar** | `.chat-secret.php` is written one directory up by the deploy, and is PHP that outputs nothing even if it lands inside the root. The usage log records tokens per call, never text — enough to price the add-on per client, nothing a subject-access request would mind. |
 | **Nothing on the critical path** | The launcher is a button in the layout chunk; the panel and matcher are a 9 KB chunk and the knowledge file a 4 KB fetch, both on the first click. Homepage mobile measured 92 with it on a quiet run, 98 without — within this build's run-to-run spread, so it was not chased further; `/contact` stayed at 99. |
 
+**The first real complaint: "it does not answer questions" (2026-09-22).**
+The usage log showed no model calls but the tests', so nothing had failed —
+the widget had answered. The intent patterns were greedy: any question
+containing *robicie* or *zajmujecie* got the services list, any with a day
+name or *otwarci* the hours, so "czy robicie podłogówkę w starym domu?" was
+met with a menu. Now an intent fires only when nothing specific is left of
+the question once its own words are removed; anything else goes to the FAQ
+and then the model. Two hardenings rode along, for causes that could not be
+ruled out from the log: the widget reloads a POST once, six seconds later,
+when the host's bot filter answers with its HTML page instead of JSON, and
+says the assistant is offline rather than throwing; and both handlers accept
+a same-origin POST that carries no `Origin` header but says
+`Sec-Fetch-Site: same-origin` or names the page in `Referer`, while still
+refusing anonymous and foreign ones.
+
 **Matching is conservative on purpose.** A question the FAQ matcher is not
 sure about goes to the model, which has the whole FAQ in its facts anyway. A
 wrong FAQ answer delivered confidently is worse than a model call that costs

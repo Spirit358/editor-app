@@ -65,6 +65,26 @@ const PRICE = /\b(cen|koszt|kosztu|cennik|ile (to )?kosztuje|price|cost|how much
 
 let nextId = 1
 
+/**
+ * Posts the conversation. Some shared hosts put a bot filter in front of
+ * everything, and it answers an unfamiliar visitor's first request with an
+ * HTML "one moment" page that a browser would reload a few seconds later.
+ * Do what the browser would do, once, before calling the assistant offline.
+ */
+async function post(endpoint: string, body: string, attempt = 0): Promise<Response> {
+  const response = await fetch(endpoint, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    body,
+  })
+  const json = /json/.test(response.headers.get('content-type') ?? '')
+  if (response.ok && !json && attempt === 0) {
+    await new Promise((resolve) => setTimeout(resolve, 6000))
+    return post(endpoint, body, 1)
+  }
+  return response
+}
+
 export function ChatPanel({
   business,
   phone,
@@ -187,14 +207,11 @@ export function ChatPanel({
     say({ role: 'user', text: question, fromModel: true })
     setBusy(true)
     try {
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ messages: history }),
-      })
+      const response = await post(endpoint, JSON.stringify({ messages: history }))
+      const json = /json/.test(response.headers.get('content-type') ?? '')
       if (response.status === 429) {
         say({ role: 'assistant', text: l.limitReached, links: [{ label: phone, href: phoneHref }] })
-      } else if (!response.ok) {
+      } else if (!response.ok || !json) {
         say({ role: 'assistant', text: l.offline, links: [{ label: phone, href: phoneHref }] })
       } else {
         const data = (await response.json()) as { reply?: string }

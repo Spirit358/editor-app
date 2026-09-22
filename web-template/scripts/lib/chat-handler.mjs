@@ -55,6 +55,14 @@ if (!is_array($knowledge) || empty($knowledge['business']['name'])) {
 // --- only this site may call this ---------------------------------------
 $siteHost = strtolower((string) parse_url((string) ($knowledge['baseUrl'] ?? ''), PHP_URL_HOST));
 $origin = (string) ($_SERVER['HTTP_ORIGIN'] ?? '');
+// A browser that leaves Origin off a same-origin POST still says so in
+// Sec-Fetch-Site, or names the page in Referer.
+if ($origin === '' && (string) ($_SERVER['HTTP_SEC_FETCH_SITE'] ?? '') === 'same-origin') {
+    $origin = 'https://' . $siteHost;
+}
+if ($origin === '') {
+    $origin = (string) ($_SERVER['HTTP_REFERER'] ?? '');
+}
 $originHost = strtolower((string) parse_url($origin, PHP_URL_HOST));
 $bare = fn(string $h): string => preg_replace('/^www\\\\./', '', $h) ?? $h;
 if ($originHost === '' || $bare($originHost) !== $bare($siteHost)) {

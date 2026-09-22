@@ -43,6 +43,8 @@ const STOP = new Set([
   'u', 'od', 'po', 'za', 'dla', 'ze', 'jakie', 'jaki', 'jaka', 'ile', 'kiedy', 'gdzie', 'mam', 'moge',
   'mozna', 'mozecie', 'macie', 'czym', 'przez', 'tez', 'ale', 'lub', 'albo', 'oraz', 'bardzo', 'was',
   'wy', 'panstwo', 'pan', 'pani', 'dzien', 'dobry', 'czesc', 'witam', 'prosze', 'dziekuje',
+  'wasz', 'wasza', 'wasze', 'waszej', 'firma', 'firmy', 'firmie', 'chcialbym', 'chcialabym', 'chce',
+  'jestescie', 'jestes', 'jestem', 'jestesmy', 'bedzie', 'bedziecie', 'byl', 'byla', 'bylo',
   // en
   'the', 'a', 'an', 'is', 'are', 'do', 'does', 'you', 'i', 'of', 'to', 'in', 'on', 'for', 'what', 'how',
   'when', 'where', 'can', 'could', 'would', 'my', 'me', 'we', 'it', 'and', 'or', 'with', 'about', 'hi',
@@ -58,17 +60,34 @@ function stems(text: string) {
 }
 
 const INTENTS: Array<[QuickIntent, RegExp]> = [
-  ['hours', /\b(godzin|otwart|czynn|zamkni|otwier|zamyka|hours|open|close|opening)\w*/],
+  [
+    'hours',
+    /\b(godzin|otwart|czynn|zamkni|otwier|zamyka|poniedzial|wtor|srod|czwart|piat|sobot|niedziel|weekend|swiet|hours|open|close|opening|monday|tuesday|wednesday|thursday|friday|saturday|sunday|today|tomorrow|dzis|jutro)\w*/,
+  ],
   ['phone', /\b(telefon|numer|zadzwon|dzwoni|komork|phone|number|call)\w*/],
   ['address', /\b(adres|gdzie jest|ulic|siedzib|lokalizac|address|located|find you|where are)\w*/],
   ['areas', /\b(dojezdz|dojazd|obszar|okolic|miejscow|teren|gmin|powiat|cover|area|travel|distance)\w*/],
   ['services', /\b(uslug|oferta|oferuj|zakres|robicie|zajmuj|services?|offer|what do you do)\w*/],
 ]
 
-/** A quick-reply intent read from free text, or null. */
+/**
+ * A quick-reply intent read from free text, or null.
+ *
+ * Only a bare question gets the canned answer: "jakie macie godziny?" is the
+ * hours, but "czy robicie podłogówkę w starym domu?" names something the
+ * services list does not answer, so it goes on to the FAQ and the model. The
+ * test is what is left of the question once the intent's own words are gone.
+ */
 export function matchIntent(question: string): QuickIntent | null {
   const q = normalise(question)
-  for (const [intent, re] of INTENTS) if (re.test(q)) return intent
+  for (const [intent, re] of INTENTS) {
+    if (!re.test(q)) continue
+    const rest = q
+      .replace(new RegExp(re.source, 'g'), ' ')
+      .split(' ')
+      .filter((w) => w.length >= 3 && !STOP.has(w))
+    if (rest.length <= 1) return intent
+  }
   return null
 }
 

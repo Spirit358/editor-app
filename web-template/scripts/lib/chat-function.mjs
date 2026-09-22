@@ -130,7 +130,10 @@ module.exports = async (req, res) => {
   const host = String(req.headers.host ?? '').toLowerCase()
   let originHost = ''
   try {
-    originHost = new URL(String(req.headers.origin ?? '')).host.toLowerCase()
+    const origin =
+      req.headers.origin ||
+      (req.headers['sec-fetch-site'] === 'same-origin' ? 'https://' + host : req.headers.referer)
+    originHost = new URL(String(origin ?? '')).host.toLowerCase()
   } catch {
     /* no or malformed Origin */
   }

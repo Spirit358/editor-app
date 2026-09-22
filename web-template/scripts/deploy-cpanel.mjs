@@ -7,8 +7,9 @@
  *   pnpm deploy-cpanel --dry-run     print the plan, connect to nothing
  *   pnpm deploy-cpanel --check       log in, find the web root, say what is in it
  *   pnpm deploy-cpanel               archive out/, upload it, move the old web
- *                                    root aside, extract, write the assistant secret
- *   pnpm deploy-cpanel --keep-old    extract over what is there instead of moving it
+ *                                    root aside (unless it is an earlier build of
+ *                                    this kind), extract, write the assistant secret
+ *   pnpm deploy-cpanel --keep-old    extract over whatever is there, never move it
  *   pnpm deploy-cpanel --secret-only rewrite .chat-secret.php only (a key rotation)
  *   pnpm deploy-cpanel --allow-demo  upload a demo build (staging only)
  *
@@ -279,7 +280,11 @@ async function main() {
     }
     console.log(`  uploaded ${archiveName} (${(bytes / 1024 / 1024).toFixed(1)} MB unpacked)`)
 
-    if (present?.length && !has('--keep-old')) {
+    // A web root that already holds a build of this kind is ours to overwrite;
+    // anything else — a WordPress, someone's hand-made site — is moved aside.
+    const ours = present?.includes('_next') ?? false
+    if (ours) console.log('  the web root already holds a build of this kind — extracting over it')
+    if (present?.length && !ours && !has('--keep-old')) {
       const aside = `${docroot.replace(/\/+$/, '')}.old-${stamp}`
       await cp.api2('Fileman', 'fileop', { op: 'rename', sourcefiles: docroot, destfiles: aside })
       await cp.api2('Fileman', 'mkdir', {
