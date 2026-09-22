@@ -318,6 +318,7 @@ shipped to the CDN on every deploy. Originals now live in
 | 3 | **Agency brand name, and does it trade under the existing Ltd?** | Nothing in the template depends on it. Needed before any outreach. | Not set. |
 | 4 | **Final price points** | Demo config shows illustrative prices for a *plumber's* services, not agency pricing. | Handoff range used as-is. |
 | 5 | **What the assistant costs the client** | It costs under £1 a month to serve and the market charges $100–200 for the equivalent (`MARKET.md`). Undercut, or price nearer the market? | Not set. Suggested: +£15–25/mo as an add-on, or a "site + assistant" bundle at £60–80/mo. |
+| 6 | **The phone assistant: price, and which number model** | Wholesale is ~$0.10 a minute, not pennies, so the price needs a per-minute term; fonio.ai charges €119 for 1,000 minutes and the US entry tiers $29 for 50–60 (`MARKET.md` → The phone assistant). Forwarding from the client's existing line, or a new public number? | Not set. Suggested: +150–250 PLN/mo including 300 minutes, then 0.60 PLN/min; forwarding on no-answer from the existing line. Blocked on an ElevenLabs account and a Telnyx number. |
 
 None of these blocked the build. Answer them when convenient.
 

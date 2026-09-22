@@ -132,16 +132,157 @@ The first five rows are the pitch. The last five are the roadmap.
    script that turns a month into one page: questions answered, leads left,
    the ten most common questions — which is also the list of FAQ entries to
    add next. This is what justifies the retainer every month.
-5. **Missed-call text-back.** Needs a telephony provider (SMSAPI in Poland,
-   Twilio in the UK) and a number; GoHighLevel charges per segment for the
-   same thing. Medium effort, strong for trades — it is the 7–11 pm problem.
-6. **Booking.** A Calendly / Google Calendar embed on the contact page first;
+5. **The phone assistant.** The fonio.ai product — the AI answers the calls
+   the owner misses, takes the lead, emails it. The 7–11 pm problem solved
+   at the source, and the one add-on the market prices at €119 a month.
+   Wholesale ~$0.10 a minute; the section below has the numbers, the
+   platform choice and what it needs. Medium effort: an agent generated
+   from the same `/chatbot.json`, a webhook into the same `form.php`.
+6. **Missed-call text-back.** The SMS-only version of the above (SMSAPI in
+   Poland, Twilio in the UK); GoHighLevel charges per segment for the same
+   thing. Cheaper, and a fallback for clients who will not have an AI voice.
+7. **Booking.** A Calendly / Google Calendar embed on the contact page first;
    an in-chat "book a survey" only once the calendar is real.
-7. **A client portal** for edits — already in "not yet built"; still last.
+8. **A client portal** for edits — already in "not yet built"; still last.
 
 Not worth building: a live-chat inbox. It is the feature every SaaS has and
 the one a two-person firm never staffs; the hand-off to phone is the honest
 version of it.
+
+---
+
+## The phone assistant — fonio.ai and what it would take to offer the same
+
+Oskar sent fonio.ai's ad on 2026-09-22 ("Musimy dodać taki bajer"): an AI
+that answers the business's phone, takes the calls nobody picked up, writes
+the lead down and emails it, and demos itself with "get a call from your AI
+in 10 seconds". Researched the same day; prices as shown on the vendors' pages.
+
+### What fonio.ai is, and charges
+
+An AI receptionist sold to small businesses, hosted in the EU, Polish in the
+language menu. Inbound answering 24/7, missed-call handling with a
+transcript to email, lead capture, appointment booking, call routing to a
+human, a 10-second outbound demo call as the sales hook. Plans: **Solo €119
+for 1,000 minutes**, Team €359 for 3,600, Scale from €599; extra minutes
+€0.15 / €0.12 / €0.08; prepaid €0.20 a minute with a €300 minimum. RODO and
+EU AI Act compliance are on the front page because every buyer asks.
+
+The rest of the market is priced the same way — a monthly plan wrapping a
+bucket of minutes:
+
+| Product | Entry plan | What it buys |
+| --- | --- | --- |
+| fonio.ai | €119/mo | 1,000 min, EU, Polish |
+| Dialzara | $29/mo | 60 min |
+| Synthflow | $29 / $99/mo | 50 / 200 min |
+| Goodcall | $59–199/mo | priced per unique caller, not minutes |
+| My AI Front Desk | $95–99/mo | unlimited-ish, US-centric |
+
+Nobody sells this under $29 a month, and the Polish-speaking option costs
+€119. The buyer's alternative is a missed call.
+
+### What it costs to run
+
+Every one of those products is the same three components rented from
+someone: a phone number, a voice-agent platform (speech-to-text, the model,
+text-to-speech, turn-taking), and the model. The wholesale prices:
+
+| Component | Option | Price |
+| --- | --- | --- |
+| Voice platform | **ElevenLabs Agents** — one vendor, its own voices (the best Polish TTS available), SIP trunk or Twilio in, tools/webhooks, custom LLM allowed | **$0.08/min** on every plan (Creator $22 buys 275 min, Pro $99 buys 1,238); model and telephony billed on top; $0.16/min above the plan's concurrency |
+| Voice platform | **Vapi** — orchestrator; bring your own keys for STT, TTS and the model (Anthropic included) | $0.05/min orchestration; realistic **$0.12–0.24/min** all-in |
+| Voice platform | **Retell** — same shape, fewer knobs | $0.07/min platform; **$0.11–0.31/min** all-in |
+| Model | Claude Haiku 4.5 — a two-minute call is ~8 turns, ~12k tokens in, 400 out | **~$0.015 per call** |
+| Number | **Telnyx** — Polish numbers from $1/mo, EU company ID accepted, SIP to any platform | ~$1/mo + about a cent a minute inbound |
+| Number | Twilio — Polish numbers need a regulatory bundle (ID + proof of address) before purchase | similar, more paperwork |
+
+So a minute of AI phone in Polish costs **about $0.10 all-in** on ElevenLabs
+Agents, or $0.12–0.24 assembled on Vapi. A tradesperson or a wholesaler
+taking five two-minute calls a day is ~220 minutes a month:
+
+| | Per month |
+| --- | --- |
+| Wholesale cost to run (220 min) | **~$25 ≈ 100 PLN** |
+| fonio.ai for the same client | €119 ≈ 510 PLN |
+| Market entry tier (Synthflow, Dialzara) | $29 for 50–60 min — the 220-minute client is on a $99 plan |
+
+The margin is the same shape as the chatbot's: the market prices the fear of
+a missed call; the inputs cost a fraction of it. Unlike the chatbot the
+inputs are not pennies — this add-on needs a per-minute term in the price.
+
+### Recommendation: ElevenLabs Agents for the pilot, number from Telnyx
+
+- **Polish voice quality is the whole product.** A robotic or accented voice
+  on a Polish business's phone is worse than voicemail. ElevenLabs' Polish
+  voices are the ones every other platform resells; going direct removes a
+  layer and $0.04–0.15 a minute.
+- **One vendor, one bill, one dashboard** for the pilot. Vapi's advantage —
+  our own Anthropic key, so the model spend shows per client in the same
+  console as the chatbot — matters at ten clients, not at one. The agent's
+  definition is plain JSON either way; moving it is a script, not a rewrite.
+- **Telnyx for the number.** Polish numbers without Twilio's regulatory
+  bundle; SIP-trunks straight into ElevenLabs. The client's ID and address
+  are still needed for the number — Polish law, not the vendor.
+- **Missed-call mode first, not a new public number.** The business keeps
+  its number; the owner's phone gets conditional forwarding on no-answer and
+  busy (`**61*<AI number>**20#`, `**67*<AI number>#` — a GSM code, no
+  operator involved). The owner still answers when they can; the AI takes
+  only what would have gone to voicemail. Lowest risk, highest-value minutes,
+  and the pitch writes itself: *"nie tracisz już żadnego telefonu"*.
+
+### How it plugs into the system
+
+Same knowledge, same rules, one more channel:
+
+1. **The agent is generated from `/chatbot.json`.** A `build-voice-agent`
+   script reads the build's knowledge file and creates or updates the
+   ElevenLabs agent by API: hours, address, services, areas and the FAQ as
+   facts; the same rules as `chat.php` — Polish, short, no prices, no
+   promises, hand off to the owner — plus the phone-only ones: say it is an
+   assistant in the first sentence, ask for name, number, what, where and
+   when, read it back, end the call. A retainer edit updates the phone
+   assistant on the next deploy, exactly as it updates the widget.
+2. **The lead goes where leads already go.** A `capture_lead` tool on the
+   agent posts to the site's existing `form.php` (or the Vercel function),
+   which emails the owner — no new mail path. The post-call webhook sends
+   the summary and transcript to the same address; an SMS to the owner via
+   SMSAPI is an option for the clients who never open email.
+3. **The 10-second demo is fonio's best sales idea and costs nothing to
+   copy.** A "Zadzwoń do mnie" form on the agency site posts a number to a
+   function that starts an outbound call through the same agent. The
+   prospect's own phone rings with the assistant they would be buying.
+4. **The monthly report gains a page:** calls answered, after-hours share,
+   leads captured, average length, the questions asked — the same list that
+   grows the FAQ.
+
+### Watch-outs
+
+- **The AI must say it is an AI** — EU AI Act transparency, and it is what
+  fonio prints on its front page. First sentence of the greeting, always.
+- **Recording and RODO.** Keep the transcript and summary, not the audio,
+  unless the client wants recordings — then the greeting says the call is
+  recorded. ElevenLabs offers a DPA; EU data residency is an enterprise
+  feature there, so the privacy page names the processor. A client who needs
+  data to stay in the EU is fonio's customer, not ours, until that changes.
+- **Do not let it quote, book or promise.** The same rule as the widget. It
+  takes the message and says who will call back and roughly when.
+- **Barge-in and background noise** are what makes a phone agent feel dumb.
+  Test on a real handset from a van, not from a laptop.
+- **Concurrency.** One call at a time is enough for one small business;
+  ElevenLabs doubles the per-minute rate above the plan's concurrency, so
+  the number's forwarding should not fan out.
+
+### What it needs from Oskar before it can be built
+
+1. An **ElevenLabs** account on the Creator plan ($22/mo, 275 minutes —
+   enough for the pilot) and its API key in `.env.local` as
+   `ELEVENLABS_API_KEY`.
+2. A **Telnyx** account with one Polish number (the client's company details
+   are required for the number) and its SIP credentials.
+3. The **decision on the number model** for Activa: forwarding from their
+   existing line (recommended) or a new public number.
+4. A **price** — open decision 6 in `DECISIONS.md`.
 
 ---
 
@@ -193,3 +334,8 @@ is open decision 5 in `DECISIONS.md`.
 - RSO, chatbot dla małej firmy 2026 — https://rso.pl/chatbot-dla-malej-firmy-czy-warto-i-ile-to-kosztuje-w-2026-roku/
 - syntalith.ai, ile kosztuje chatbot AI 2026 — https://syntalith.ai/pl/blog/ile-kosztuje-chatbot-ai-dla-firmy-2026
 - Softomate, AI chatbot for UK trades — https://www.softomatesolutions.com/blog/ai-chatbot-uk-trades-businesses-2026/
+- fonio.ai pricing — https://fonio.ai/pricing
+- ElevenLabs Agents pricing — https://elevenlabs.io/pricing/agents
+- Vapi pricing — https://vapi.ai/pricing ; Retell pricing — https://www.retellai.com/pricing
+- Telnyx Polish numbers — https://telnyx.com/products/phone-numbers ; Twilio regulatory requirements (Poland) — https://www.twilio.com/en-us/guidelines/pl/regulatory
+- Dialzara — https://dialzara.com/pricing ; Synthflow — https://synthflow.ai/pricing ; Goodcall — https://www.goodcall.com/pricing ; My AI Front Desk — https://www.myaifrontdesk.com/pricing
