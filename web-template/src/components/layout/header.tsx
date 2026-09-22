@@ -29,7 +29,8 @@ export interface HeaderProps {
 }
 
 /**
- * White, ruled, sticky. A utility row carries the address, hours and email —
+ * White, ruled, sticky; slides away on scroll down and back on scroll up. A
+ * utility row carries the address, hours and email —
  * NAP on every screen is one of the few things that measurably converts on a
  * trades site — and the main row carries the wordmark, nav, phone and quote
  * button.
@@ -46,7 +47,32 @@ export function Header({
   labels,
 }: HeaderProps) {
   const [open, setOpen] = React.useState(false)
+  const [hidden, setHidden] = React.useState(false)
   const pathname = usePathname()
+
+  // The bar gets out of the way while the visitor reads down the page and
+  // comes back the moment they scroll up — the one scroll-driven behaviour
+  // the template allows, because on a phone the bar is a fifth of the screen.
+  // Transform only, 200 ms, none of it under prefers-reduced-motion.
+  React.useEffect(() => {
+    let last = window.scrollY
+    let queued = false
+    const onScroll = () => {
+      if (queued) return
+      queued = true
+      requestAnimationFrame(() => {
+        const y = window.scrollY
+        const delta = y - last
+        if (y < 96) setHidden(false)
+        else if (delta > 8) setHidden(true)
+        else if (delta < -8) setHidden(false)
+        last = y
+        queued = false
+      })
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   React.useEffect(() => setOpen(false), [pathname])
   React.useEffect(() => {
@@ -63,7 +89,13 @@ export function Header({
   }, [open])
 
   return (
-    <header className="sticky top-0 z-50 bg-paper no-print">
+    <header
+      className={cn(
+        'sticky top-0 z-50 bg-paper no-print transition-transform duration-200 motion-reduce:transition-none',
+        hidden && !open && '-translate-y-full',
+      )}
+      onFocusCapture={() => setHidden(false)}
+    >
       {/* Utility row */}
       <div className="rule-b hidden lg:block">
         <div className="container-page">

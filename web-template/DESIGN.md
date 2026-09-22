@@ -107,7 +107,8 @@ as a ruled strip of facts under the hero, not as badges.
    never a blurred placeholder in front of a prospect.
 6. Phone number and address in the header and footer on every page.
 7. Facts over adjectives. "Od 1991" beats "doświadczony zespół".
-8. Nothing animates on scroll.
+8. Nothing animates on scroll. (One exception: the header slides away on
+   scroll down and back on scroll up — `DECISIONS.md`.)
 
 ## 6. What this environment could not do
 

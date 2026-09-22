@@ -303,6 +303,20 @@ it in Higgsfield Cloud once the Activa imagery has been generated.**
 
 ---
 
+## The header hides on scroll
+
+Oskar, from the phone, on the day the site went live: the bar at the top
+should get out of the way. It is the one exception to "nothing animates on
+scroll": on a 390-px screen the sticky bar is a fifth of what the visitor
+can see, and a bar that slides away while they read down and returns the
+moment they scroll up is navigation, not decoration. Transform only, 200 ms,
+none of it under `prefers-reduced-motion`; never hidden within the first
+96 px, while the mobile menu is open, or while focus is inside it (keyboard
+users tabbing into the nav get it back). Verified in an emulated phone
+before and after deploy.
+
+---
+
 ## Localisation
 
 A strings layer (`src/lib/i18n.ts`) rather than a Polish fork of the
