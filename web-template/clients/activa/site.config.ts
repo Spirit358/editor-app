@@ -421,7 +421,7 @@ const config: SiteConfig = {
       'Technika grzewcza w Szczecinku od 1991 roku. Hurtownia, montaż i serwis: kotły gazowe, pompy ciepła, ogrzewanie podłogowe, instalacje sanitarne. ul. Harcerska 2, tel. 94 374 11 32.',
     ogImage: '/clients/activa/og.jpg',
     // Search Console (HTML tag → content) and Bing Webmaster (msvalidate.01).
-    // verification: { google: '', bing: '' },
+    // verification: { google: '', bing: '', googleFile: 'google….html' },
     indexNowKey: '175680e2505fefdaf26333d19d987b54',
   },
 

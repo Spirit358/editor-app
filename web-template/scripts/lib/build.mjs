@@ -113,6 +113,16 @@ export async function prepareServerFiles(outDir, build, { allowDemo = false, env
     )
   }
 
+  // Search Console's "HTML file" verification, when the site uses it.
+  try {
+    const name = (await readFile(path.join(outDir, 'verification.txt'), 'utf8')).trim()
+    if (/^google[a-f0-9]{16}\.html$/.test(name)) {
+      await writeFile(path.join(outDir, name), `google-site-verification: ${name}`, 'utf8')
+    }
+  } catch {
+    /* no verification route in this build */
+  }
+
   if (!build.hasChat) return null
   await writeFile(path.join(outDir, 'chat.php'), chatHandler(), 'utf8')
   return {

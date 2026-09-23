@@ -343,7 +343,16 @@ export interface SiteConfig {
      * Site-verification tokens: Google Search Console (HTML tag method,
      * the `content` value) and Bing Webmaster Tools (`msvalidate.01`).
      */
-    verification?: { google?: string; bing?: string }
+    verification?: {
+      google?: string
+      bing?: string
+      /**
+       * Search Console's "HTML file" method instead of the tag: the file's
+       * name (google<hex>.html). The deploy scripts write it into out/ with
+       * the content Google expects, so it survives every redeploy.
+       */
+      googleFile?: string
+    }
     /**
      * IndexNow key (8–128 of [a-zA-Z0-9-]). Served at /indexnow.txt; the
      * deploy scripts ping Bing & co. with every sitemap URL after an upload.
