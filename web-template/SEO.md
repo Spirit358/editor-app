@@ -119,12 +119,14 @@ reviews come from real customers. The honest version is also the one that
 works:
 
 - **The counter is the review machine.** A wholesale counter sees more
-  customers in a week than an installer sees in a quarter. A card with a
-  QR code at the till and a line from whoever serves — *"Jeśli wszystko
-  grało, zostaw nam opinię — 30 sekund, ten kod"* — is the whole system.
+  customers in a week than an installer sees in a quarter. A printed QR
+  code by the till (an A6 card or a sticker — no NFC, Oskar's call) and a
+  line from whoever serves — *"Jeśli wszystko grało, zostaw nam opinię —
+  30 sekund, ten kod"* — is the whole system.
 - **The link**: from the profile, *Ask for reviews* → share
   (`https://g.page/r/<code>/review`). It goes in `contact.googleReviewUrl`
-  (footer link), on the NFC cards, and in the assistant's hand-off later.
+  (footer link), on the printed QR code, in the text message after a job,
+  and in the assistant's hand-off later.
 - **After every installation**, the same ask by text message the day the
   job is signed off, from the fitter's phone, with the link.
 - **Reply to every review within 48 hours**, positive ones included, as the
@@ -191,7 +193,7 @@ the assistant are the next FAQ entries.
   into `seo.verification` → deploy → submit `sitemap.xml` in both.
 - Business Profile: claim, categories, hours, website, services, description,
   first ten photos. Review link → `contact.googleReviewUrl` → deploy.
-- Order NFC/QR review cards for the counter.
+- Print the QR code for the counter (the review link as a QR, A6 card or sticker).
 - NAP sweep: the eight listings above, old URL and phone replaced.
 
 **Weeks 2–4**:
@@ -227,7 +229,7 @@ the assistant are the next FAQ entries.
 ## As a product
 
 This is the retainer's "SEO + opinie" line: the profile kept current, the
-review cards, the monthly report with the map-pack ranks, the AI-visibility
+review link and QR code, the monthly report with the map-pack ranks, the AI-visibility
 test and the FAQ growth. The market prices it at 400–2,200 PLN a month
 (`MARKET.md`); the work above is a few hours a month once the first ninety
 days are done, because the site does the technical half by itself.
