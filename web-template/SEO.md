@@ -186,6 +186,40 @@ the assistant are the next FAQ entries.
 
 ---
 
+## Citations audit — Activa (2026-09-23)
+
+What the directories say today, read from the build environment. Read
+against the truth: **Activa Technika Grzewcza · ul. Harcerska 2, 78-400
+Szczecinek · 94 374 11 32 · info@activa-szczecinek.pl ·
+https://activa-szczecinek.pl · Mon–Fri 07:30–16:00, Sat 08:00–13:00.**
+
+| Listing | What it says | Fix |
+| --- | --- | --- |
+| [pkt.pl](https://www.pkt.pl/firma/activa-technika-grzewcza-1445034) | Name, address, phone, site and hours all correct; category "Hurtownie i producenci urządzeń grzejnych"; NIP 6730001334 | Claim it; add description, services, photos. Its clones (biznesfinder, aleranking, solidnybiznes, misterwhat, krs-online, restauracja.pl — same id 1445034) follow it. |
+| [Panorama Firm](https://panoramafirm.pl/zachodniopomorskie,szczecinecki,szczecinek,harcerska,2/activa_s.c._jozef_czebotar-agecxl_msb.html) | Name *"Activa" S.C. Józef Czebotar*; category **"Produkcja urządzeń sanitarnych"** (wrong); no website, no hours; unclaimed | Claim; name → Activa Technika Grzewcza; category → hurtownia instalacyjna / technika grzewcza; add site, hours, phone. |
+| [zimno-cieplo.pl](https://www.zimno-cieplo.pl/firma/activa-technika-grzewcza-1445034) | Name and address correct; no phone, site, hours or description | Add all four. Trade directory — worth a full profile. |
+| [budfach.pl](https://www.budfach.pl/activa-technika-grzewcza-firma-465882.html) | Phone correct; hours **"Pn–Pt 8:00–16:00"** (wrong, no Saturday); no website | Fix hours, add site. |
+| [wpolsce24.pl](https://www.wpolsce24.pl/firma,1035858,ACTIVA+J%C3%B3zef+Czebotar-Technika+Grzewcza.html) | **Harcerska 3, 78-623** (wrong number and postcode); phones **94 378 11 82; 508 284 484** (not the site's number — [VERIFY] with the client whether the mobile is real); site correct | "Przejmij wizytówkę" → fix address and phones. The most damaging entry found: two wrong facts on one page. |
+| [hurtownie.pl](https://www.hurtownie.pl/hurtownia_activa-s-c-jozef-czebotar,14235.html) | Name *ACTIVA S.C. Józef Czebotar*; category "Sanitarne urządzenia"; no website | Update name, category, site. |
+| [Yelp](https://www.yelp.com/biz/activa-j%C3%B3zef-czebotar-irena-czebotar-maciej-czebotar-aneta-szczecinek) | Listed under the four partners' names as "General Contractors"; could not be read from here (403) | Claim via Yelp for Business; name, category, site. ChatGPT carries Yelp data since 2026. |
+| [naszemiasto.pl](https://szczecinek.naszemiasto.pl/activa-s-c-jozef-czebotar-irena-czebotar-maciej-czebotar-aneta-dubas/kf/197599) | Under the s.c. name; not readable from here (403) | Check by hand; request name/site update. |
+| [teraz-otwarte.pl](https://teraz-otwarte.pl/szczecinek/activa-technika-grzewcza-301064), [cylex](https://www.cylex-polska.pl/firmy/activa--technika-grzewcza-10418625.html) | Not readable from here (403) | Check by hand; hours and site. |
+| [targeo](https://mapa.targeo.pl/activa-jozef-czebotar-irena-czebotar-maciej-czebotar-aneta-dubas~17563523/przedsiebiorstwo-firma/adres), [aleo](https://aleo.com/pl/firma/activa-jozef-czebotar-spolka-cywilna-irena-czebotar,-maciej-czebotarszczecinek), egospodarka, owg | Registry mirrors of the s.c. (NIP 6731814890), no phone or site | Add phone and site where the mirror allows; the legal names cannot change. |
+| Facebook | **No page found** under any of the names | Create one: name, address, phone, hours, site, the review link. |
+| Bing Places, Apple Business Connect | Not checked (need logins) | Create from the Google profile once it is claimed. |
+
+Two things the sweep makes visible. **Three legal identities** appear
+across the web — *Activa. Technika grzewcza* (NIP 6730001334, the 1991
+entry), *Activa S.C. Józef Czebotar…* (NIP 6731814890), and *Activa Sp. z
+o.o.* (2019, the one the site names). The registers cannot be edited; the
+*trading* name, phone, site and hours can, and should read the same on every
+listing. And **the site's own number is not on most of them**: the
+directories hold either nothing or a different phone. Until they agree, an
+AI asked "who installs heat pumps in Szczecinek" has a reason to skip the
+firm.
+
+---
+
 ## The first 90 days
 
 **Week 1** (Oskar + client, one sitting):
