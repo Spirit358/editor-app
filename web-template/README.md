@@ -250,6 +250,12 @@ to `cpanel.<domain>` (the Host header — the server may hand the wrong
 certificate to the proxy name directly). Everything goes through `curl`, so
 the machine's proxy and CA settings apply.
 
+**The generated `.htaccess` also hardens PHP** on the client's host: request
+bodies to `*.php` are capped at 64 KB and multipart posts to PHP are refused,
+both before PHP's parser runs — the two shapes of the October 2026 PHP2Shell
+flaws. The contact form posts urlencoded for that reason; a third-party form
+endpoint (Web3Forms) accepts it too.
+
 **`deploy-ftp` and `deploy-cpanel` refuse to upload a demo build.** A `noindex` site on the
 client's real domain is invisible to Google forever, so the guard is in code
 rather than in someone's memory. Clear `demo.enabled` and rebuild, or pass

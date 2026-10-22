@@ -40,7 +40,11 @@ export function ContactForm({ endpoint, hiddenFields, successMessage, services, 
     setStatus('sending')
     setError(null)
     try {
-      const response = await fetch(endpoint, { method: 'POST', headers: { Accept: 'application/json' }, body: data })
+      // Urlencoded, not multipart: the form carries text only, and the
+      // host's .htaccess refuses multipart posts to PHP (see htaccess.mjs).
+      const body = new URLSearchParams()
+      data.forEach((value, key) => body.append(key, typeof value === 'string' ? value : ''))
+      const response = await fetch(endpoint, { method: 'POST', headers: { Accept: 'application/json' }, body })
       if (!response.ok) throw new Error(`Request failed (${response.status})`)
       setStatus('sent')
       form.reset()

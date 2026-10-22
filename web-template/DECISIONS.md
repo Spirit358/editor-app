@@ -195,6 +195,28 @@ Polish with the phone number. The WordPress is at
 `public_html.old-20260922-170328`, unreachable from the web; delete it once
 nobody misses it.
 
+**PHP2Shell (2026-10-22).** PHP's October security release fixed two
+critical flaws in request handling (CVE-2026-109618, CVE-2026-109619; fixed
+in 8.2.35 / 8.3.36 / 8.4.27 / 8.5.12) that fire before any script runs, on
+every web SAPI including LiteSpeed — one needs a multi-megabyte urlencoded
+body, the other a multipart body riding on session upload progress, which
+is on by default even when nothing calls `session_start()`. This site has
+two PHP entry points. The host (CloudLinux + Imunify360, judging by CageFS
+and the splash page) gets patched `alt-php`/`ea-php` from CloudLinux's
+stable repo, released 21–22 October, and the Imunify360 rulesets 8.83–8.85
+block the public exploit shapes, though on LiteSpeed only the upload-progress
+one — the out-of-memory path is not virtually patched there. So the build
+now refuses both shapes at the web server, before PHP: `LimitRequestBody
+65536` on `*.php` (the form's maximum is about 6 KB) and a 403 for any
+multipart POST to a PHP file, which meant moving the contact form from
+`FormData` to urlencoded. Neither replaces the host's update; both make this
+site's PHP files a dead end for the published exploits whatever the host's
+pace. The same release's cousin, PHP 8.5, deprecates `curl_close()`, which
+`chat.php` used — now `unset()`. Checking the running PHP version needs the
+cPanel token again (`LangPHP::php_get_vhost_versions`) or the "Select PHP
+Version" page in cPanel; the old WordPress copy in `public_html.old-…` is
+not web-reachable and should now be deleted anyway.
+
 **Knowingly shipped unverified:** the six `[VERIFY]` items are still
 assumptions — that they install and service rather than only sell, the six
 services, the eight areas, the map coordinates. Oskar's call to publish

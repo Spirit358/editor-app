@@ -205,7 +205,7 @@ curl_setopt_array($ch, [
 $raw = curl_exec($ch);
 $status = (int) curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
 $curlError = curl_error($ch);
-curl_close($ch);
+unset($ch); // curl_close() is deprecated from PHP 8.5; the handle frees itself
 
 // The visitor's request counts whether or not the model answered — a broken
 // key must not turn into an unlimited retry loop.

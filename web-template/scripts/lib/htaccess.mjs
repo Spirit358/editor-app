@@ -79,5 +79,21 @@ ${canonicalHost}
   AddType image/avif .avif
   AddType font/woff2 .woff2
 </IfModule>
+
+# PHP runs for two small files here (form.php, chat.php), and neither takes
+# an upload or more than a few kilobytes. Both limits are enforced by the web
+# server, before PHP's own request parser runs — which is where the October
+# 2026 "PHP2Shell" flaws (CVE-2026-109618/109619) live: a multi-megabyte
+# urlencoded body, or a multipart body abusing session upload progress, on
+# any reachable .php. Only the host's PHP update fixes them; this keeps the
+# exploit shapes from reaching PHP at all.
+<FilesMatch "\.php$">
+  LimitRequestBody 65536
+</FilesMatch>
+<IfModule mod_rewrite.c>
+  RewriteCond %{REQUEST_METHOD} POST
+  RewriteCond %{CONTENT_TYPE} ^multipart/ [NC]
+  RewriteRule \.php$ - [F]
+</IfModule>
 `
 }
