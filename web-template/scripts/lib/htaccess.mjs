@@ -87,13 +87,13 @@ ${canonicalHost}
 # urlencoded body, or a multipart body abusing session upload progress, on
 # any reachable .php. Only the host's PHP update fixes them; this keeps the
 # exploit shapes from reaching PHP at all.
-<FilesMatch "\.php$">
+<FilesMatch "\\.php$">
   LimitRequestBody 65536
 </FilesMatch>
 <IfModule mod_rewrite.c>
   RewriteCond %{REQUEST_METHOD} POST
   RewriteCond %{CONTENT_TYPE} ^multipart/ [NC]
-  RewriteRule \.php$ - [F]
+  RewriteRule \\.php$ - [F]
 </IfModule>
 `
 }
