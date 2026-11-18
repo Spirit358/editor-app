@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #06070c;
+  --color-panel: #10121b;
+  --color-line: #232738;
+  --color-mute: #8b90a6;
+  --color-volt: #3d6bff;
+  --color-cash: #1fe096;
+  --color-nope: #ff4d6d;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+html,
+body {
+  background: var(--color-ink);
+  color: #fff;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: none;
+}
+
+body {
+  min-height: 100dvh;
+  background-image: radial-gradient(60rem 30rem at 50% -10rem, rgb(61 107 255 / 0.22), transparent 70%);
+  background-repeat: no-repeat;
+}
+
+.headline {
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.field {
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid var(--color-line);
+  background: var(--color-ink);
+  padding: 0.7rem 0.9rem;
+  color: #fff;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.field:focus {
+  border-color: var(--color-volt);
+}
+.field::placeholder {
+  color: #5b607a;
+}
+input[type="date"].field {
+  color-scheme: dark;
+}
