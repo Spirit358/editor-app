@@ -1,0 +1,4 @@
+numpy
+pytest
+# Live trading only (Windows, needs the MT5 terminal):
+# MetaTrader5

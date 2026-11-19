@@ -1,0 +1,29 @@
+# Copy to config.toml and edit. Every key is optional; these are the defaults.
+
+[strategy]
+symbol = "XAUUSDm"
+lot = 0.01
+contract_size = 100.0       # checked against the broker at startup
+fast_halflife_s = 20.0
+slow_halflife_s = 120.0
+entry_threshold = 0.15      # EMA gap (price units) needed to enter
+warmup_s = 300.0
+allow_short = true
+take_profit = 0.30          # close once net profit covers this price move
+stop_loss = 0.90            # server-side stop, price distance from entry
+max_hold_s = 600.0
+max_positions = 4
+min_entry_interval_s = 5.0
+
+[risk]
+max_spread = 0.30
+daily_loss_limit = 10.0     # account currency; flatten and stop until next UTC day
+max_consecutive_losses = 4
+cooldown_s = 900.0
+trade_start_hour_utc = 0
+trade_end_hour_utc = 24
+max_slippage = 0.05
+
+[costs]
+commission_per_lot = 0.0    # round trip
+slippage = 0.0              # backtest only
