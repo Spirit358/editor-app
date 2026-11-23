@@ -9,6 +9,16 @@ The product is live at `/seatview` on this app's Vercel deploy. It covers 99 ven
 - **The real advantage is speed and cost.** A bespoke 3D venue build usually takes weeks of modelling. Ours builds in under a second. That makes the long tail of venues profitable to serve: Championship and League One, the Scottish Premiership, Premiership Rugby, county cricket, arenas, EuroLeague and second divisions. It also lets you give every prospect a free demo of their own venue.
 - **Don't use club crests, kits or sponsor marks** in demos or clips without permission. Public clips should use fictional fixtures (e.g. "Ravens vs Atlas") and say "concept". Never imply a partnership that doesn't exist.
 
+## 1b. Who already has 3D seat views (web check, Nov 2026)
+
+The `existing_3d_view` column in `leads.csv` has the detail for each venue. "Not found" means the search turned up no evidence, not that the venue definitely has nothing.
+
+- **Already have it (8):** Tottenham, Arsenal (Emirates), Everton (Hill Dickinson), Celtic, Principality Stadium and Co-op Live, all on Ticketmaster Virtual Venue; Benfica, on 3D Digital Venue. Chelsea has a 3D planner for corporate hospitality only.
+- **Probably have it:** Old Trafford, Etihad, Anfield, St James' Park and Villa Park (listed on 3D Digital Venue's seat-view directory); Twickenham and Atlético's Metropolitano (3D Digital Venue). Most US and Canadian NFL/NBA/NHL venues are likely covered too: Ticketmaster had Virtual Venue in 110+ North American venues by 2017.
+- **Nothing found (63):** Wembley, The O2, AO Arena, OVO Hydro, Ibrox, Hampden, Murrayfield, Aviva, Croke Park, Stadium of Light and the Sheffield and Leeds grounds in the UK. In Europe, all but Benfica and Atlético, including the Bernabéu, Camp Nou, Allianz Arena, San Siro and Signal Iduna Park.
+
+**What this means for selling:** Ticketmaster is the main competitor. It sells Virtual Venue as an add-on to its own ticketing clients, and it is moving down the leagues (Burnley, Bolton and Fulham have it). Lead with the venues where nothing was found, and with clubs whose ticketing isn't Ticketmaster: a Ticketmaster club can switch Virtual Venue on without buying anything new. Use continental Europe and the non-Ticketmaster UK venues for Wave 1 targets, and skip the venues that already have it.
+
 ## 2. The way to reach all of them: four channels
 
 1. **A personalised demo link for every venue.** `leads.csv` gives each venue its own link (`/seatview/#venue-id`) to its stadium, already built. The first message is "here's your stadium in 3D", not a pitch deck. Regenerate the links with your domain: `node docs/seatview/export-leads.mjs https://your-domain.com`.
