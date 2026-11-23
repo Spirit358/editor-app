@@ -1,0 +1,443 @@
+<title>Warmwink Launch Kit</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a working document. Sticky section nav, one reading column, tables and copyable templates. Same thermal palette as the storefront, used sparingly. */
+:root{
+  --bg:#F4EEF7; --paper:#FFFFFF; --ink:#2A1531; --soft:#65516D; --line:#DFD2E6;
+  --ember:#D9431D; --dusk:#5B3F8C; --ok:#1F7A4D; --warn:#A35A00; --warnbg:#FFF1DC; --code:#F0E7F4;
+  --display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"DM Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#1D0F23; --paper:#28172F; --ink:#F7F0FA; --soft:#BBA8C4; --line:#43304C;
+  --ember:#FF7A4F; --dusk:#B79AE6; --ok:#6FD3A0; --warn:#FFC06B; --warnbg:#3A2A1C; --code:#33203B; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1D0F23; --paper:#28172F; --ink:#F7F0FA; --soft:#BBA8C4; --line:#43304C;
+  --ember:#FF7A4F; --dusk:#B79AE6; --ok:#6FD3A0; --warn:#FFC06B; --warnbg:#3A2A1C; --code:#33203B; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16.5px;line-height:1.6}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:880px;margin-inline:auto;padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--display);letter-spacing:-.02em;line-height:1.08;margin:0;text-wrap:balance}
+h1{font-size:clamp(2.2rem,6vw,3.6rem);font-weight:800}
+h2{font-size:clamp(1.6rem,3.6vw,2.2rem);font-weight:700;padding-top:8px}
+h3{font-size:1.15rem;font-weight:700;letter-spacing:-.01em}
+p,ul,ol{margin:0}
+ul,ol{padding-left:1.2em;display:flex;flex-direction:column;gap:6px}
+a{color:var(--dusk);text-underline-offset:3px;overflow-wrap:anywhere}
+:focus-visible{outline:3px solid var(--dusk);outline-offset:2px;border-radius:4px}
+.mono{font-family:var(--mono);font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--soft)}
+header .wrap{padding-block:40px 20px;display:flex;flex-direction:column;gap:14px}
+header p{color:var(--soft);max-width:62ch;font-size:1.08rem}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1.5px solid var(--line)}
+nav .wrap{display:flex;gap:6px 18px;flex-wrap:wrap;padding-block:10px;font-weight:600;font-size:.9rem}
+nav a{text-decoration:none;color:var(--ink)}
+nav a:hover{color:var(--ember)}
+section .wrap{padding-block:34px;display:flex;flex-direction:column;gap:18px}
+section{scroll-margin-top:70px}
+section+section .wrap{border-top:1.5px solid var(--line)}
+.callout{background:var(--warnbg);border-radius:12px;padding:14px 16px}
+.callout b{color:var(--warn)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid2>*{min-width:0}
+.panel{background:var(--paper);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:10px}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.93rem;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:.7rem;letter-spacing:.07em;text-transform:uppercase;color:var(--soft);font-weight:500}
+.day{background:var(--paper);border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:8px}
+.day h3 span{color:var(--ember)}
+.todo{list-style:none;padding:0}
+.todo label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+.todo input{margin-top:5px;accent-color:var(--ember);flex:none;width:16px;height:16px}
+.todo input:checked+span{color:var(--soft);text-decoration:line-through}
+.tpl{background:var(--paper);border-radius:14px;overflow:hidden}
+.tpl-h{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line)}
+.tpl pre{margin:0;padding:14px;white-space:pre-wrap;overflow-wrap:anywhere;font-family:var(--body);font-size:.95rem;line-height:1.55}
+button.copy{font:600 .8rem var(--body);background:var(--ink);color:var(--bg);border:0;border-radius:999px;padding:6px 14px;cursor:pointer}
+.swatches{display:flex;gap:10px;flex-wrap:wrap}
+.sw{width:104px;border-radius:12px;overflow:hidden;background:var(--paper);font-size:.78rem}
+.sw i{display:block;height:54px}
+.sw span{display:block;padding:6px 8px;font-family:var(--mono)}
+.yes{color:var(--ok);font-weight:700}.no{color:var(--ember);font-weight:700}
+.small{font-size:.9rem;color:var(--soft)}
+code{font-family:var(--mono);font-size:.86em;background:var(--code);padding:1px 5px;border-radius:5px}
+@media (max-width:700px){.grid2{grid-template-columns:1fr}}
+</style>
+
+<header><div class="wrap">
+  <p class="mono">Launch week · Mon 23 – Sun 29 November 2026 · UK</p>
+  <h1>Warmwink launch kit</h1>
+  <p>Everything for selling self-heating steam eye masks in the UK this week: brand, pricing, suppliers to contact, Shopify setup, legal checklist, and two weeks of social content. Tick things off as you go; ticks are saved in this browser only.</p>
+</div></header>
+
+<nav aria-label="Sections"><div class="wrap">
+  <a href="#status">Status</a><a href="#week">7-day plan</a><a href="#brand">Brand</a><a href="#money">Pricing</a><a href="#supply">Suppliers</a><a href="#shopify">Shopify</a><a href="#legal">Legal</a><a href="#social">Social</a><a href="#ads">Ads</a><a href="#email">Emails</a>
+</div></nav>
+
+<section id="status"><div class="wrap">
+  <h2>Where this stands</h2>
+  <div class="grid2">
+    <div class="panel"><h3>Done for you</h3><ul>
+      <li>Brand: name, voice, palette, type, logo, packaging direction</li>
+      <li>Storefront design with all page copy (see the Warmwink Storefront page)</li>
+      <li>Shopify product import file with 12 variants, plus shipping, returns, terms, safety and FAQ pages</li>
+      <li>Pricing and unit economics against UK competitors</li>
+      <li>Supplier shortlist and a ready-to-send enquiry message</li>
+      <li>UK legal checklist and a safe-claims list</li>
+      <li>14-day content calendar, 6 video scripts, 8 post graphics, ad copy, 4 emails</li>
+    </ul></div>
+    <div class="panel"><h3>Only you can do</h3><ul>
+      <li>Pick and confirm a supplier. None is confirmed yet: the research could search but not open supplier sites, so no listing, price or delivery time was verified first-hand.</li>
+      <li>Check <code>warmwink.co.uk</code>, <code>warmwink.com</code> and the @warmwink handles, and search the UK IPO trade mark register. These could not be checked from here.</li>
+      <li>Open the Shopify account, payments and bank details</li>
+      <li>Ask an accountant one question about VAT on dropshipped orders (see Legal)</li>
+      <li>Order samples and film them. Every video script needs the real product in hand.</li>
+    </ul></div>
+  </div>
+  <div class="callout"><b>The one thing to know before spending money.</b> Generic 20-packs sell on Amazon UK for £8.59–£16.14 (43p–81p a mask). Branded 5-packs from Spacemasks, Popmask and Sensory Retreats sell for £15–£18.50 (about £3 a mask). The whole margin is the brand. An unbranded dropshipped mask in a plain sachet cannot justify £2 a mask for long, so treat dropshipping as a 3–4 week demand test and order custom-printed boxes as soon as the first 30–50 orders prove people want it.</div>
+</div></section>
+
+<section id="week"><div class="wrap">
+  <h2>The 7-day plan</h2>
+  <p class="small">Black Friday is this Friday (27 Nov). Ad costs peak, so launch organically this week and start paid ads the week after. With 7–12 working day delivery from China, the last safe order date for Christmas is around Mon 7 Dec; say so on the site rather than risk late gifts.</p>
+  <div class="day"><h3><span>Mon 23</span> · Lock the name and the supplier</h3><ul class="todo" data-k="d1">
+    <li>Check domains and handles; buy <code>warmwink.co.uk</code> (and .com if free); claim @warmwink on Instagram and TikTok</li>
+    <li>Search "Warmwink" on the UK IPO register (classes 3, 5, 10, 35)</li>
+    <li>Search CJ Dropshipping for "steam eye mask", filter to GB warehouse; note price, pack sizes, scents, delivery days</li>
+    <li>Send the supplier enquiry (Suppliers section) to 3 Alibaba factories and the best CJ / AliExpress listing</li>
+    <li>Order 2–3 sample packs to your own address by the fastest route, plus one Spacemasks box to compare</li>
+  </ul></div>
+  <div class="day"><h3><span>Tue 24</span> · Build the store</h3><ul class="todo" data-k="d2">
+    <li>Start the Shopify trial, add the Dawn theme, apply brand colours and fonts</li>
+    <li>Import <code>shopify/products.csv</code>; paste the policy and page files</li>
+    <li>Set up Shopify Payments, shipping rates, and the cookie banner</li>
+    <li>Connect the dropship app (CJ app or DSers) and map the 12 variants</li>
+  </ul></div>
+  <div class="day"><h3><span>Wed 25</span> · Legal basics and test order</h3><ul class="todo" data-k="d3">
+    <li>Put your name, address and email in the footer and contact page</li>
+    <li>Pay the ICO data protection fee (£52, or £47 by direct debit)</li>
+    <li>Email an accountant the VAT question; get a product liability insurance quote</li>
+    <li>Place a real test order end to end and refund it</li>
+    <li>Post teaser 1 and 2 from the calendar</li>
+  </ul></div>
+  <div class="day"><h3><span>Thu 26</span> · Soft launch</h3><ul class="todo" data-k="d4">
+    <li>Remove the store password; send the link to 20 friends and ask for honest feedback, not reviews</li>
+    <li>Set the real delivery time on the site from the supplier's answer</li>
+    <li>Message 15 micro-creators (template in Social)</li>
+  </ul></div>
+  <div class="day"><h3><span>Fri 27</span> · Public launch</h3><ul class="todo" data-k="d5">
+    <li>Launch post and Reel; pin it. Launch offer: code <code>FIRSTWINK</code> for 15% off through Monday (a real end date, no fake timers)</li>
+    <li>Reply to every comment and DM the same day</li>
+  </ul></div>
+  <div class="day"><h3><span>Sat 28 – Sun 29</span> · Film and learn</h3><ul class="todo" data-k="d6">
+    <li>When samples arrive, film scripts 1–4 in one session; replace illustrations on the product page with your own photos</li>
+    <li>Measure a sample's temperature and duration with a kitchen probe thermometer; keep the notes</li>
+    <li>Review supplier quotes; pick the factory for custom boxes</li>
+    <li>Check store analytics: visits, add-to-basket rate, orders. Decide the ad budget for week two.</li>
+  </ul></div>
+</div></section>
+
+<section id="brand"><div class="wrap">
+  <h2>Brand</h2>
+  <div class="grid2">
+    <div class="panel"><h3>Positioning</h3><p><b>Warmwink</b> is twenty minutes of warm, shut-eyed nothing. The UK shelf is all pastel spa and outer-space gifting; Warmwink is the dry-witted one for people who are tired of screens, sold on a ritual rather than a remedy.</p><p><b>Tagline:</b> Warm eyes, quiet head.</p><p><b>Who it's for:</b> 22–40, desk-bound, phone-tired, buys small treats for themselves and as gifts.</p></div>
+    <div class="panel"><h3>Voice</h3><ul><li>Plain, warm, a little dry. Short sentences.</li><li>Sells permission to stop, never a cure.</li><li>Honest about being single-use and about delivery times.</li><li>Says "wink" for a session: "time for a wink".</li></ul></div>
+  </div>
+  <div class="swatches" aria-label="Brand colours">
+    <div class="sw"><i style="background:#F0532B"></i><span>Ember #F0532B</span></div>
+    <div class="sw"><i style="background:#FFB15E"></i><span>Glow #FFB15E</span></div>
+    <div class="sw"><i style="background:#A12C6B"></i><span>Flush #A12C6B</span></div>
+    <div class="sw"><i style="background:#4A2A86"></i><span>Dusk #4A2A86</span></div>
+    <div class="sw"><i style="background:#2A1531"></i><span>Night #2A1531</span></div>
+    <div class="sw"><i style="background:#F4EEF7;border-bottom:1px solid #DFD2E6"></i><span>Steam #F4EEF7</span></div>
+  </div>
+  <p><b>Type:</b> Bricolage Grotesque (headlines, logo, bold and tight), Figtree (body), DM Mono (the readouts: ≈40°C, ≈20 min). All free on Google Fonts and available in Shopify's font picker or via the theme code. <b>Signature graphic:</b> the thermal-camera gradient, cool dusk at the edges to glowing ember at the centre, with the white mask on top. <b>Logo:</b> <code>brand/logo.svg</code> and <code>brand/logo-mark.svg</code>.</p>
+  <p class="small">Packaging direction for the custom box (phase two): gradient box, white mask illustration, lowercase wordmark, mono readouts. Design the box no deeper than 2.5 cm so a 5-pack posts as a Royal Mail large letter (£2.85 Tracked 48) rather than a small parcel (£3.65). Confirm the depth limit on Royal Mail's site before printing.</p>
+</div></section>
+
+<section id="money"><div class="wrap">
+  <h2>Pricing and unit economics</h2>
+  <div class="tw"><table>
+    <thead><tr><th>Pack</th><th>Price</th><th>Per mask</th><th>Delivery charged</th><th>Est. landed cost</th><th>Card fees (approx.)</th><th>Left before ads and VAT</th></tr></thead>
+    <tbody>
+      <tr><td>5 masks</td><td>£11</td><td>£2.20</td><td>£2.95</td><td>£3–5</td><td>£0.55</td><td>£8.40–10.40</td></tr>
+      <tr><td>10 masks</td><td>£18</td><td>£1.80</td><td>£2.95</td><td>£4–9</td><td>£0.70</td><td>£11.25–16.25</td></tr>
+      <tr><td>20 masks</td><td>£30</td><td>£1.50</td><td>Free</td><td>£8–18</td><td>£0.85</td><td>£11.15–21.15</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small">Landed costs are estimates derived from AliExpress 10-pack prices of about $4.58–$11.72; shipping to the UK was not confirmed. Card fees assume roughly 2% + 25p; check your Shopify plan. If you must charge VAT, a sixth of the price goes to HMRC, so re-run this table. Replace every figure with your supplier's real quote before launch.</p>
+  <h3>The competition</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Brand</th><th>Pack</th><th>Price</th><th>Per mask</th><th>Angle</th></tr></thead>
+    <tbody>
+      <tr><td>Spacemasks</td><td>5</td><td>£15.99–18.50</td><td>£3.20–3.70</td><td>Jasmine, gifting, space theme. In Sephora, Oliver Bonas, Cult Beauty</td></tr>
+      <tr><td>Popmask London</td><td>5</td><td>£14.99–16.60</td><td>≈£3.00</td><td>Themed variants. In Tesco, Superdrug, ASOS</td></tr>
+      <tr><td>Sensory Retreats</td><td>5 / 7</td><td>£16.50 / £21</td><td>£3.00–3.30</td><td>Lavender, spa</td></tr>
+      <tr><td>Generic, Amazon UK</td><td>20</td><td>£8.59–16.14</td><td>£0.43–0.81</td><td>Unbranded, Prime delivery</td></tr>
+      <tr><td><b>Warmwink</b></td><td>5 / 10 / 20</td><td>£11 / £18 / £30</td><td>£1.50–2.20</td><td>Screen-tired ritual, about a third under the gift brands</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small">Prices from retailer search listings on 23 Nov 2026; re-check before quoting any comparison publicly.</p>
+</div></section>
+
+<section id="supply"><div class="wrap">
+  <h2>Suppliers</h2>
+  <div class="callout"><b>Not verified.</b> Supplier sites could not be opened during research, so everything here comes from search listings. Treat it as a list of doors to knock on today.</div>
+  <h3>This week: dropship</h3>
+  <ol>
+    <li><b>CJ Dropshipping, GB warehouse</b> if a steam eye mask listing exists there (CJ advertises 2–7 day UK delivery from its UK warehouse). Has a Shopify app and offers custom packaging. Check first.</li>
+    <li><b>AliExpress via the DSers app</b> as the fallback. Many generic 10-packs at about $0.46–$1.17 a mask. Expect 7–15 days; pick a listing that states its UK delivery time and has "ships from" options.</li>
+  </ol>
+  <h3>Weeks 3–6: your own box</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Factory (Alibaba)</th><th>Minimum order</th><th>Listed unit price</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Tianjin Fuqin (est. 2006)</td><td>Says small trial batches accepted</td><td>Not published</td><td>Claims ISO 13485, CE, MSDS, BSCI. Ask for certificates and verify with the issuer.</td></tr>
+      <tr><td>Hebei Houde Hanfang Medical Devices</td><td>100 boxes</td><td>$0.11–0.18</td><td>Lowest barrier to a first branded run</td></tr>
+      <tr><td>Hebei Warm Duck Biotechnology</td><td>1,000 pieces</td><td>$0.16–0.20</td><td>"CE ISO" in listing title</td></tr>
+      <tr><td>Hebei Yinuan Biotechnology</td><td>96 pieces</td><td>$0.07–0.09</td><td>Good for samples</td></tr>
+      <tr><td>Hebei Feifan Biotechnology</td><td>Not seen</td><td>Not seen</td><td>Quotes 3–4 week lead time</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small">Rough phase-two maths (estimate): 2,000 masks at £0.15–0.25 plus printed boxes puts a 5-pack at about £1.50–2.50 landed, and £4.50–5.50 delivered by Royal Mail. Air freight of iron-powder heat packs needs the factory's transport classification report; without one, ship by sea. Kao's own MegRhythm has no authorised UK distributor that could be found, so reselling it is not a practical route.</p>
+  <div class="tpl"><div class="tpl-h"><span class="mono">Supplier enquiry</span><button class="copy" type="button">Copy</button></div><pre>Hello,
+
+I run a new UK brand of self-heating steam eye masks and am choosing a manufacturer this week.
+
+Please send:
+1. Price per mask for 500, 1,000, 3,000 and 5,000 pieces (individually sealed sachets), unscented plus lavender, chamomile and rose.
+2. Price and minimum order for custom-printed sachets and custom boxes of 5 and 10 masks. Outer box depth must be 25 mm or less.
+3. Heating profile: peak temperature on skin, time to reach it, and duration, with your test report.
+4. Documents: SDS for the finished mask, full ingredient list, fragrance allergen / IFRA declaration, skin irritation test, ISO certificates, and a current air and sea transport classification report.
+5. Sample cost and fastest delivery to the UK, and production lead time after artwork approval.
+6. Can you print a batch number and my UK business address on each box and sachet?
+
+Do you also dropship single orders to UK customers, or hold stock in a UK warehouse?
+
+Thank you,
+[Your name], Warmwink</pre></div>
+</div></section>
+
+<section id="shopify"><div class="wrap">
+  <h2>Shopify setup</h2>
+  <ol>
+    <li><b>Account.</b> Start a trial at shopify.com, store name Warmwink, country UK, currency GBP.</li>
+    <li><b>Theme.</b> Use the free Dawn theme. In Theme settings set background <code>#F4EEF7</code>, text <code>#2A1531</code>, buttons <code>#F0532B</code> with white text, fully rounded buttons, headings Bricolage Grotesque, body Figtree. Upload <code>brand/logo.svg</code>.</li>
+    <li><b>Product.</b> Products → Import → <code>shopify/products.csv</code>. It creates one product with 4 scents × 3 pack sizes. Delete any scent your supplier doesn't offer. Add your photos.</li>
+    <li><b>Homepage.</b> Rebuild the Warmwink Storefront page section by section with Dawn's blocks (image banner, multicolumn, featured product, collapsible content, email signup) using the copy in <code>shopify/homepage-copy.md</code>. The file <code>store/storefront.html</code> can also be pasted into a "Custom liquid" section if you want the exact design; then point its button at your product page.</li>
+    <li><b>Pages.</b> Online Store → Pages: create Safety information and FAQ from <code>shopify/pages/</code>. Settings → Policies: paste the refund, shipping and terms files; use Shopify's generator for the privacy policy and edit in your details.</li>
+    <li><b>Shipping.</b> Settings → Shipping: UK only at launch. Standard tracked £2.95; free over £25. State the real delivery window.</li>
+    <li><b>Payments and tax.</b> Turn on Shopify Payments and PayPal. Set prices as VAT-inclusive. Only switch on VAT collection once you are registered.</li>
+    <li><b>Dropship app.</b> Install CJ Dropshipping or DSers, link each of the 12 variants to the supplier's matching listing, switch on tracking emails.</li>
+    <li><b>Privacy.</b> Settings → Customer privacy: turn on the cookie banner for the UK so the Meta and TikTok pixels only fire after consent.</li>
+    <li><b>Discounts.</b> Create <code>FIRSTWINK</code> (15%, ends Mon 30 Nov 23:59) and <code>WINK10</code> (10%, first order, for the email signup).</li>
+    <li><b>Test.</b> Buy something with a real card, check the confirmation email, the supplier order and the refund.</li>
+  </ol>
+</div></section>
+
+<section id="legal"><div class="wrap">
+  <h2>UK legal checklist</h2>
+  <div class="callout"><b>Not legal or tax advice.</b> Official pages (gov.uk, legislation.gov.uk, ASA) could not be opened during research; this is drawn from search extracts of them. Use the links to confirm, and get the VAT point answered by an accountant.</div>
+  <h3>Before the first sale</h3>
+  <ul class="todo" data-k="l1">
+    <li><b>Stay a comfort product.</b> No mention anywhere, including reviews you publish and ads, of dry eye, blepharitis, styes, headaches, migraines, eye strain treatment, insomnia or better sleep. Those claims make it a medical device, which needs MHRA registration. <a href="https://www.gov.uk/government/publications/borderlines-with-medical-devices/borderlines-with-medical-devices-and-other-products-in-great-britain">MHRA borderlines guidance</a></li>
+    <li><b>You are the "producer".</b> Selling under your own brand makes you legally responsible for the product being safe. <a href="https://www.gov.uk/government/publications/general-product-safety-regulations-2005/general-product-safety-regulations-2005-great-britain">GPSR 2005 guidance</a></li>
+    <li><b>Get the supplier's safety file:</b> SDS, ingredients, temperature and duration test, skin irritation data, fragrance allergen declaration, batch records.</li>
+    <li><b>Website must show:</b> your trading name, your own name if a sole trader, a geographic address and an email. <a href="https://www.legislation.gov.uk/uksi/2002/2013/regulation/6">E-commerce Regulations, reg 6</a></li>
+    <li><b>Consumer terms:</b> total price including delivery, a truthful delivery window, 14-day right to cancel from delivery, refund within 14 days. Unopened boxes are returnable; the hygiene exception only covers packs unsealed after delivery. <a href="https://www.legislation.gov.uk/uksi/2013/3134">Consumer Contracts Regulations 2013</a></li>
+    <li><b>No fake reviews, fake countdowns or "only 3 left".</b> All compulsory fees in the headline price. The CMA can fine directly. <a href="https://www.gov.uk/government/news/cma-to-boost-consumer-and-business-confidence-as-new-consumer-protection-regime-comes-into-force">DMCC Act 2024</a></li>
+    <li><b>ICO fee:</b> £52 a year (£47 by direct debit). <a href="https://ico.org.uk/for-organisations/data-protection-fee/">ICO</a></li>
+    <li><b>Cookie consent and privacy policy</b> before any ad pixel runs. <b>Email:</b> only people who opted in or bought from you, with an unsubscribe link every time. <a href="https://ico.org.uk/for-organisations/direct-marketing-and-privacy-and-electronic-communications/">ICO PECR guidance</a></li>
+    <li><b>VAT: ask an accountant this exact question.</b> "I'm a UK sole trader under the £90,000 threshold, selling goods shipped from China direct to UK customers in parcels under £135. Must I register for and charge VAT from my first sale, and who is the importer?" Sources disagree for UK-based sellers. Stock held in a UK warehouse follows the normal £90,000 threshold. <a href="https://www.gov.uk/guidance/vat-and-overseas-goods-sold-directly-to-customers-in-the-uk">HMRC guidance</a></li>
+  </ul>
+  <h3>Within 30 days</h3>
+  <ul class="todo" data-k="l2">
+    <li>Product liability insurance. Not compulsory but you carry the liability; entry quotes are advertised around £60–80 a year, likely more for a heat product used on the eyes. Tell the insurer what it is and where it's made.</li>
+    <li>Tell HMRC you're self-employed: register for Self Assessment by 5 October 2027 once trading income passes £1,000. <a href="https://www.gov.uk/register-for-self-assessment">gov.uk</a></li>
+    <li>Creators you gift product to must label posts "Ad" up front; "gifted" alone isn't enough, and you share responsibility. <a href="https://www.asa.org.uk/advice-online/influencers-guide.html">ASA influencer guide</a></li>
+    <li>Keep a complaints log and note which supplier batch each order came from.</li>
+  </ul>
+  <h3>Before your own-brand box</h3>
+  <ul class="todo" data-k="l3">
+    <li>Box and sachet carry: brand, UK name and address, batch number, instructions and the warnings on the Safety page.</li>
+    <li>Independent UK lab test of temperature profile and leakage; ask Trading Standards or a product safety consultant to confirm classification and warnings.</li>
+    <li>Check the commodity code and duty rate on the <a href="https://www.trade-tariff.service.gov.uk">UK Trade Tariff</a> before a bulk import.</li>
+    <li>If you add skin claims (puffiness, dark circles) the product may become a cosmetic with its own rules. Don't.</li>
+  </ul>
+  <h3>What you can and can't say</h3>
+  <div class="grid2">
+    <div class="panel"><p class="yes">Say</p><ul><li>relaxing, soothing warmth, gentle steam</li><li>helps you unwind; a moment of calm before bed</li><li>a break from screens</li><li>lavender scented</li><li>"warms to about 40°C for about 20 minutes", once you hold the supplier's test report</li></ul></div>
+    <div class="panel"><p class="no">Don't say</p><ul><li>treats, relieves or helps dry eye, styes, blepharitis</li><li>relieves headaches or migraines</li><li>improves sleep, promotes restful sleep, helps insomnia</li><li>reduces eye strain, puffiness or dark circles</li><li>clinically proven, doctor recommended</li><li>Japanese, or made in Japan, unless it is</li></ul></div>
+  </div>
+</div></section>
+
+<section id="social"><div class="wrap">
+  <h2>Social content</h2>
+  <p>Handles: @warmwink on TikTok and Instagram. Post one short video a day; the product demonstrates itself, so every video shows the sachet opening and the mask going on. Eight ready-made graphics are in <code>social/</code>. Scripts need the real product, so post graphics and teasers until samples arrive.</p>
+  <h3>14-day calendar</h3>
+  <div class="tw"><table>
+    <thead><tr><th>Day</th><th>Format</th><th>Post</th><th>Asset</th></tr></thead>
+    <tbody>
+      <tr><td>Wed 25</td><td>Graphic</td><td>Teaser: "Twenty minutes of warm, shut-eyed nothing. Friday."</td><td>01-teaser</td></tr>
+      <tr><td>Thu 26</td><td>Story + graphic</td><td>"It heats itself. No plug. No microwave." Poll: bath, bed or sofa?</td><td>02-no-plug</td></tr>
+      <tr><td>Fri 27</td><td>Reel + graphic</td><td>Launch. Code FIRSTWINK, 15% off until Monday.</td><td>03-launch, script 1 when filmed</td></tr>
+      <tr><td>Sat 28</td><td>Graphic</td><td>How it works in three steps</td><td>04-how</td></tr>
+      <tr><td>Sun 29</td><td>Video</td><td>Sunday reset</td><td>Script 3</td></tr>
+      <tr><td>Mon 30</td><td>Graphic</td><td>Last day of FIRSTWINK</td><td>05-last-day</td></tr>
+      <tr><td>Tue 1</td><td>Video</td><td>"What's actually in it"</td><td>Script 4</td></tr>
+      <tr><td>Wed 2</td><td>Video</td><td>POV: 11pm, 14 tabs open</td><td>Script 2</td></tr>
+      <tr><td>Thu 3</td><td>Graphic</td><td>Good moments for a wink</td><td>06-moments</td></tr>
+      <tr><td>Fri 4</td><td>Video</td><td>Packing an order</td><td>Script 5</td></tr>
+      <tr><td>Sat 5</td><td>Graphic</td><td>Stocking filler; last Christmas order date</td><td>07-gift</td></tr>
+      <tr><td>Sun 6</td><td>Video</td><td>Flight bag</td><td>Script 6</td></tr>
+      <tr><td>Mon 7</td><td>Story</td><td>Last order day for Christmas delivery</td><td>07-gift</td></tr>
+      <tr><td>Tue 8</td><td>Graphic</td><td>Honest one: "It's single-use. Here's when that makes sense."</td><td>08-honest</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Video scripts (15–25 seconds, vertical, natural light)</h3>
+  <div class="tpl"><div class="tpl-h"><span class="mono">1 · The demo (launch video)</span><button class="copy" type="button">Copy</button></div><pre>HOOK (text on screen, first second): "This eye mask heats itself."
+0–3s  Close-up: tear the sachet open. Sound on, no music yet.
+3–7s  Unfold the mask, split the ear loops. Text: "No plug. No microwave. Air starts it."
+7–14s Put it on, lie back on the sofa. Text: "About 40°C. About 20 minutes."
+14–20s Hold on the stillness. Text: "Twenty minutes of warm, shut-eyed nothing."
+END   Logo card: warmwink. "Link in bio."
+
+Caption: We made a thing that makes you do nothing. Warmwink steam eye masks, out now. FIRSTWINK gets you 15% off until Monday.</pre></div>
+  <div class="tpl"><div class="tpl-h"><span class="mono">2 · POV: 14 tabs open</span><button class="copy" type="button">Copy</button></div><pre>HOOK: "POV: it's 11pm and you have 14 tabs open."
+0–4s  Over-the-shoulder shot of a laptop full of tabs. Hand closes the lid.
+4–8s  Sachet tears open. Mask on.
+8–16s Lying back in the dark, mask on, visibly unbothered. Text: "Closed for the day."
+END   "warmwink · twenty minutes off."
+
+Caption: Your eyes clocked off hours ago. Let them.</pre></div>
+  <div class="tpl"><div class="tpl-h"><span class="mono">3 · Sunday reset</span><button class="copy" type="button">Copy</button></div><pre>HOOK: "The laziest part of my Sunday reset."
+0–5s  Quick cuts: fresh sheets, candle, bath running.
+5–12s Open the mask at the bath edge, put it on, sink back.
+12–18s Text: "Step 4: do nothing for 20 minutes."
+END   Product on the bath tray.
+
+Caption: Self-care that requires no effort at all. That's the whole pitch.</pre></div>
+  <div class="tpl"><div class="tpl-h"><span class="mono">4 · What's actually in it</span><button class="copy" type="button">Copy</button></div><pre>HOOK: "How does an eye mask heat itself?" (talking to camera, mask in hand)
+0–6s  "Same idea as a hand warmer. Iron powder inside meets air and slowly gives off heat."
+6–12s "There's a bit of water in the pad, so the warmth feels soft and steamy rather than dry."
+12–18s "It gets to about bath temperature, lasts about twenty minutes, then it's done. Single use."
+18–22s "It's a comfort thing, not a medical thing. It's just a very nice twenty minutes."
+
+Caption: Science, briefly. Then a lie down.</pre></div>
+  <div class="tpl"><div class="tpl-h"><span class="mono">5 · Packing an order</span><button class="copy" type="button">Copy</button></div><pre>HOOK: "Packing order number [real number] for our tiny eye mask brand."
+0–12s Overhead shot: masks into the mailer, handwritten thank-you card, seal, label.
+12–18s Text: "Started this in November. Every order still makes my day."
+END   Stack of parcels.
+
+Caption: Small brand, warm eyes. Thank you for order [number].
+(Only film this when you are packing orders yourself. Use the real order number.)</pre></div>
+  <div class="tpl"><div class="tpl-h"><span class="mono">6 · Flight bag</span><button class="copy" type="button">Copy</button></div><pre>HOOK: "The one thing I always put in my hand luggage."
+0–5s  Packing a bag: passport, headphones, two flat sachets.
+5–12s On a train or plane seat: open, mask on, headphones on.
+12–16s Text: "Flat. Light. No liquids."
+END   Logo.
+
+Caption: Seat 23A, but make it a spa. (Use it when you're a passenger, never when driving.)</pre></div>
+
+  <h3>Hooks to rotate</h3>
+  <ul><li>"This eye mask heats itself."</li><li>"I found the laziest form of self-care."</li><li>"Things under £12 that feel expensive."</li><li>"What I do instead of doomscrolling at 11pm."</li><li>"A stocking filler they'll actually use."</li><li>"You open it and it just gets warm."</li></ul>
+  <p><b>Hashtags (pick 4–5):</b> #steameyemask #selfcareuk #winddown #eveningroutine #stockingfillers #smallbusinessuk #tiktokmademebuyit</p>
+
+  <div class="tpl"><div class="tpl-h"><span class="mono">Creator outreach DM</span><button class="copy" type="button">Copy</button></div><pre>Hi [name], I loved your [specific video]. I've just launched Warmwink, self-heating steam eye masks: you open the sachet and it warms to about bath temperature for twenty minutes. Could I send you a pack, no strings? If you like it and want to post, great, and if not, enjoy the lie down. If you do post, it needs "Ad" at the start since it's gifted; that's the UK rule. Where should I send it?</pre></div>
+  <p class="small">Aim for 15 UK creators with 3k–30k followers in evening routine, "that girl", travel and student niches. Never script health claims for them, and never post invented testimonials. If any video uses AI-generated footage or voices, switch on the platform's AI label and don't show effects the product can't produce.</p>
+</div></section>
+
+<section id="ads"><div class="wrap">
+  <h2>Paid ads (from week two)</h2>
+  <p>Start only after 20+ organic orders and your own filmed video. Budget £10–15 a day on one platform for 7 days, one campaign, three creatives (scripts 1, 2 and 4), broad UK targeting aged 20–45. Judge on cost per purchase against the margin table above; pause anything that has spent £25 without a sale.</p>
+  <div class="tpl"><div class="tpl-h"><span class="mono">Ad copy, three versions</span><button class="copy" type="button">Copy</button></div><pre>A
+Headline: The eye mask that heats itself
+Text: Open the sachet. It warms to about 40°C. Lie back for twenty minutes. No plug, no microwave, no screen. From £11.
+Button: Shop now
+
+B
+Headline: Twenty minutes of warm, shut-eyed nothing
+Text: Warmwink steam eye masks. Single-use, individually sealed, ready wherever you are. 10 masks for £18.
+Button: Shop now
+
+C
+Headline: A stocking filler they'll actually use
+Text: Self-heating steam eye masks, from £11. Order by Mon 7 Dec for Christmas.
+Button: Shop now</pre></div>
+</div></section>
+
+<section id="email"><div class="wrap">
+  <h2>Emails</h2>
+  <p class="small">Set these up in Shopify Email or Klaviyo. Marketing emails only go to people who opted in.</p>
+  <div class="tpl"><div class="tpl-h"><span class="mono">1 · Welcome (on signup)</span><button class="copy" type="button">Copy</button></div><pre>Subject: Your 10% off, and permission to do nothing
+
+Hello,
+
+Thanks for joining Warmwink. Here's your code: WINK10. It takes 10% off your first order.
+
+What we make: a steam eye mask that warms itself when you open it. About 40°C, about twenty minutes, no plug. You lie there. That's it.
+
+Shop the masks → [link]
+
+Warm eyes, quiet head,
+[Your name], Warmwink
+
+[Business name and address] · Unsubscribe</pre></div>
+  <div class="tpl"><div class="tpl-h"><span class="mono">2 · Abandoned basket (after 4 hours)</span><button class="copy" type="button">Copy</button></div><pre>Subject: Your masks are still here
+
+Hello,
+
+You left a pack of Warmwink masks in your basket. No rush; they'll keep.
+
+Finish your order → [link]
+
+A reminder of the deal: delivery is £2.95 or free over £25, and unopened packs can come back within 30 days.
+
+[Your name], Warmwink
+
+[Business name and address] · Unsubscribe</pre></div>
+  <div class="tpl"><div class="tpl-h"><span class="mono">3 · Order shipped (add to Shopify's shipping notification)</span><button class="copy" type="button">Copy</button></div><pre>Your masks are on their way. Launch orders travel from our partner warehouse, so allow [X–Y] working days; your tracking link is below.
+
+When they land: open one sachet, wait a minute, put it on, and do nothing for twenty minutes. Please read the safety note on the pack first.</pre></div>
+  <div class="tpl"><div class="tpl-h"><span class="mono">4 · How was it? (10 days after delivery)</span><button class="copy" type="button">Copy</button></div><pre>Subject: How was your first wink?
+
+Hello,
+
+You've had your Warmwink masks for a little while. We're a brand-new shop, so an honest review helps a lot, whatever you thought.
+
+Leave a review → [link]
+
+If something wasn't right, reply to this email and I'll sort it personally.
+
+[Your name], Warmwink
+
+[Business name and address] · Unsubscribe</pre></div>
+  <p class="small">Publish every genuine review, good or bad, and don't offer a reward for positive ones. If a review makes a health claim ("cured my dry eye"), don't feature it in marketing.</p>
+</div></section>
+
+<script>
+(function(){
+  document.querySelectorAll('.todo').forEach(function(ul){
+    var k='ww-'+ul.dataset.k,saved={};
+    try{saved=JSON.parse(localStorage.getItem(k)||'{}')}catch(e){}
+    ul.querySelectorAll('li').forEach(function(li,i){
+      var id=k+'-'+i,l=document.createElement('label'),c=document.createElement('input'),s=document.createElement('span');
+      c.type='checkbox';c.id=id;c.checked=!!saved[i];
+      while(li.firstChild)s.appendChild(li.firstChild);
+      l.appendChild(c);l.appendChild(s);li.appendChild(l);
+      c.addEventListener('change',function(){saved[i]=c.checked;try{localStorage.setItem(k,JSON.stringify(saved))}catch(e){}});
+    });
+  });
+  document.querySelectorAll('button.copy').forEach(function(b){
+    b.addEventListener('click',function(){
+      var pre=b.closest('.tpl').querySelector('pre');
+      function sel(){var r=document.createRange();r.selectNodeContents(pre);var s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Selected';}
+      try{navigator.clipboard.writeText(pre.textContent).then(function(){b.textContent='Copied';setTimeout(function(){b.textContent='Copy'},1500)},sel)}catch(e){sel()}
+    });
+  });
+})();
+</script>

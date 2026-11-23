@@ -1,0 +1,13 @@
+Handle,Title,Body (HTML),Vendor,Product Category,Type,Tags,Published,Option1 Name,Option1 Value,Option2 Name,Option2 Value,Variant SKU,Variant Grams,Variant Inventory Policy,Variant Fulfillment Service,Variant Price,Variant Requires Shipping,Variant Taxable,SEO Title,SEO Description,Status
+steam-eye-masks,Warmwink Steam Eye Masks,"<p>Open the sachet and the mask warms itself to around 40°C for about twenty minutes. No plug, no microwave, no screen. Hook it over your ears, lie back, and let your eyes be off duty for a while.</p><ul><li>Self-heating: air starts it</li><li>Individually sealed, single-use</li><li>Soft fabric, stretch ear loops, one size</li><li>Unscented or lightly scented</li></ul><p><strong>Inside the heat pad:</strong> iron powder, water, activated carbon, vermiculite, salt. Scented masks contain fragrance.</p><p><strong>Please note:</strong> for adults only. Remove contact lenses first. Take the mask off if it feels too hot. Not a medical device. Read the full safety information before use.</p>",Warmwink,,Eye masks,"steam eye mask, self-heating, relaxation, gift",TRUE,Scent,Unscented,Pack,5 masks,WW-UN-05,90,continue,manual,11.00,TRUE,TRUE,Self-Heating Steam Eye Masks | Warmwink,"Steam eye masks that warm themselves to around 40°C for about twenty minutes. No plug, no microwave. From £11 with UK delivery.",draft
+steam-eye-masks,,,,,,,,,Unscented,,10 masks,WW-UN-10,170,continue,manual,18.00,TRUE,TRUE,,,
+steam-eye-masks,,,,,,,,,Unscented,,20 masks,WW-UN-20,330,continue,manual,30.00,TRUE,TRUE,,,
+steam-eye-masks,,,,,,,,,Lavender,,5 masks,WW-LV-05,90,continue,manual,11.00,TRUE,TRUE,,,
+steam-eye-masks,,,,,,,,,Lavender,,10 masks,WW-LV-10,170,continue,manual,18.00,TRUE,TRUE,,,
+steam-eye-masks,,,,,,,,,Lavender,,20 masks,WW-LV-20,330,continue,manual,30.00,TRUE,TRUE,,,
+steam-eye-masks,,,,,,,,,Chamomile,,5 masks,WW-CH-05,90,continue,manual,11.00,TRUE,TRUE,,,
+steam-eye-masks,,,,,,,,,Chamomile,,10 masks,WW-CH-10,170,continue,manual,18.00,TRUE,TRUE,,,
+steam-eye-masks,,,,,,,,,Chamomile,,20 masks,WW-CH-20,330,continue,manual,30.00,TRUE,TRUE,,,
+steam-eye-masks,,,,,,,,,Rose,,5 masks,WW-RS-05,90,continue,manual,11.00,TRUE,TRUE,,,
+steam-eye-masks,,,,,,,,,Rose,,10 masks,WW-RS-10,170,continue,manual,18.00,TRUE,TRUE,,,
+steam-eye-masks,,,,,,,,,Rose,,20 masks,WW-RS-20,330,continue,manual,30.00,TRUE,TRUE,,,
